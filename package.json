@@ -34,5 +34,10 @@
   "license": "ISC",
   "directories": {
     "test": "test"
-  }
+  },
+  "repository": "git+https://github.com/opensource254/events254.git",
+  "bugs": {
+    "url": "https://github.com/opensource254/events254/issues"
+  },
+  "homepage": "https://github.com/opensource254/events254#readme"
 }

@@ -1,0 +1,38 @@
+{
+  "name": "events254",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An application for event organisers in Kenya.",
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "DEBUG=events254:* nodemon bin/www",
+    "test": "mocha --exit",
+    "lint": "eslint --ext .js --ignore-path .gitignore ./"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "debug": "^2.6.9",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.14.0",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6"
+  },
+  "main": "bin/www",
+  "keywords": [
+    "Events",
+    "Meetup",
+    "Kenya",
+    "254",
+    "opensource254"
+  ],
+  "author": "opensource254",
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  }
+}

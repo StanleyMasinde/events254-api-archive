@@ -1,7 +1,7 @@
 
 exports.up = function (knex) {
 	return knex.schema.createTable('events', (table) => {
-		table.primary()
+		table.bigIncrements('id')
 		table.string('title')
 		table.string('description')
 		table.date('date')

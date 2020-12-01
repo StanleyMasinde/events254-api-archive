@@ -2,7 +2,7 @@
 // const knexx = require('knex')()
 exports.up = function (knex) {
 	return knex.schema.createTable('users', (table) => {
-		table.primary()
+		table.bigIncrements('id')
 		table.string('name')
 		table.string('username').unique()
 		table.string('email').unique()

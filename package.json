@@ -8,6 +8,7 @@
     "dev": "DEBUG=events254:* nodemon bin/www",
     "pretest": "knex migrate:latest && knex seed:run",
     "test": "NODE_ENV=development mocha --exit",
+    "posttest": "npm pack",
     "lint": "eslint --ext .js --ignore-path .gitignore ./"
   },
   "dependencies": {

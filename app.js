@@ -20,4 +20,10 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/groups', groupsRouter)
 
+// Error handling
+app.use(function (err, req, res) {
+	console.error(err.stack)
+	res.status(500).json('Server error!')
+})
+
 module.exports = app

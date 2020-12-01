@@ -10,7 +10,7 @@ class UserController extends Controller {
 		try {
 			return this.response(await User.all())
 		} catch (error) {
-			return this.response(error, 500)
+			throw new Error(error)
 		}
 	}
 }

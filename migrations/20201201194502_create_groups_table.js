@@ -8,7 +8,8 @@ exports.up = function (knex) {
 		table.text('description')
 		table.timestamps()
 
-		table.foreign('user_id').references('id').inTable('users')
+		// TODO enable this in prod
+		// table.foreign('user_id').references('id').inTable('users')
 	})
 }
 

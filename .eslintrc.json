@@ -9,6 +9,18 @@
         "ecmaVersion": 12
     },
     "rules": {
+        "arrow-parens":"error",
+        "camelcase":"error",
+        "line-comment-position":"error",
+        "no-await-in-loop":"error",
+        "no-var":"error",
+        "no-empty":"error",
+        "no-unreachable": "error",
+        "require-jsdoc":"error",
+        "valid-jsdoc":"error",
+        "require-await":"error",
+        "no-return-await":"error",
+        "curly":"error",
         "indent": [
             "error",
             "tab"

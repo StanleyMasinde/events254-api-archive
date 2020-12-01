@@ -8,7 +8,6 @@
     "dev": "DEBUG=events254:* nodemon bin/www",
     "pretest": "knex migrate:latest && knex seed:run",
     "test": "NODE_ENV=development mocha --exit",
-    "posttest": "npm pack",
     "lint": "eslint --ext .js --ignore-path .gitignore ./"
   },
   "dependencies": {
@@ -23,6 +22,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "eslint": "^7.14.0",
+    "faker": "^5.1.0",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6"
   },

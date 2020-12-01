@@ -1,4 +1,4 @@
-
+const faker = require('faker')
 exports.seed = function (knex) {
 	// Deletes ALL existing entries
 	return knex('users').del()
@@ -6,16 +6,18 @@ exports.seed = function (knex) {
 			// Inserts seed entries
 			return knex('users').insert([
 				{
-					name: 'John Doe',
-					email: 'John@example.com',
-					password: 'secret',
-					Bio: 'Awesome Bio' 
+					name: faker.name.findName(),
+					username: faker.internet.userName(),
+					email: faker.internet.email(),
+					password: faker.internet.password(8),
+					Bio: faker.lorem.words(10)
 				},
 				{
-					name: 'Jane Doe',
-					email: 'Jane@example.com',
-					password: 'secret',
-					Bio: 'Awesome Bio for jane' 
+					name: faker.name.findName(),
+					username: faker.internet.userName(),
+					email: faker.internet.email(),
+					password: faker.internet.password(8),
+					Bio: faker.lorem.words(10)
 				},
 			])
 		})

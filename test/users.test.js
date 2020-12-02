@@ -7,11 +7,12 @@ const application = require('../app')
 
 const app = chai.request.agent(application).keepOpen()
 
-describe('Web test', () => {
-	it('Index GET route should respond with 200', (done) => {
-		app.get('/')
+describe('Users tests', () => {
+	it('All users', (done) => {
+		app.get('/users')
 			.then((res) => {
 				expect(res.status).equals(200)
+				expect(res.body).to.be.an('array')
 				done()
 			})
 			.catch((err) => {

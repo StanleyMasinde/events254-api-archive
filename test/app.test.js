@@ -8,15 +8,15 @@ const application = require('../app')
 const app = chai.request.agent(application).keepOpen()
 
 describe('Web test', () => {
-	it('Index GET route should respond with 200', (done) => {
-		app.get('/')
-			.then((res) => {
-				expect(res.status).equals(200)
-				done()
-			})
-			.catch((err) => {
-				done(err)
-			})
-	})
+  it('Index GET route should respond with 200', (done) => {
+    app.get('/')
+      .then((res) => {
+        // This has been changed
+        expect(res.status).equals(404)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 })
-

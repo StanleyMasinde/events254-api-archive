@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{195:function(n,t,e){"use strict";e.r(t);var l=e(37),component=Object(l.a)({},(function(){var n=this.$createElement,t=this._self._c||n;return t("div",[t("h1",[this._v("Events254")]),this._v(" "),t("nuxt-link",{attrs:{to:"/Login"}},[this._v("\n    Login\n  ")])],1)}),[],!1,null,null,null);t.default=component.exports}}]);

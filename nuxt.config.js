@@ -10,6 +10,8 @@ module.exports = {
   pageTransition: 'page',
   /** Allow auto component imports */
   components: true,
+
+  target: 'server',
   /*
    ** Headers of the page
    */

@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "NODE_ENV=dev DEBUG=events254:* node bin/www",
-    "pretest": "nuxt build --spa && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
+    "pretest": "nuxt build --target server && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
     "test": "NODE_ENV=testing mocha --exit",
-    "lint": "eslint --ext .js --ignore-path .gitignore ./",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "build": "nuxt build"
   },
   "dependencies": {

@@ -11,7 +11,9 @@ module.exports = {
   /** Allow auto component imports */
   components: true,
 
-  target: 'server',
+  /** Application mode */
+  // ssr: false,
+
   /*
    ** Headers of the page
    */
@@ -60,7 +62,9 @@ module.exports = {
     // PWA
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    // Auth
+    '@nuxtjs/auth-next'
   ],
   // Vuetify config
   vuetify: {
@@ -97,54 +101,16 @@ module.exports = {
      ** https://github.com/nuxt-community/vuetify-module
      */
   auth: {
-    resetOnError: true,
-    cookie: false,
-    redirect: {
-      login: '/auth/login',
-      logout: '/',
-      home: '/b/dashboard',
-      callback: '/auth/login'
-    },
-
     strategies: {
-      business: {
-        provider: 'laravel/sanctum',
-        url: '/',
-
+      local: {
+        token: {
+          required: false,
+          type: false
+        },
         endpoints: {
-          csrf: {
-            url: '/sanctum/csrf-cookie'
-          },
-          login: {
-            url: '/api/b/login'
-          },
-          logout: {
-            url: '/api/b/logout',
-            method: 'POST'
-          },
-          user: {
-            url: '/api/b/user'
-          }
-        }
-      },
-      customer: {
-        provider: 'laravel/sanctum',
-        url: '/',
-
-        endpoints: {
-          csrf: {
-            url: '/sanctum/csrf-cookie'
-          },
-          login: {
-            url: '/api/c/login'
-          },
-          logout: {
-            url: '/api/c/logout',
-            method: 'POST'
-          },
-          user: {
-            url: '/api/c/user'
-          }
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get' }
         }
       }
     }

@@ -4,7 +4,7 @@ module.exports = {
     script: 'bin/www',
     watch: false,
     exec_mode: 'cluster',
-    instances: 4
+    instances: 1
   }
   ]
 }

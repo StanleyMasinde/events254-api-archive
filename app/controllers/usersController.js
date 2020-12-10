@@ -12,6 +12,14 @@ class UserController extends Controller {
       throw new Error(error)
     }
   }
+
+  async register (details = []) {
+    try {
+      await User.register(details)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 }
 
 module.exports = new UserController()

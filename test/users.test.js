@@ -9,7 +9,7 @@ const app = chai.request.agent(application).keepOpen()
 
 describe('Users tests', () => {
   it('All users', (done) => {
-    app.get('/api/users')
+    app.get('/users')
       .then((res) => {
         expect(res.status).equals(200)
         expect(res.body).to.be.an('array')

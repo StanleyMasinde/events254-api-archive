@@ -9,7 +9,10 @@ const app = chai.request.agent(application).keepOpen()
 
 describe('Authentication tests', () => {
   it('Register a user', (done) => {
-    app.post('/api/auth/register')
+    app.post('/auth/register')
+      .send({
+        password: 'secret'
+      })
       .then((res) => {
         expect(res.status).equals(200)
         done()

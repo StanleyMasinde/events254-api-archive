@@ -17,7 +17,9 @@ export default {
   layout: 'auth',
   head: {
     title: 'Sign in',
-    description: 'Sign in into your Events254 account'
+    meta: [
+      { hid: 'description', name: 'description', content: 'Login into your account' }
+    ]
   }
 }
 </script>

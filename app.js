@@ -26,7 +26,7 @@ const doBuild = process.env.NODE_ENV === 'production' || process.env.NODE_ENV ==
 // eslint-disable-next-line no-unexpected-multiline
 async function start () {
   // We get Nuxt instance
-  const nuxt = await loadNuxt(doBuild ? 'start --spa' : 'dev')
+  const nuxt = await loadNuxt(doBuild ? 'start' : 'dev')
 
   // Render every route with Nuxt.js
   app.use(nuxt.render)
@@ -38,13 +38,5 @@ async function start () {
   app.use(nuxt.render)
 }
 start()
-
-// TODO Remove this
-// Error handling
-// app.use(function (err, req, res) {
-//   // eslint-disable-next-line no-console
-//   console.error(err.stack)
-//   res.status(500).json('Server error!')
-// })
 
 module.exports = app

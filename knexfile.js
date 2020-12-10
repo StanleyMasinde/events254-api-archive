@@ -15,6 +15,7 @@ module.exports = {
   staging: {
     client: process.env.DB_CLIENT || 'mysql',
     connection: {
+      host: process.env.DB_HOST || 'localhost',
       database: process.env.DB_DATABASE || 'my_db',
       user: process.env.DB_USER || 'username',
       password: process.env.DB_PASSWORD || 'password'
@@ -31,6 +32,7 @@ module.exports = {
   production: {
     client: process.env.DB_CLIENT || 'mysql',
     connection: {
+      host: process.env.DB_HOST || 'localhost',
       database: process.env.DB_DATABASE || 'my_db',
       user: process.env.DB_USER || 'username',
       password: process.env.DB_PASSWORD || 'password'

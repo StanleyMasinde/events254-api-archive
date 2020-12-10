@@ -1,5 +1,5 @@
 /* eslint-disable nuxt/no-cjs-in-config */
-
+const colors = require('vuetify/lib/util/colors').default
 module.exports = {
   server: {
     port: 3010,
@@ -16,7 +16,7 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - Events254',
+    titleTemplate: null,
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -45,6 +45,7 @@ module.exports = {
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
@@ -56,19 +57,45 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    // PWA
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv'
   ],
+  // Vuetify config
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    theme: {
+      dark: false,
+      themes: {
+        light: {
+          primary: '#49c5b6',
+          accent: '#ff8601',
+          secondary: colors.blue.accent1,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        }
+      }
+    },
+    defaultAssets: {
+      font: {
+        family: 'Roboto'
+      },
+      icons: 'mdi'
+    }
+  },
   /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
+     ** Axios module configuration
+     ** See https://axios.nuxtjs.org/options
+     */
   axios: {},
   /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
+     ** vuetify module configuration
+     ** https://github.com/nuxt-community/vuetify-module
+     */
   auth: {
     resetOnError: true,
     cookie: false,
@@ -123,12 +150,12 @@ module.exports = {
     }
   },
   /*
-   ** Build configuration
-   */
+     ** Build configuration
+     */
   build: {
     transpile: ['vee-validate']
     /*
-     ** You can extend webpack config here
-     */
+       ** You can extend webpack config here
+       */
   }
 }

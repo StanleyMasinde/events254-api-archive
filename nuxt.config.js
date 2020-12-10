@@ -2,12 +2,21 @@
 const colors = require('vuetify/lib/util/colors').default
 module.exports = {
   server: {
-    port: 3010,
+    port: process.env.PORT || 3000,
     host: 'localhost',
     timing: false
   },
+
+  /**
+   * erver middleware
+   */
+  serverMiddleware: {
+    '/api': '~/app.js'
+  },
+
   /** Page transition */
   pageTransition: 'page',
+
   /** Allow auto component imports */
   components: true,
 

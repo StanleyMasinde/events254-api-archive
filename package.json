@@ -1,8 +1,21 @@
 {
   "name": "events254",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "An application for event organisers in Kenya.",
+  "main": "app.js",
+  "keywords": [
+    "Events",
+    "Meetup",
+    "Kenya",
+    "254",
+    "opensource254"
+  ],
+  "author": "opensource254",
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "start": "nuxt start",
     "dev": "nuxt",
@@ -17,19 +30,15 @@
     "@nuxtjs/pwa": "^3.3.2",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
-    "debug": "^2.6.9",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "knex": "^0.21.12",
     "mevn-orm": "^2.0.0-beta-5",
-    "morgan": "^1.10.0",
     "nuxt": "^2.14.10",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.10",
     "@nuxtjs/axios": "^5.12.3",
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.1",
@@ -42,21 +51,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "faker": "^5.1.0",
     "mocha": "^8.2.1",
-    "nodemon": "^2.0.6",
     "stylelint": "^13.8.0"
-  },
-  "main": "bin/www",
-  "keywords": [
-    "Events",
-    "Meetup",
-    "Kenya",
-    "254",
-    "opensource254"
-  ],
-  "author": "opensource254",
-  "license": "ISC",
-  "directories": {
-    "test": "test"
   },
   "repository": "git+https://github.com/opensource254/events254.git",
   "bugs": {

@@ -1,15 +1,21 @@
 const { hashSync } = require('bcrypt')
 const { Model } = require('mevn-orm')
+const { hash } = require('bcrypt')
 
 class User extends Model {
   /**
-     * Register a new user
-     * @param {Array} details
+     * Register a new User
+     * @param {Object} details user details
+     * @returns {Promise|any} registers a user
      */
-  static register (details = []) {
+  static async register (details = []) {
     const { password } = details
-    const hash = hashSync(password, 10)
-    details.password = hash
+    const p = await hash(password, 10)
+    details.password = p
+
+    // TODO add the timestamp functionality to the base model
+    details.created_at = new Date()
+    details.updated_at = new Date()
     return this.create(details)
   }
 }

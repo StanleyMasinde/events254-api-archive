@@ -1,22 +1,37 @@
 /* eslint-disable nuxt/no-cjs-in-config */
-
+const colors = require('vuetify/lib/util/colors').default
 module.exports = {
   server: {
-    port: 3010,
+    port: process.env.PORT || 3000,
     host: 'localhost',
     timing: false
   },
+
+  router: {
+    middleware: ['auth']
+  },
+
+  /**
+   * server middleware
+   */
+  serverMiddleware: {
+    '/api': '~/app.js'
+  },
+
   /** Page transition */
   pageTransition: 'page',
+
   /** Allow auto component imports */
   components: true,
 
-  target: 'server',
+  /** Application mode */
+  // ssr: false,
+
   /*
    ** Headers of the page
    */
   head: {
-    titleTemplate: '%s - Events254',
+    titleTemplate: null,
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -36,15 +51,16 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['@/assets/main.css'],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/axios', '~/plugins/veevalidate.js'],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
+    '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
@@ -56,79 +72,72 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    // PWA
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    // Auth
+    '@nuxtjs/auth-next'
   ],
+  // Vuetify config
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
+    theme: {
+      dark: false,
+      themes: {
+        light: {
+          primary: '#49c5b6',
+          accent: '#ff8601',
+          secondary: colors.blue.accent1,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        }
+      }
+    },
+    defaultAssets: {
+      font: {
+        family: 'Roboto'
+      },
+      icons: 'mdi'
+    }
+  },
   /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
+     ** Axios module configuration
+     ** See https://axios.nuxtjs.org/options
+     */
   axios: {},
   /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
+     ** vuetify module configuration
+     ** https://github.com/nuxt-community/vuetify-module
+     */
   auth: {
-    resetOnError: true,
-    cookie: false,
-    redirect: {
-      login: '/auth/login',
-      logout: '/',
-      home: '/b/dashboard',
-      callback: '/auth/login'
-    },
-
     strategies: {
-      business: {
-        provider: 'laravel/sanctum',
-        url: '/',
-
+      local: {
+        user: {
+          property: false
+        },
+        token: {
+          required: false,
+          type: false
+        },
         endpoints: {
-          csrf: {
-            url: '/sanctum/csrf-cookie'
-          },
-          login: {
-            url: '/api/b/login'
-          },
-          logout: {
-            url: '/api/b/logout',
-            method: 'POST'
-          },
-          user: {
-            url: '/api/b/user'
-          }
-        }
-      },
-      customer: {
-        provider: 'laravel/sanctum',
-        url: '/',
-
-        endpoints: {
-          csrf: {
-            url: '/sanctum/csrf-cookie'
-          },
-          login: {
-            url: '/api/c/login'
-          },
-          logout: {
-            url: '/api/c/logout',
-            method: 'POST'
-          },
-          user: {
-            url: '/api/c/user'
-          }
+          login: { url: '/api/auth/login', method: 'POST' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get' }
         }
       }
     }
   },
   /*
-   ** Build configuration
-   */
+     ** Build configuration
+     */
   build: {
     transpile: ['vee-validate']
     /*
-     ** You can extend webpack config here
-     */
+       ** You can extend webpack config here
+       */
   }
 }

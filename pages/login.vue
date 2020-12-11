@@ -1,8 +1,61 @@
 <template>
   <div>
-    <h1>Login Page</h1>
-    <nuxt-link to="/">
-      Home
-    </nuxt-link>
+    <v-alert v-if="err" type="error">
+      {{ err }}
+    </v-alert>
+    <h3 class="headline">
+      Login
+    </h3>
+    <br>
+    <ValidationObserver v-slot="{ invalid }">
+      <v-form @submit.prevent="login">
+        <ValidationProvider name="email" rules="required">
+          <v-text-field v-model="cred.email" outlined label="Username or Email" />
+        </ValidationProvider>
+
+        <ValidationProvider name="password" rules="required">
+          <v-text-field v-model="cred.password" type="password" outlined label="Password" />
+        </ValidationProvider>
+        <v-btn :disabled="invalid" type="submit" color="accent">
+          Sign in
+        </v-btn>
+        <v-btn text to="/register" color="primary">
+          Sign up
+        </v-btn>
+      </v-form>
+    </ValidationObserver>
   </div>
 </template>
+<script>
+export default {
+  layout: 'auth',
+  data () {
+    return {
+      err: null,
+      cred: {
+        email: null,
+        password: null
+      }
+    }
+  },
+  head: {
+    title: 'Sign in',
+    meta: [
+      { hid: 'description', name: 'description', content: 'Login into your account' }
+    ]
+  },
+  methods: {
+    async login () {
+      try {
+        await this.$auth.loginWith('local', { data: this.cred })
+      } catch (error) {
+        this.err = 'These credentials do not match our records'
+
+        setTimeout(() => {
+          this.err = null
+        }, 5000)
+      }
+    }
+  }
+}
+</script>

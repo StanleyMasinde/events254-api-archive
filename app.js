@@ -1,42 +1,29 @@
-/* eslint-disable func-call-spacing */
-require('dotenv').config()
-const path = require('path')
-const { loadNuxt, build } = require('nuxt')
 const express = require('express')
+const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const logger = require('morgan')
+
+// Auth
+const passport = require('./app/auth/auth')
 
 const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
+const authRouter = require('./routes/auth')
 
 const app = express()
 
-app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(session({
+  secret: 'super-secret-cookie', resave: false, saveUninitialized: true, name: 'events254_session'
+}))
 
-// app.use('/', indexRouter)
-app.use('/api/users', usersRouter)
-app.use('/api/groups', groupsRouter)
+// Passport
+app.use(passport.initialize())
+app.use(passport.session())
 
-const doBuild = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing'
-
-// eslint-disable-next-line no-unexpected-multiline
-async function start () {
-  // We get Nuxt instance
-  const nuxt = await loadNuxt(doBuild ? 'start' : 'dev')
-
-  // Render every route with Nuxt.js
-  app.use(nuxt.render)
-
-  // Build only in dev mode with hot-reloading
-  if (!doBuild) {
-    build(nuxt)
-  }
-  app.use(nuxt.render)
-}
-start()
+app.use('/users', usersRouter)
+app.use('/groups', groupsRouter)
+app.use('/auth', authRouter)
 
 module.exports = app

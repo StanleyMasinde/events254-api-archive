@@ -2,7 +2,7 @@
 
 const faker = require('faker')
 const rows = []
-for (let index = 0; index < 10; index++) {
+for (let index = 0; index < 5; index++) {
   rows.push({
     user_id: 1,
     name: faker.commerce.productName(),

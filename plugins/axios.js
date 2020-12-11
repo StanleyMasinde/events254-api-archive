@@ -1,4 +1,5 @@
 export default function ({ $axios, redirect, store }, inject) {
+  $axios.defaults.baseURL = null
   $axios.defaults.headers.common.Accept = 'application/json'
   $axios.defaults.withCredentials = true
 

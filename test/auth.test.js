@@ -11,7 +11,9 @@ describe('Authentication tests', () => {
   it('Register a user', (done) => {
     app.post('/auth/register')
       .send({
-        password: 'secret'
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: '12345678'
       })
       .then((res) => {
         expect(res.status).equals(200)

@@ -1,4 +1,3 @@
-const { hashSync } = require('bcrypt')
 const { Model } = require('mevn-orm')
 const { hash } = require('bcrypt')
 

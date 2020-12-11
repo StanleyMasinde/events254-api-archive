@@ -34,6 +34,7 @@
     "express-session": "^1.17.1",
     "knex": "^0.21.12",
     "mevn-orm": "^2.0.0-beta-5",
+    "mevn-validator": "^2.0.0",
     "nuxt": "^2.14.10",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"

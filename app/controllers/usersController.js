@@ -1,3 +1,4 @@
+const Validator = require('mevn-validator')
 const User = require('../models/user')
 const Controller = require('./controller')
 
@@ -13,11 +14,24 @@ class UserController extends Controller {
     }
   }
 
+  /**
+   * Register a new user
+   * @param {*} details
+   */
   async register (details = []) {
     try {
-      await User.register(details)
+      // Validate the input
+      await new Validator(details, {
+        name: 'required',
+        email: 'required|email',
+        password: 'required|min:8'
+      })
+        .validate()
+
+      const u = await User.register(details)
+      return this.response(u)
     } catch (error) {
-      throw new Error(error)
+      return this.response(error, error.status || 422)
     }
   }
 }

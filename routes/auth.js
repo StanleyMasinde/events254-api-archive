@@ -1,17 +1,13 @@
 const express = require('express')
+const usersController = require('../app/controllers/usersController')
 const router = express.Router()
-const User = require('../app/models/user')
 
 router.post('/register', async (req, res) => {
-  // TODO add validation
   try {
-    const usr = await User.register(req.body)
-    // TODO make the base model to return user object instead of ID
-    const user = await User.find(usr[0])
-    res.json(user)
+    const { status, message } = await usersController.register(req.body)
+    res.status(status).json(message)
   } catch (error) {
-    console.log(error)
-    res.status(500).json(error)
+    res.json(error)
   }
 })
 

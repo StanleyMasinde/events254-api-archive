@@ -24,12 +24,28 @@ describe('Authentication tests', () => {
       })
   })
 
-  it('Login user with wrong credentials should fail', (done) => {
+  it('Login user with wrong PASSWORD should fail', (done) => {
     app
       .post('/auth/login')
       .send({
         email: 'john@example.com',
         password: '1234567'
+      })
+      .then((res) => {
+        expect(res.status).equals(401)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('Login user with wrong EMAIL should fail', (done) => {
+    app
+      .post('/auth/login')
+      .send({
+        email: 'john@mail.com',
+        password: '12345678'
       })
       .then((res) => {
         expect(res.status).equals(401)

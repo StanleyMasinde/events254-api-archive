@@ -1,4 +1,5 @@
 const express = require('express')
+const passport = require('passport')
 const usersController = require('../app/controllers/usersController')
 const router = express.Router()
 
@@ -11,16 +12,15 @@ router.post('/register', async (req, res) => {
   }
 })
 
-router.post('/login', function (req, res) {
-  res.json({
-    message: 'Events254'
-  })
+router.post('/login', passport.authenticate('local', {
+  failureMessage: 'ddd'
+}), (req, res) => {
+  res.json(req.user)
 })
 
 router.post('/logout', function (req, res) {
-  res.json({
-    message: 'Events254'
-  })
+  req.logOut()
+  res.json({ message: 'Logout' })
 })
 
 module.exports = router

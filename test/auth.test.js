@@ -23,4 +23,48 @@ describe('Authentication tests', () => {
         done(err)
       })
   })
+
+  it('Login user with wrong credentials should fail', (done) => {
+    app
+      .post('/auth/login')
+      .send({
+        email: 'john@example.com',
+        password: '1234567'
+      })
+      .then((res) => {
+        expect(res.status).equals(401)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('Login user with correct credentials', (done) => {
+    app
+      .post('/auth/login')
+      .send({
+        email: 'john@example.com',
+        password: '12345678'
+      })
+      .then((res) => {
+        expect(res.status).equals(200)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('Logout a user', (done) => {
+    app
+      .post('/auth/logout')
+      .then((res) => {
+        expect(res.status).equals(200)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 })

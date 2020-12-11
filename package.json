@@ -37,7 +37,8 @@
     "mevn-validator": "^2.0.0",
     "nuxt": "^2.14.11",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "vee-validate": "^3.4.5"
   },
   "devDependencies": {
     "@nuxtjs/axios": "^5.12.3",

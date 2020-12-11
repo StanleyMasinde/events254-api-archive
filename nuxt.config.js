@@ -1,14 +1,25 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 const colors = require('vuetify/lib/util/colors').default
 module.exports = {
+  vue: {
+    config: {
+      productionTip: true,
+      devtools: true
+    }
+  },
+
   server: {
     port: process.env.PORT || 3000,
     host: 'localhost',
     timing: false
   },
 
+  router: {
+    middleware: ['auth']
+  },
+
   /**
-   * erver middleware
+   * server middleware
    */
   serverMiddleware: {
     '/api': '~/app.js'
@@ -51,7 +62,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/axios', '~/plugins/veevalidate.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -112,14 +123,17 @@ module.exports = {
   auth: {
     strategies: {
       local: {
+        user: {
+          property: false
+        },
         token: {
           required: false,
           type: false
         },
         endpoints: {
-          login: { url: '/api/auth/login', method: 'post' },
-          logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get' }
+          login: { url: 'api/auth/login', method: 'post' },
+          logout: { url: 'api/auth/logout', method: 'post' },
+          user: { url: 'api/auth/user', method: 'get' }
         }
       }
     }

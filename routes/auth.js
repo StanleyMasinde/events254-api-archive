@@ -12,15 +12,17 @@ router.post('/register', async (req, res) => {
   }
 })
 
-router.post('/login', passport.authenticate('local', {
-  failureMessage: 'ddd'
-}), (req, res) => {
+router.post('/login', passport.authenticate('local'), (req, res) => {
   res.json(req.user)
 })
 
 router.post('/logout', function (req, res) {
   req.logOut()
   res.json({ message: 'Logout' })
+})
+
+router.get('/user', (req, res) => {
+  res.json(req.user)
 })
 
 module.exports = router

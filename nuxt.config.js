@@ -1,13 +1,6 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 const colors = require('vuetify/lib/util/colors').default
 module.exports = {
-  vue: {
-    config: {
-      productionTip: true,
-      devtools: true
-    }
-  },
-
   server: {
     port: process.env.PORT || 3000,
     host: 'localhost',
@@ -131,9 +124,9 @@ module.exports = {
           type: false
         },
         endpoints: {
-          login: { url: 'api/auth/login', method: 'post' },
-          logout: { url: 'api/auth/logout', method: 'post' },
-          user: { url: 'api/auth/user', method: 'get' }
+          login: { url: '/api/auth/login', method: 'POST' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get' }
         }
       }
     }

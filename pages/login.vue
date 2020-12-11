@@ -7,16 +7,23 @@
       Login
     </h3>
     <br>
-    <v-form @submit.prevent="login">
-      <v-text-field outlined label="Username or Email" />
-      <v-text-field outlined label="Password" />
-      <v-btn type="submit" color="accent">
-        Sign in
-      </v-btn>
-      <v-btn text to="/register" color="primary">
-        Sign up
-      </v-btn>
-    </v-form>
+    <ValidationObserver v-slot="{ invalid }">
+      <v-form @submit.prevent="login">
+        <ValidationProvider name="email" rules="required">
+          <v-text-field v-model="cred.email" outlined label="Username or Email" />
+        </ValidationProvider>
+
+        <ValidationProvider name="password" rules="required">
+          <v-text-field v-model="cred.password" type="password" outlined label="Password" />
+        </ValidationProvider>
+        <v-btn :disabled="invalid" type="submit" color="accent">
+          Sign in
+        </v-btn>
+        <v-btn text to="/register" color="primary">
+          Sign up
+        </v-btn>
+      </v-form>
+    </ValidationObserver>
   </div>
 </template>
 <script>
@@ -40,15 +47,12 @@ export default {
   methods: {
     async login () {
       try {
-        await this.$auth.loginWith('local', {
-          data: this.cred
-        })
-        this.$router.push('/home')
+        await this.$auth.loginWith('local', { data: this.cred })
       } catch (error) {
-        this.error = error.response.data
+        this.err = 'These credentials do not match our records'
 
         setTimeout(() => {
-          this.error = null
+          this.err = null
         }, 5000)
       }
     }

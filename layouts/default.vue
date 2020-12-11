@@ -4,7 +4,10 @@
       <v-toolbar-title>Events254</v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
-        <v-btn text link to="/login">
+        <v-btn v-if="$auth.loggedIn" text to="/home">
+          {{ $auth.user.name }}
+        </v-btn>
+        <v-btn v-else text link to="/login">
           Login
         </v-btn>
       </v-toolbar-items>

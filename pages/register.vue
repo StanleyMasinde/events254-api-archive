@@ -15,7 +15,7 @@
         </ValidationProvider>
 
         <ValidationProvider v-slot="{ errors }" name="password" rules="required">
-          <v-text-field v-model="user.password" :error-messages="errors" outlined label="Password" />
+          <v-text-field v-model="user.password" type="password" :error-messages="errors" outlined label="Password" />
         </ValidationProvider>
 
         <v-btn :disabled="invalid" type="submit" rounded large color="accent">

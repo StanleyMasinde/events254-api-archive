@@ -1,4 +1,5 @@
 const Validator = require('mevn-validator')
+const mail = require('../mail/mail')
 const User = require('../models/user')
 const Controller = require('./controller')
 
@@ -29,6 +30,13 @@ class UserController extends Controller {
         .validate()
 
       const u = await User.register(details)
+      // TODO use queing here
+      await mail.sendMail({
+        from: '"Events254" <no-reply@events254.com>',
+        to: details.email,
+        subject: 'Welcome to Events254',
+        html: '<b>Hello world?</b>'
+      })
       return this.response(u)
     } catch (error) {
       return this.response(error, error.status || 422)

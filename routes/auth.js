@@ -31,6 +31,15 @@ router.post('/password', async (req, res) => {
   }
 })
 
+router.post('/password/update', async (req, res) => {
+  try {
+    const { message, status } = await usersController.resetPassword(req.body)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
 router.get('/user', (req, res) => {
   res.json(req.user)
 })

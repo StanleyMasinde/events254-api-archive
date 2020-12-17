@@ -24,6 +24,9 @@
         <v-btn text to="/login" color="primary">
           Sign in
         </v-btn>
+        <v-btn text to="/password/reset" color="primary">
+          Did you forget your password?
+        </v-btn>
       </v-form>
     </ValidationObserver>
   </div>

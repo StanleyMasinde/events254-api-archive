@@ -36,7 +36,6 @@
     "mevn-orm": "^2.0.1",
     "mevn-validator": "^2.0.0",
     "nodemailer": "^6.4.17",
-    "nodemailer-express-handlebars": "^4.0.0",
     "nodemailer-pug-engine": "^1.0.2",
     "nuxt": "^2.14.12",
     "passport": "^0.4.1",

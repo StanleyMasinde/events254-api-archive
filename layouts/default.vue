@@ -7,9 +7,14 @@
         <v-btn v-if="$auth.loggedIn" text to="/home">
           {{ $auth.user.name }}
         </v-btn>
-        <v-btn v-else text link to="/login">
-          Login
-        </v-btn>
+        <template v-else>
+          <v-btn text link to="/login">
+            Login
+          </v-btn>
+          <v-btn text link to="/register">
+            Register
+          </v-btn>
+        </template>
       </v-toolbar-items>
     </v-app-bar>
     <v-main>

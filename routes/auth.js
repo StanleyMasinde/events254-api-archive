@@ -21,6 +21,16 @@ router.post('/logout', function (req, res) {
   res.json({ message: 'Logout' })
 })
 
+router.post('/password', async (req, res) => {
+  try {
+    const { message, status } = await usersController.sendPasswordResetEmail(req.body.email)
+    res.status(status)
+      .json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
 router.get('/user', (req, res) => {
   res.json(req.user)
 })

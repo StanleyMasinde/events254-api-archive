@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-const hbs = require('nodemailer-express-handlebars')
+const { pugEngine } = require('nodemailer-pug-engine')
 
 const mail = nodemailer.createTransport({
   streamTransport: process.env.NODE_ENV === 'testing',
@@ -11,15 +11,8 @@ const mail = nodemailer.createTransport({
     pass: process.env.MAIL_PASSWORD || ''
   }
 })
-mail.use('compile', hbs({
-  viewEngine: {
-    extName: '.handlebars',
-    partialsDir: 'app/mail',
-    layoutsDir: 'app/mail',
-    defaultLayout: 'main'
-  },
-  viewPath: 'app/mail',
-  extName: '.handlebars'
+mail.use('compile', pugEngine({
+  templateDir: __dirname
 }))
 
 // TODO Create a resusbale mail class or package

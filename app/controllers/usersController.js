@@ -35,7 +35,10 @@ class UserController extends Controller {
         from: '"Events254" <no-reply@events254.com>',
         to: details.email,
         subject: 'Welcome to Events254',
-        html: '<b>Hello world?</b>'
+        template: 'main',
+        context: {
+          user: details
+        }
       })
       return this.response(u)
     } catch (error) {

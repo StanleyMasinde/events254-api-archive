@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer')
+const hbs = require('nodemailer-express-handlebars')
 
 const mail = nodemailer.createTransport({
-  streamTransport: process.env.NODE_ENV === 'testing',
+  // streamTransport: process.env.NODE_ENV === 'testing',
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: process.env.MAIL_PORT || 2525,
   secure: false,
@@ -10,6 +11,16 @@ const mail = nodemailer.createTransport({
     pass: process.env.MAIL_PASSWORD || ''
   }
 })
+mail.use('compile', hbs({
+  viewEngine: {
+    extName: '.handlebars',
+    partialsDir: 'app/mail',
+    layoutsDir: 'app/mail',
+    defaultLayout: 'main'
+  },
+  viewPath: 'app/mail',
+  extName: '.handlebars'
+}))
 
 // TODO Create a resusbale mail class or package
 // class BaseMail {

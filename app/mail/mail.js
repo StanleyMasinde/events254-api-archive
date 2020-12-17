@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 const hbs = require('nodemailer-express-handlebars')
 
 const mail = nodemailer.createTransport({
-  // streamTransport: process.env.NODE_ENV === 'testing',
+  streamTransport: process.env.NODE_ENV === 'testing',
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: process.env.MAIL_PORT || 2525,
   secure: false,

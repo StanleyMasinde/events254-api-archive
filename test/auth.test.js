@@ -83,4 +83,31 @@ describe('Authentication tests', () => {
         done(err)
       })
   })
+
+  it('Send a password reset notification without email should fail', (done) => {
+    app.post('/auth/password')
+      .then((res) => {
+        expect(res.status).equals(422)
+        expect(res.body).to.haveOwnProperty('errors')
+        expect(res.body.errors).to.be.an('Object')
+        done()
+      })
+      .catch((e) => {
+        done(e)
+      })
+  })
+
+  it('Send a password reset notification', (done) => {
+    app.post('/auth/password')
+      .send({
+        email: 'john@example.com'
+      })
+      .then((res) => {
+        expect(res.status).equals(200)
+        done()
+      })
+      .catch((e) => {
+        done(e)
+      })
+  })
 })

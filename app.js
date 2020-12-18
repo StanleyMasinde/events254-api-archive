@@ -8,6 +8,7 @@ const passport = require('./app/auth/auth')
 const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
 const authRouter = require('./routes/auth')
+const eventsRouter = require('./routes/events')
 
 const app = express()
 
@@ -25,5 +26,6 @@ app.use(passport.session())
 app.use('/users', usersRouter)
 app.use('/groups', groupsRouter)
 app.use('/auth', authRouter)
+app.use('/events', eventsRouter)
 
 module.exports = app

@@ -1,19 +1,18 @@
 extends ./layouts/main.pug
 block content
     tr
-        td(class="content-cell")
-            h1 Hi #{ user.name }
-            p We are glad to have you here at events254 the one stop place for everything events.
-            p Click the link below to confirm your account
-
-            table(class="action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation")
+        td.content-wrap
+            table(width='100%' cellpadding='0' cellspacing='0')
                 tr
-                    td(align="center")
-                        table(width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation")
-                            tr
-                                td(align="center")
-                                    table(border="0" cellpadding="0" cellspacing="0" role="presentation")
-                                        tr
-                                            td
-                                                a(href="/" class="button button-primary" target="_blank" rel="noopener") Verify your Email
+                    td.content-block
+                        | Please confirm your email address by clicking the link below.
+                tr
+                    td.content-block
+                        | We may need to send you critical information about our service and it is important that we have an accurate email address.
+                tr
+                    td.content-block
+                        a.btn-primary(href='http://www.mailgun.com') Confirm email address
+                tr
+                    td.content-block
+                        | &mdash; Events254
 

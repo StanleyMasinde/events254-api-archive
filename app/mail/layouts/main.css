@@ -1,303 +1,278 @@
- body,
- body *:not(html):not(style):not(br):not(tr):not(code) {
-     box-sizing: border-box;
-     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-     position: relative;
- }
-
- body {
-     -webkit-text-size-adjust: none;
-     background-color: #ffffff;
-     color: #718096;
-     height: 100%;
-     line-height: 1.4;
-     margin: 0;
-     padding: 0;
-     width: 100% !important;
- }
-
- p,
- ul,
- ol,
- blockquote {
-     line-height: 1.4;
-     text-align: left;
- }
-
- a {
-     color: #3869d4;
- }
-
- a img {
-     border: none;
- }
-
- /* Typography */
-
- h1 {
-     color: #3d4852;
-     font-size: 18px;
-     font-weight: bold;
-     margin-top: 0;
-     text-align: left;
- }
-
- h2 {
-     font-size: 16px;
-     font-weight: bold;
-     margin-top: 0;
-     text-align: left;
- }
-
- h3 {
-     font-size: 14px;
-     font-weight: bold;
-     margin-top: 0;
-     text-align: left;
- }
-
- p {
-     font-size: 16px;
-     line-height: 1.5em;
-     margin-top: 0;
-     text-align: left;
- }
-
- p.sub {
-     font-size: 12px;
- }
-
- img {
-     max-width: 100%;
- }
-
- /* Layout */
-
- .wrapper {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 100%;
-     background-color: #edf2f7;
-     margin: 0;
-     padding: 0;
-     width: 100%;
- }
-
- .content {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 100%;
-     margin: 0;
-     padding: 0;
-     width: 100%;
- }
-
- /* Header */
-
- .header {
-     padding: 25px 0;
-     text-align: center;
- }
-
- .header a {
-     color: #3d4852;
-     font-size: 19px;
-     font-weight: bold;
-     text-decoration: none;
- }
-
- /* Logo */
-
- .logo {
-     height: 75px;
-     width: 75px;
- }
-
- /* Body */
-
- .body {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 100%;
-     background-color: #edf2f7;
-     border-bottom: 1px solid #edf2f7;
-     border-top: 1px solid #edf2f7;
-     margin: 0;
-     padding: 0;
-     width: 100%;
- }
-
- .inner-body {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 570px;
-     background-color: #ffffff;
-     border-color: #e8e5ef;
-     border-radius: 2px;
-     border-width: 1px;
-     box-shadow: 0 2px 0 rgba(0, 0, 150, 0.025), 2px 4px 0 rgba(0, 0, 150, 0.015);
-     margin: 0 auto;
-     padding: 0;
-     width: 570px;
- }
-
- /* Subcopy */
-
- .subcopy {
-     border-top: 1px solid #e8e5ef;
-     margin-top: 25px;
-     padding-top: 25px;
- }
-
- .subcopy p {
-     font-size: 14px;
- }
-
- /* Footer */
-
- .footer {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 570px;
-     margin: 0 auto;
-     padding: 0;
-     text-align: center;
-     width: 570px;
- }
-
- .footer p {
-     color: #b0adc5;
-     font-size: 12px;
-     text-align: center;
- }
-
- .footer a {
-     color: #b0adc5;
-     text-decoration: underline;
- }
-
- /* Tables */
-
- .table table {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 100%;
-     margin: 30px auto;
-     width: 100%;
- }
-
- .table th {
-     border-bottom: 1px solid #edeff2;
-     margin: 0;
-     padding-bottom: 8px;
- }
-
- .table td {
-     color: #74787e;
-     font-size: 15px;
-     line-height: 18px;
-     margin: 0;
-     padding: 10px 0;
- }
-
- .content-cell {
-     max-width: 100vw;
-     padding: 32px;
- }
-
- /* Buttons */
-
- .action {
-     -premailer-cellpadding: 0;
-     -premailer-cellspacing: 0;
-     -premailer-width: 100%;
-     margin: 30px auto;
-     padding: 0;
-     text-align: center;
-     width: 100%;
- }
-
- .button {
-     -webkit-text-size-adjust: none;
-     border-radius: 4px;
-     color: #fff;
-     display: inline-block;
-     overflow: hidden;
-     text-decoration: none;
- }
-
- .button-blue,
- .button-primary {
-     background-color: #2d3748;
-     border-bottom: 8px solid #2d3748;
-     border-left: 18px solid #2d3748;
-     border-right: 18px solid #2d3748;
-     border-top: 8px solid #2d3748;
- }
-
- .button-green,
- .button-success {
-     background-color: #48bb78;
-     border-bottom: 8px solid #48bb78;
-     border-left: 18px solid #48bb78;
-     border-right: 18px solid #48bb78;
-     border-top: 8px solid #48bb78;
- }
-
- .button-red,
- .button-error {
-     background-color: #e53e3e;
-     border-bottom: 8px solid #e53e3e;
-     border-left: 18px solid #e53e3e;
-     border-right: 18px solid #e53e3e;
-     border-top: 8px solid #e53e3e;
- }
-
- /* Panels */
-
- .panel {
-     border-left: #2d3748 solid 4px;
-     margin: 21px 0;
- }
-
- .panel-content {
-     background-color: #edf2f7;
-     color: #718096;
-     padding: 16px;
- }
-
- .panel-content p {
-     color: #718096;
- }
-
- .panel-item {
-     padding: 0;
- }
-
- .panel-item p:last-of-type {
-     margin-bottom: 0;
-     padding-bottom: 0;
- }
-
- /* Utilities */
-
- .break-all {
-     word-break: break-all;
- }
-
- @media only screen and (max-width: 600px) {
-     .inner-body {
-         width: 100% !important;
-     }
-
-     .footer {
-         width: 100% !important;
-     }
- }
-
- @media only screen and (max-width: 500px) {
-     .button {
-         width: 100% !important;
-     }
- }
+/* -------------------------------------
+    GLOBAL
+------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  
+  img {
+    max-width: 100%;
+  }
+  
+  body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    width: 100% !important;
+    height: 100%;
+    line-height: 1.6;
+  }
+  
+  /* Let's make sure all tables have defaults */
+  table td {
+    vertical-align: top;
+  }
+  
+  /* -------------------------------------
+      BODY & CONTAINER
+  ------------------------------------- */
+  body {
+    background-color: #f6f6f6;
+  }
+  
+  .body-wrap {
+    background-color: #f6f6f6;
+    width: 100%;
+  }
+  
+  .container {
+    display: block !important;
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    /* makes it centered */
+    clear: both !important;
+  }
+  
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+    padding: 20px;
+  }
+  
+  /* -------------------------------------
+      HEADER, FOOTER, MAIN
+  ------------------------------------- */
+  .main {
+    background: #fff;
+    border: 1px solid #e9e9e9;
+    border-radius: 3px;
+  }
+  
+  .content-wrap {
+    padding: 20px;
+  }
+  
+  .content-block {
+    padding: 0 0 20px;
+  }
+  
+  .header {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .footer {
+    width: 100%;
+    clear: both;
+    color: #999;
+    padding: 20px;
+  }
+  .footer a {
+    color: #999;
+  }
+  .footer p, .footer a, .footer unsubscribe, .footer td {
+    font-size: 12px;
+  }
+  
+  /* -------------------------------------
+      GRID AND COLUMNS
+  ------------------------------------- */
+  .column-left {
+    float: left;
+    width: 50%;
+  }
+  
+  .column-right {
+    float: left;
+    width: 50%;
+  }
+  
+  /* -------------------------------------
+      TYPOGRAPHY
+  ------------------------------------- */
+  h1, h2, h3 {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: #000;
+    margin: 40px 0 0;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+  
+  h1 {
+    font-size: 32px;
+    font-weight: 500;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: 18px;
+  }
+  
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  p, ul, ol {
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  p li, ul li, ol li {
+    margin-left: 5px;
+    list-style-position: inside;
+  }
+  
+  /* -------------------------------------
+      LINKS & BUTTONS
+  ------------------------------------- */
+  a {
+    color: #348eda;
+    text-decoration: underline;
+  }
+  
+  .btn-primary {
+    text-decoration: none;
+    color: #FFF;
+    background-color: #348eda;
+    border: solid #348eda;
+    border-width: 10px 20px;
+    line-height: 2;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 5px;
+    text-transform: capitalize;
+  }
+  
+  /* -------------------------------------
+      OTHER STYLES THAT MIGHT BE USEFUL
+  ------------------------------------- */
+  .last {
+    margin-bottom: 0;
+  }
+  
+  .first {
+    margin-top: 0;
+  }
+  
+  .padding {
+    padding: 10px 0;
+  }
+  
+  .aligncenter {
+    text-align: center;
+  }
+  
+  .alignright {
+    text-align: right;
+  }
+  
+  .alignleft {
+    text-align: left;
+  }
+  
+  .clear {
+    clear: both;
+  }
+  
+  /* -------------------------------------
+      Alerts
+  ------------------------------------- */
+  .alert {
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    padding: 20px;
+    text-align: center;
+    border-radius: 3px 3px 0 0;
+  }
+  .alert a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .alert.alert-warning {
+    background: #ff9f00;
+  }
+  .alert.alert-bad {
+    background: #d0021b;
+  }
+  .alert.alert-good {
+    background: #68b90f;
+  }
+  
+  /* -------------------------------------
+      INVOICE
+  ------------------------------------- */
+  .invoice {
+    margin: 40px auto;
+    text-align: left;
+    width: 80%;
+  }
+  .invoice td {
+    padding: 5px 0;
+  }
+  .invoice .invoice-items {
+    width: 100%;
+  }
+  .invoice .invoice-items td {
+    border-top: #eee 1px solid;
+  }
+  .invoice .invoice-items .total td {
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
+    font-weight: 700;
+  }
+  
+  /* -------------------------------------
+      RESPONSIVE AND MOBILE FRIENDLY STYLES
+  ------------------------------------- */
+  @media only screen and (max-width: 640px) {
+    h1, h2, h3, h4 {
+      font-weight: 600 !important;
+      margin: 20px 0 5px !important;
+    }
+  
+    h1 {
+      font-size: 22px !important;
+    }
+  
+    h2 {
+      font-size: 18px !important;
+    }
+  
+    h3 {
+      font-size: 16px !important;
+    }
+  
+    .container {
+      width: 100% !important;
+    }
+  
+    .content, .content-wrapper {
+      padding: 10px !important;
+    }
+  
+    .invoice {
+      width: 100% !important;
+    }
+  }

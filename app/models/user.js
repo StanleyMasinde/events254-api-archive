@@ -17,6 +17,13 @@ class User extends Model {
     details.updated_at = new Date()
     return this.create(details)
   }
+
+  /**
+   * Get the events created by the current User
+   */
+  events () {
+    return this.hasMany('Event')
+  }
 }
 
 module.exports = User

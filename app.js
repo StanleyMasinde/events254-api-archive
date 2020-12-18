@@ -21,9 +21,11 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   name: 'events254_session',
-  store: sessionstore.createSessionStore({
-    type: 'redis'
-  })
+  store: process.env.NODE_ENV === 'testing'
+    ? null
+    : sessionstore.createSessionStore({
+      type: 'redis'
+    })
 }))
 
 // Passport

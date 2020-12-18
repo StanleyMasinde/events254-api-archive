@@ -1,6 +1,7 @@
 const express = require('express')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+const sessionstore = require('sessionstore')
 
 // Auth
 const passport = require('./app/auth/auth')
@@ -16,7 +17,15 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(session({
-  secret: 'super-secret-cookie', resave: false, saveUninitialized: true, name: 'events254_session'
+  secret: 'super-secret-cookie',
+  resave: false,
+  saveUninitialized: true,
+  name: 'events254_session',
+  store: process.env.NODE_ENV === 'testing'
+    ? null
+    : sessionstore.createSessionStore({
+      type: 'redis'
+    })
 }))
 
 // Passport

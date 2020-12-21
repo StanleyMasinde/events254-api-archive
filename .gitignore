@@ -27,3 +27,4 @@ typings/
 .nuxt
 sw.js
 .nuxt
+dist

@@ -3,7 +3,7 @@ const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
-const application = require('../app')
+const application = require('../api/app')
 
 const app = chai.request.agent(application).keepOpen()
 

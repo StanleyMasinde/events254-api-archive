@@ -11,5 +11,5 @@ exports.up = function (knex) {
 }
 
 exports.down = function (knex) {
-  knex.schema.dropTableIfExists('event_rsvps')
+  return knex.schema.dropTableIfExists('event_rsvps')
 }

@@ -15,7 +15,7 @@ module.exports = {
    * server middleware
    */
   serverMiddleware: {
-    '/api': '~/app.js'
+    '/api': '~/api/app.js'
   },
 
   /** Page transition */

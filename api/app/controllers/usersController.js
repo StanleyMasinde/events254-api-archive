@@ -72,7 +72,7 @@ class UserController extends Controller {
         await DB.table('password_resets').insert({
           email,
           token,
-          created_at: new Date().toISOString()
+          created_at: new Date()
         })
         // Send the token to the user
         await mail.sendMail({

@@ -1,5 +1,4 @@
 const router = require('express').Router()
-const { response } = require('../app/controllers/eventsController')
 const EventsController = require('../app/controllers/eventsController')
 
 router.use((req, res, next) => {

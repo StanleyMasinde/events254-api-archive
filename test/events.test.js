@@ -75,6 +75,17 @@ describe('#Events test', () => {
       })
   })
 
+  it('Get the updated Event', (done) => {
+    app.get('/events/1')
+      .then((ev) => {
+        expect(ev.body.title).equals('New title')
+        done()
+      })
+      .catch((e) => {
+        done(e)
+      })
+  })
+
   it('User deletes and event', (done) => {
     app.delete('/events/1')
       .then((res) => {

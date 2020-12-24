@@ -28,6 +28,14 @@ class EventsController extends Controller {
     }
   }
 
+  async show ({ params }) {
+    const e = await Event.find(params.event)
+    if (!e) {
+      return this.response('Model not found', 404)
+    }
+    return this.response(e)
+  }
+
   /**
    * Update an event
    * @param {Array} payload
@@ -37,11 +45,9 @@ class EventsController extends Controller {
     // The the event Id
     const { event } = params
     // Load the current event
-    const currentEvent = new Event(event)
-    const { attributes } = currentEvent
-    const details = await attributes
+    const currentEvent = await Event.find(event)
     // A user can only update his/her own event
-    if (await details.user_id !== user.id) {
+    if (await currentEvent.user_id !== user.id) {
       return this.response('You dont\'t have permisiion to perfrom this action', 401)
     }
     try {
@@ -71,12 +77,10 @@ class EventsController extends Controller {
     // The the event Id
     const { event } = params
     // Load the current event
-    const currentEvent = new Event(event)
-    const { attributes } = currentEvent
-    const details = await attributes
+    const currentEvent = await Event.find(event)
     // A user can only update his/her own event
-    if (await details.user_id !== user.id) {
-      return this.response('You dont\'t have permisiion to perfrom this action', 401)
+    if (await currentEvent.user_id !== user.id) {
+      return this.response('You dont\'t have permision to perfrom this action', 401)
     }
     try {
       await currentEvent.destroy()

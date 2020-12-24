@@ -27,6 +27,15 @@ router.put('/:event', async (req, res) => {
   }
 })
 
+router.get('/:event', async (req, res) => {
+  try {
+    const { message, status } = await EventsController.show(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
 router.delete('/:event', async (req, res) => {
   try {
     const { message, status } = await EventsController.delete(req)

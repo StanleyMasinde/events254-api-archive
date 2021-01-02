@@ -12,9 +12,6 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer>
-      &copy; opensource254 2020
-    </v-footer>
   </v-app>
 </template>
 <style lang="scss" scoped>

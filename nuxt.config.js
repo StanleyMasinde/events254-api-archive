@@ -99,7 +99,7 @@ module.exports = {
     },
     defaultAssets: {
       font: {
-        family: 'Roboto'
+        family: 'Ubuntu'
       },
       icons: 'mdi'
     }

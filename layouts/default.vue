@@ -18,10 +18,12 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
-      <nuxt />
+      <v-container fluid>
+        <nuxt />
+      </v-container>
     </v-main>
     <v-footer>
-      &copy; opensource254 2020
+      &copy; opensource254 2020 - {{ new Date().getFullYear() }}
     </v-footer>
   </v-app>
 </template>

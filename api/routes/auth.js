@@ -41,7 +41,8 @@ router.post('/password/update', async (req, res) => {
 })
 
 router.get('/user', (req, res) => {
-  res.json(req.user)
+  const { user } = req
+  res.json({ user })
 })
 
 module.exports = router

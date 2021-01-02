@@ -77,7 +77,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Auth
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth'
   ],
   // Vuetify config
   vuetify: {

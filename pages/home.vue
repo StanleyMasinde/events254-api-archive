@@ -21,6 +21,11 @@
 </template>
 <script>
 export default {
-  middleware: 'auth'
+  middleware: 'auth',
+  head () {
+    return {
+      title: this.$auth.user.name || ''
+    }
+  }
 }
 </script>

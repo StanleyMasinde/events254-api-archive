@@ -44,7 +44,6 @@
     "passport-local": "^1.0.0",
     "redis": "^3.0.2",
     "sessionstore": "^0.4.8",
-    "sqlite3": "^5.0.0",
     "vee-validate": "^3.4.5"
   },
   "devDependencies": {
@@ -60,6 +59,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "faker": "^5.1.0",
     "mocha": "^8.2.1",
+    "sqlite3": "^5.0.0",
     "stylelint": "^13.8.0"
   },
   "repository": "git+https://github.com/opensource254/events254.git",

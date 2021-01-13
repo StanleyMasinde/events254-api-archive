@@ -36,7 +36,6 @@ class UserController extends Controller {
       const { email } = details
       const exists = await User.whereFirst({ email })
       if (exists) {
-        console.log(exists)
         return this.response({ errors: { email: 'This email is already registerd' } }, 422)
       }
 

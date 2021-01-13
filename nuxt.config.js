@@ -1,12 +1,17 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 const colors = require('vuetify/lib/util/colors').default
 module.exports = {
+  // Nuxt server
   server: {
     port: process.env.PORT || 3000,
     host: 'localhost',
     timing: false
   },
 
+  // disable ssr
+  ssr: false,
+
+  // Vue router
   router: {
     middleware: ['auth']
   },

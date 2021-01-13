@@ -32,6 +32,14 @@ class UserController extends Controller {
       })
         .validate()
 
+      // user exists
+      const { email } = details
+      const exists = await User.whereFirst({ email })
+      if (exists) {
+        console.log(exists)
+        return this.response({ errors: { email: 'This email is already registerd' } }, 422)
+      }
+
       const u = await User.register(details)
       // TODO use queing here
       await mail.sendMail({
@@ -45,6 +53,7 @@ class UserController extends Controller {
       })
       return this.response(u)
     } catch (error) {
+      // If error is 422
       return this.response(error, error.status || 422)
     }
   }

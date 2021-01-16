@@ -9,7 +9,7 @@ module.exports = {
   },
 
   // disable ssr
-  ssr: false,
+  // ssr: false,
 
   // Vue router
   router: {
@@ -114,6 +114,7 @@ module.exports = {
      ** See https://axios.nuxtjs.org/options
      */
   axios: {},
+
   /*
      ** vuetify module configuration
      ** https://github.com/nuxt-community/vuetify-module

@@ -7,8 +7,8 @@ const mail = nodemailer.createTransport({
   port: process.env.MAIL_PORT || 2525,
   secure: false,
   auth: {
-    user: process.env.MAIL_USERNAME || '',
-    pass: process.env.MAIL_PASSWORD || ''
+    user: process.env.MAIL_USERNAME,
+    pass: process.env.MAIL_PASSWORD
   }
 })
 mail.use('compile', pugEngine({

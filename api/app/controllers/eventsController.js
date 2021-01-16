@@ -21,7 +21,9 @@ class EventsController extends Controller {
       }).validate()
       // The data is valid
       body.user_id = user.id
-      const e = await Event.create(body)
+      // eslint-disable-next-line camelcase
+      const { user_id, type, meeting_link, title, description, date, time, duration } = body
+      const e = await Event.create({ user_id, type, meeting_link, title, description, date, time, duration })
       return this.response(e, 201)
     } catch (error) {
       return this.response(error, error.status || 422)

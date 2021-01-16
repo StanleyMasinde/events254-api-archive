@@ -94,8 +94,5 @@
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer>
-      &copy; opensource254 2020 - {{ new Date().getFullYear() }}
-    </v-footer>
   </v-app>
 </template>

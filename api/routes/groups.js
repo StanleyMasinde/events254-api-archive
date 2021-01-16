@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const GroupController = require('../app/controllers/groupController')
 
+/**
+ * Get all groups
+ */
 router.get('/', async (req, res) => {
   try {
     const { status, message } = await GroupController.index()

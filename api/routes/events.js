@@ -1,14 +1,23 @@
 const router = require('express').Router()
 const EventsController = require('../app/controllers/eventsController')
 
+/**
+ * All these routes require auth
+ */
 router.use((req, res, next) => {
   req.user === undefined ? res.status(401).json('Unauthenticated') : next()
 })
 
+/**
+ * Get all events from the database
+ */
 router.get('/', (req, res) => {
   res.json('All events')
 })
 
+/**
+ * Create a new event
+ */
 router.post('/', async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
@@ -18,6 +27,9 @@ router.post('/', async (req, res) => {
   }
 })
 
+/**
+ * Update a specified event
+ */
 router.put('/:event', async (req, res) => {
   try {
     const { message, status } = await EventsController.update(req)
@@ -27,6 +39,9 @@ router.put('/:event', async (req, res) => {
   }
 })
 
+/**
+ * Fetch a specified event
+ */
 router.get('/:event', async (req, res) => {
   try {
     const { message, status } = await EventsController.show(req)
@@ -36,6 +51,9 @@ router.get('/:event', async (req, res) => {
   }
 })
 
+/**
+ * Delete a specified event
+ */
 router.delete('/:event', async (req, res) => {
   try {
     const { message, status } = await EventsController.delete(req)
@@ -45,6 +63,9 @@ router.delete('/:event', async (req, res) => {
   }
 })
 
+/**
+ * Get events for the current authenticated user
+ */
 router.get('/currentUser', async (req, res) => {
   try {
     const { message, status } = await EventsController.currentUserEvents(req.user)

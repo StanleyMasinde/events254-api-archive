@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const sessionstore = require('sessionstore')
 const formData = require('express-form-data')
 
-// Auth
+// Require passportjs for auth
 const passport = require('./app/auth/auth')
 
 const usersRouter = require('./routes/users')

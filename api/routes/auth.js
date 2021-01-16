@@ -3,6 +3,9 @@ const passport = require('passport')
 const usersController = require('../app/controllers/usersController')
 const router = express.Router()
 
+/**
+ * Register a new user to the application
+ */
 router.post('/register', async (req, res) => {
   try {
     const { status, message } = await usersController.register(req.body)
@@ -12,15 +15,26 @@ router.post('/register', async (req, res) => {
   }
 })
 
+/**
+ * Login a user using the local strategy
+ */
 router.post('/login', passport.authenticate('local'), (req, res) => {
   res.json(req.user)
 })
 
+/**
+ * End a user's session
+ */
 router.post('/logout', function (req, res) {
   req.logOut()
   res.json({ message: 'Logout' })
 })
 
+/**
+ * Reset a user's password
+ * This route is used to request a new password
+ * The user receives an email
+ */
 router.post('/password', async (req, res) => {
   try {
     const { message, status } = await usersController.sendPasswordResetEmail(req.body.email)
@@ -31,6 +45,9 @@ router.post('/password', async (req, res) => {
   }
 })
 
+/**
+ * This route is used to update a user's password
+ */
 router.post('/password/update', async (req, res) => {
   try {
     const { message, status } = await usersController.resetPassword(req.body)
@@ -40,6 +57,9 @@ router.post('/password/update', async (req, res) => {
   }
 })
 
+/**
+ * Get the current authenticated user
+ */
 router.get('/user', (req, res) => {
   const { user } = req
   res.json({ user })

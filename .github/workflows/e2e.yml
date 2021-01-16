@@ -11,7 +11,7 @@ jobs:
           with:
             args: npm install
         - name: Test
-          uses: ianwalter/puppeteer@master
+          uses: ianwalter/puppeteer@main
           with:
             args: npm run test:e2e
         - uses: actions/upload-artifact@v1

@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "nuxt start",
+    "start": "nuxt start --spa",
     "dev": "DEBUG=express:* nuxt",
     "pretest": "NODE_ENV=development knex migrate:latest",
     "test": "NODE_ENV=testing mocha --timeout 12000 --exit",

@@ -13,7 +13,7 @@ const s3 = new S3Client({ region: REGION })
 
 const upload = async (file, folder = '/') => {
   // Destructure to get original name and path
-  const { originalname, path, mimetype } = file
+  const {originalname ,filename, path, mimetype } = file
 
   // Read the teporary upload
   const fileStream = fs.createReadStream(path)
@@ -23,19 +23,21 @@ const upload = async (file, folder = '/') => {
     fs.writeFileSync('error.log', `${new Date().toUTCString()} | FileStream error ${new Error(err).message} \n`, { flag: 'a' })
   })
 
+  const uploadFolder = `${folder}/${filename}${originalname}`
+
   // Object params for the upload
   const objectParams = {
     ContentType: mimetype,
     ACL: 'public-read',
     Bucket: bucketName,
-    Key: `${folder}/${originalname}`,
+    Key: uploadFolder,
     Body: fileStream
   }
 
   try {
     await s3.send(new PutObjectCommand(objectParams))
     // The upload was successful
-    return `https://${bucketName}.s3.${REGION}.amazonaws.com/${folder}/${originalname}}`
+    return `https://${bucketName}.s3.${REGION}.amazonaws.com/${uploadFolder}`
   } catch (error) {
     fs.writeFileSync('error.log', `${new Date().toUTCString()} | S3 ${new Error(error).message} \n`, { flag: 'a' })
   }

@@ -16,8 +16,8 @@ class EventsController extends Controller {
         title: 'required',
         description: 'required',
         date: 'required',
-        time: 'required',
-        duration: 'required'
+        time: 'required'
+        // duration: 'required'
       }).validate()
       // The data is valid
       body.user_id = user.id

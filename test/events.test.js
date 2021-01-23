@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+const fs = require('fs')
 const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
@@ -27,15 +28,18 @@ describe('#Events test', () => {
 
   it('User creates and event', (done) => {
     app.post('/events')
-      .send({
+      .set('content-type', 'multipart/form-data')
+      .attach('poster', fs.readFileSync('./static/icon.png'), 'poster.png')
+      .field({
         type: 'Physical',
         title: 'Awesome event',
         description: faker.lorem.paragraph(10),
-        date: faker.date.future(),
-        time: faker.time.recent(),
-        // TODO calculate duration from the backend
-        duration: '2h'
+        date: new Date().toISOString().substr(0, 10),
+        time: '09:30'
       })
+      //   // TODO calculate duration from the backend
+      //   duration: '2h'
+      // })
       .then((res) => {
         expect(res.status).equals(201)
         done()

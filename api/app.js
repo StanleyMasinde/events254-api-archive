@@ -1,9 +1,7 @@
-const os = require('os')
 const express = require('express')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const sessionstore = require('sessionstore')
-const formData = require('express-form-data')
 
 // Require passportjs for auth
 const passport = require('./app/auth/auth')
@@ -29,17 +27,6 @@ app.use(session({
       type: 'redis'
     })
 }))
-// parse data with connect-multiparty.
-app.use(formData.parse({
-  uploadDir: os.tmpdir(),
-  autoClean: true
-}))
-// delete from the request all empty files (size == 0)
-app.use(formData.format())
-// change the file objects to fs.ReadStream
-app.use(formData.stream())
-// union the body and the files
-app.use(formData.union())
 
 // Passport
 app.use(passport.initialize())

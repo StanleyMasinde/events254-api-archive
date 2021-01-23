@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const EventsController = require('../app/controllers/eventsController')
+const multer = require('multer')
 
 /**
  * All these routes require auth
@@ -18,7 +19,7 @@ router.get('/', (req, res) => {
 /**
  * Create a new event
  */
-router.post('/', async (req, res) => {
+router.post('/', multer({ dest: './uploads' }).single('poster'), async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
     res.status(status).json(message)

@@ -2,6 +2,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('events', (table) => {
     table.bigIncrements('id')
+    table.string('poster_url')
     table.bigInteger('user_id').unsigned()
     table.string('type')
     table.string('meeting_link')

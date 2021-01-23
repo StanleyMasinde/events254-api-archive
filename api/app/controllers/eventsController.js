@@ -1,6 +1,7 @@
 const Validator = require('mevn-validator')
 const Event = require('../models/event')
 const User = require('../models/user')
+const upload = require('../filesystem/s3')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -9,7 +10,9 @@ class EventsController extends Controller {
      * @param {*} payload
      */
   async store (payload) {
-    const { user, body } = payload
+    const { user, body, file } = payload
+    // eslint-disable-next-line camelcase
+    const poster_url = await upload(file, 'event-posters')
     try {
       await new Validator(body, {
         type: 'required',
@@ -23,7 +26,7 @@ class EventsController extends Controller {
       body.user_id = user.id
       // eslint-disable-next-line camelcase
       const { user_id, type, meeting_link, title, description, date, time, duration } = body
-      const e = await Event.create({ user_id, type, meeting_link, title, description, date, time, duration })
+      const e = await Event.create({ poster_url, user_id, type, meeting_link, title, description, date, time, duration })
       return this.response(e, 201)
     } catch (error) {
       return this.response(error, error.status || 422)

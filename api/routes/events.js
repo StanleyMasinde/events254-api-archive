@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const EventsController = require('../app/controllers/eventsController')
 const multer = require('multer')
+const EventsController = require('../app/controllers/eventsController')
 
 /**
  * All these routes require auth

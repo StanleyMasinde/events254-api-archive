@@ -29,7 +29,7 @@ describe('#Events test', () => {
   it('User creates and event', (done) => {
     app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('poster', fs.readFileSync('./static/icon.png'), 'poster.png')
+      .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
         type: 'Physical',
         title: 'Awesome event',

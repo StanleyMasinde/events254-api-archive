@@ -34,12 +34,9 @@ describe('#Events test', () => {
         type: 'Physical',
         title: 'Awesome event',
         description: faker.lorem.paragraph(10),
-        date: new Date().toISOString().substr(0, 10),
-        time: '09:30'
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '09:30'
       })
-      //   // TODO calculate duration from the backend
-      //   duration: '2h'
-      // })
       .then((res) => {
         expect(res.status).equals(201)
         done()
@@ -66,9 +63,8 @@ describe('#Events test', () => {
         type: 'Online',
         title: 'New title',
         description: faker.lorem.paragraph(10),
-        date: faker.date.future(),
-        time: faker.time.recent(),
-        duration: '2h'
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '10:45'
       })
       .then((res) => {
         expect(res.status).equals(201)

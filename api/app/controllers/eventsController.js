@@ -1,4 +1,5 @@
 const Validator = require('mevn-validator')
+const moment = require('moment-timezone')
 const Event = require('../models/event')
 const User = require('../models/user')
 const upload = require('../filesystem/s3')
@@ -13,20 +14,24 @@ class EventsController extends Controller {
     const { user, body, file } = payload
     // eslint-disable-next-line camelcase
     const poster_url = await upload(file, 'event-posters')
+
     try {
       await new Validator(body, {
         type: 'required',
         title: 'required',
         description: 'required',
-        date: 'required',
-        time: 'required'
-        // duration: 'required'
-      }).validate()
+        from_date: 'required',
+        from_time: 'required'
+      })
+        .validate()
+
       // The data is valid
       body.user_id = user.id
       // eslint-disable-next-line camelcase
-      const { user_id, type, meeting_link, title, description, date, time, duration } = body
-      const e = await Event.create({ poster_url, user_id, type, meeting_link, title, description, date, time, duration })
+      const { from_date, from_time, type, meeting_link, title, description } = body
+      const from = this.formatToDateTime(from_time, from_date)
+      const to = null
+      const e = await Event.create({ poster_url, type, meeting_link, title, description, from, to })
       return this.response(e, 201)
     } catch (error) {
       return this.response(error, error.status || 422)
@@ -46,26 +51,31 @@ class EventsController extends Controller {
    * @param {Array} payload
    */
   async update (payload) {
-    const { user, body, params } = payload
+    const { body, params } = payload
     // The the event Id
     const { event } = params
     // Load the current event
     const currentEvent = await Event.find(event)
     // A user can only update his/her own event
-    if (await currentEvent.user_id !== user.id) {
-      return this.response('You dont\'t have permisiion to perfrom this action', 401)
-    }
+    // TODO add a middleware or policy for this
+    // if (await currentEvent.user_id !== user.id) {
+    //   return this.response('You dont\'t have permisiion to perfrom this action', 401)
+    // }
     try {
       await new Validator(body, {
         type: 'required',
         title: 'required',
         description: 'required',
-        date: 'required',
-        time: 'required',
-        duration: 'required'
+        from_date: 'required',
+        from_time: 'required'
       }).validate()
+      // create the from date
+      // eslint-disable-next-line camelcase
+      const { from_date, from_time, type, meeting_link, title, description } = body
+      const from = this.formatToDateTime(from_time, from_date)
+      const to = null
       // Payload is valid
-      const res = await currentEvent.update(body)
+      const res = await currentEvent.update({ type, meeting_link, title, description, from, to })
       // Looks good
       return this.response(res, 201)
     } catch (error) {
@@ -78,15 +88,16 @@ class EventsController extends Controller {
    * @param {Array} payload
    */
   async delete (payload = {}) {
-    const { user, params } = payload
+    const { params } = payload
     // The the event Id
     const { event } = params
     // Load the current event
     const currentEvent = await Event.find(event)
     // A user can only update his/her own event
-    if (await currentEvent.user_id !== user.id) {
-      return this.response('You dont\'t have permision to perfrom this action', 401)
-    }
+    // TODO add this middleware
+    // if (await currentEvent.user_id !== user.id) {
+    //   return this.response('You dont\'t have permision to perfrom this action', 401)
+    // }
     try {
       await currentEvent.destroy()
       return this.response('Deleted')
@@ -107,5 +118,28 @@ class EventsController extends Controller {
       return this.response(error, 500)
     }
   }
+
+  /**
+  * Format the date and time into a datetime field
+  * @param {String} fromTime
+  * @param {String} fromDate
+  * @param {String} timezone
+  * @returns new Date()
+  */
+  formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
+    /** Format the date */
+    const fromTimeArray = fromTime.split(':')
+    const fromDateArray = fromDate.split('-')
+    const fromDateTime = new Date() // New date instance
+    fromDateTime.setHours(fromTimeArray[0]) // Set the hours from the input
+    fromDateTime.setMinutes(fromTimeArray[1]) // set the minutes from the input
+    fromDateTime.setSeconds(0) // Seconds should always be zero
+    fromDateTime.setFullYear(fromDateArray[0]) // set the year
+    fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
+    fromDateTime.setDate(fromDateArray[2]) // The day of the month
+
+    return moment(fromDateTime).tz(timezone)
+  }
 }
+
 module.exports = new EventsController()

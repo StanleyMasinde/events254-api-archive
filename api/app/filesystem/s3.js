@@ -13,7 +13,7 @@ const s3 = new S3Client({ region: REGION })
 
 const upload = async (file, folder = '/') => {
   // Destructure to get original name and path
-  const {originalname ,filename, path, mimetype } = file
+  const { originalname, filename, path, mimetype } = file
 
   // Read the teporary upload
   const fileStream = fs.createReadStream(path)
@@ -33,7 +33,10 @@ const upload = async (file, folder = '/') => {
     Key: uploadFolder,
     Body: fileStream
   }
-
+  // Do not upload to S3 in test environmets
+  if (process.env.NODE_ENV === 'testing') {
+    return 'https://fakeurl.com'
+  }
   try {
     await s3.send(new PutObjectCommand(objectParams))
     // The upload was successful

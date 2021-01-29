@@ -29,6 +29,18 @@ router.post('/', multer({ dest: './uploads' }).single('poster'), async (req, res
 })
 
 /**
+ * Get events for the current authenticated user
+ */
+router.get('/currentUser', async (req, res) => {
+  try {
+    const { message, status } = await EventsController.currentUserEvents(req.user)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
  * Update a specified event
  */
 router.put('/:event', async (req, res) => {
@@ -58,18 +70,6 @@ router.get('/:event', async (req, res) => {
 router.delete('/:event', async (req, res) => {
   try {
     const { message, status } = await EventsController.delete(req)
-    res.status(status).json(message)
-  } catch (error) {
-    res.status(500).json(error)
-  }
-})
-
-/**
- * Get events for the current authenticated user
- */
-router.get('/currentUser', async (req, res) => {
-  try {
-    const { message, status } = await EventsController.currentUserEvents(req.user)
     res.status(status).json(message)
   } catch (error) {
     res.status(500).json(error)

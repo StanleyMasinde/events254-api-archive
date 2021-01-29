@@ -26,18 +26,26 @@ class EventsController extends Controller {
         .validate()
 
       // The data is valid
-      body.user_id = user.id
       // eslint-disable-next-line camelcase
       const { from_date, from_time, type, meeting_link, title, description } = body
       const from = this.formatToDateTime(from_time, from_date)
-      const to = null
-      const e = await Event.create({ poster_url, type, meeting_link, title, description, from, to })
+      const to = null // TODO Add this field
+      // eslint-disable-next-line camelcase
+      const organisable_id = user.id // The authenticated user's ID
+      // eslint-disable-next-line camelcase
+      const organisable_type = 'User' // The organiser's Model can be group or user
+      const e = await Event.create({ poster_url, type, meeting_link, title, description, from, to, organisable_id, organisable_type })
+      // Add the organiser
       return this.response(e, 201)
     } catch (error) {
       return this.response(error, error.status || 422)
     }
   }
 
+  /**
+   * Show an event
+   * @param {Array} params
+   */
   async show ({ params }) {
     const e = await Event.find(params.event)
     if (!e) {

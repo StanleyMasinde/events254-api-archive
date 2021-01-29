@@ -22,7 +22,7 @@ class User extends Model {
    * Get the events created by the current User
    */
   events () {
-    return this.hasMany('Event')
+    return this.morphMany('Event', 'organisable')
   }
 }
 

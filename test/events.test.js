@@ -50,6 +50,7 @@ describe('#Events test', () => {
     app.get('/events/currentUser')
       .then((res) => {
         expect(res.status).equals(200)
+        expect(res.body).to.be.an('Array')
         done()
       })
       .catch((err) => {

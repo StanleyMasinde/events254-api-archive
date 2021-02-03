@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 // this is the original session manager
-
+/*
 app.use(session({
   secret: 'super-secret-cookie',
   resave: false,
@@ -30,9 +30,9 @@ app.use(session({
     : sessionstore.createSessionStore({
       type: 'redis'
     })
-}))
+})) */
 // the new session handler
-/* const sessionHandler = session({
+const sessionHandler = session({
   secret: 'super-secret-cookie',
   resave: false,
   saveUninitialized: true,
@@ -48,12 +48,12 @@ app.use(session({
 app.use((req, res, next) => {
   // check the user agent
   // TIP use (req.useragent.isMobile) to check if the session was created
-  if (req.useragent.isDesktop) {
+  if (!req.useragent.isMobile) {
     return sessionHandler(req, res, next)
   } else {
     next()
   }
-}) */
+})
 
 // Passport
 app.use(passport.initialize())

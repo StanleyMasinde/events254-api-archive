@@ -1,33 +1,36 @@
-/* eslint-disable no-undef */
 const fs = require('fs')
 const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 const faker = require('faker')
 chai.use(chaiHttp)
-const application = require('../api/app')
-const app = chai.request.agent(application).keepOpen()
 
-describe('#Events test', () => {
-  // The following tests require auth
-  it('Login a user', (done) => {
-    app
+const request = require('supertest')
+
+const application = require('../api/app')
+
+let cookie
+describe('#Events test with protected routes', () => {
+  // using auth methods
+  // eslint-disable-next-line no-undef
+  before((done) => {
+    request(application)
       .post('/auth/login')
       .send({
         email: 'john@example.com',
         password: '12345678'
       })
-      .then((res) => {
-        expect(res.status).equals(200)
-        done()
-      })
-      .catch((err) => {
-        done(err)
+      .expect(200)
+      .end(function (err, res) {
+        if (err) { return done(err) }
+        cookie = res.headers['set-cookie']
+        return done()
       })
   })
 
   it('User creates and event', (done) => {
-    app.post('/events')
+    request(application).post('/events')
+      .set('cookie', cookie)
       .set('content-type', 'multipart/form-data')
       .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
@@ -37,29 +40,27 @@ describe('#Events test', () => {
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '09:30'
       })
-      .then((res) => {
-        expect(res.status).equals(201)
-        done()
-      })
-      .catch((err) => {
-        done(err)
+      .expect(201)
+      .end(function (err, res) {
+        if (err) { return done(err) }
+        return done()
       })
   })
 
   it('Get current user\'s events', (done) => {
-    app.get('/events/currentUser')
-      .then((res) => {
-        expect(res.status).equals(200)
-        expect(res.body).to.be.an('Array')
-        done()
-      })
-      .catch((err) => {
-        done(err)
+    request(application).get('/events/currentUser')
+      .set('cookie', cookie)
+      .set('Accept', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        if (err) { return done(err) }
+        return done()
       })
   })
 
   it('Update an event', (done) => {
-    app.put('/events/1')
+    request(application).put('/events/1')
+      .set('cookie', cookie)
       .send({
         type: 'Online',
         title: 'New title',
@@ -67,34 +68,31 @@ describe('#Events test', () => {
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
       })
-      .then((res) => {
-        expect(res.status).equals(201)
-        done()
-      })
-      .catch((err) => {
-        done(err)
+      .expect(201)
+      .end(function (err, res) {
+        if (err) { return done(err) }
+        return done()
       })
   })
 
   it('Get the updated Event', (done) => {
-    app.get('/events/1')
-      .then((ev) => {
-        expect(ev.body.title).equals('New title')
-        done()
-      })
-      .catch((e) => {
-        done(e)
+    request(application).get('/events/1')
+      .set('cookie', cookie)
+      .expect(200)
+      .end(function (err, res) {
+        expect(res.body.title).equals('New title')
+        if (err) { return done(err) }
+        return done()
       })
   })
 
   it('User deletes and event', (done) => {
-    app.delete('/events/1')
-      .then((res) => {
-        expect(res.status).equals(200)
-        done()
-      })
-      .catch((err) => {
-        done(err)
+    request(application).delete('/events/1')
+      .set('cookie', cookie)
+      .expect(200)
+      .end(function (err, res) {
+        if (err) { return done(err) }
+        return done()
       })
   })
 })

@@ -12,6 +12,17 @@
 3. npm run run build
 3. npm start --spa
 
+## Mail setup
+Both dev and prod send real worl emails. Please be sure to setup your SMTP settings in the `.env` like below for [mailhog](https://github.com/mailhog)
+```
+MAIL_HOST=0.0.0.0
+MAIL_PORT=1025
+MAIL_USERNAME=''
+MAIL_PASSWORD=''
+SECURE=false
+
+```
+
 ## API Routes
 > Route prefix `/api/auth`
 

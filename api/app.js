@@ -19,8 +19,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 // this is the original session manager
-/**
-  app.use(session({
+
+app.use(session({
   secret: 'super-secret-cookie',
   resave: false,
   saveUninitialized: true,
@@ -30,9 +30,9 @@ app.use(cookieParser())
     : sessionstore.createSessionStore({
       type: 'redis'
     })
-})) */
+}))
 // the new session handler
-const sessionHandler = session({
+/* const sessionHandler = session({
   secret: 'super-secret-cookie',
   resave: false,
   saveUninitialized: true,
@@ -53,7 +53,7 @@ app.use((req, res, next) => {
   } else {
     next()
   }
-})
+}) */
 
 // Passport
 app.use(passport.initialize())

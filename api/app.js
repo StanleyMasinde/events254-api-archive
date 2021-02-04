@@ -64,4 +64,11 @@ app.use('/groups', groupsRouter)
 app.use('/auth', authRouter)
 app.use('/events', eventsRouter)
 
-module.exports = app
+if (process.env.NODE_ENV === 'api') {
+  const port = process.env.PORT | 3000
+  app.listen(port, () => {
+    console.log(`API DEV server running on http://localhost:${port}`)
+  })
+} else {
+  module.exports = app
+}

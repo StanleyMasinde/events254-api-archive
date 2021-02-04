@@ -19,7 +19,7 @@
   "scripts": {
     "start": "nuxt start --spa",
     "dev": "DEBUG=express:* nuxt",
-    "dev:api" : "DEBUG=express:* NODE_ENV=api node api/app.js",
+    "dev:api": "DEBUG=express:* NODE_ENV=api node api/app.js",
     "pretest": "NODE_ENV=development knex migrate:latest",
     "test": "NODE_ENV=testing mocha --timeout 12000 --exit",
     "posttest": "rm dev.sqlite",
@@ -27,7 +27,7 @@
     "build": "nuxt build"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.3.0",
+    "@aws-sdk/client-s3": "^3.4.1",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/pwa": "^3.3.3",
@@ -53,17 +53,17 @@
     "vee-validate": "^3.4.5"
   },
   "devDependencies": {
-    "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/axios": "^5.13.0",
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@nuxtjs/vuetify": "^1.11.2",
     "babel-eslint": "^10.1.0",
-    "chai": "^4.2.0",
+    "chai": "^4.3.0",
     "chai-http": "^4.3.0",
-    "eslint": "^7.17.0",
+    "eslint": "^7.19.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "faker": "^5.1.0",
+    "faker": "^5.3.1",
     "mocha": "^8.2.1",
     "stylelint": "^13.8.0"
   },

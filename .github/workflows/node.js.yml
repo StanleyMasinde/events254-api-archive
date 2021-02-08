@@ -20,6 +20,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        mysql database: 'events254'
+        mysql root password: 'password'
+        mysql user: 'events254'
+        mysql password: 'password'
     - uses: mirromutth/mysql-action@v1.1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1

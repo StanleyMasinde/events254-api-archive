@@ -23,7 +23,7 @@ jobs:
       with:
         mysql database: 'events254'
         mysql root password: 'password'
-        mysql user: 'events254'
+        mysql user: 'root'
         mysql password: 'password'
     - uses: mirromutth/mysql-action@v1.1
     - name: Use Node.js ${{ matrix.node-version }}

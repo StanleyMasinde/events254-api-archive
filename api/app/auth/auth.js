@@ -66,7 +66,16 @@ const auth = () => {
     /**
      * Determine weather the current request requires toke
      */
-    req.requiresToken = () => {}
+    req.requiresToken = () => {
+      const header = req.header('X-requested-with')
+      if (header) { // We first check for the header before the value
+        if (header === 'mobile') { // We can use multiple like true, 1 etc for now let us use mobile
+          return true
+        }
+        return false // The value might have been set by mistake
+      }
+      return false // No headers set
+    }
     next()
   }
 }

@@ -1,5 +1,4 @@
 const express = require('express')
-const Auth = require('../app/auth/auth')
 const usersController = require('../app/controllers/usersController')
 const router = express.Router()
 
@@ -8,7 +7,7 @@ const router = express.Router()
  */
 router.post('/register', async (req, res) => {
   try {
-    const { status, message } = await usersController.register(req.body)
+    const { status, message } = await usersController.register(req)
     res.status(status).json(message)
   } catch (error) {
     res.json(error)

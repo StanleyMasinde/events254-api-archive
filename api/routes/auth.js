@@ -19,7 +19,6 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', (req, res) => {
   req.attempt()
-  // res.json(req.body)
 })
 
 /**

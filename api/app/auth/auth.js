@@ -1,3 +1,4 @@
+const { randomBytes } = require('crypto')
 const { compareSync } = require('bcrypt')
 const { DB } = require('mevn-orm')
 
@@ -16,7 +17,27 @@ const auth = () => {
           // The email is correct
           if (u) {
             if (compareSync(password, u.password)) {
-              // The login was sucessful
+              if (req.requiresToken()) {
+                // Create a new access token
+                // TODO the token name should include the device details and IP
+                const token = randomBytes(64).toString('hex')
+                const now = new Date()
+
+                // TODO move this into a reusable function
+                DB.table('personal_access_tokens').insert({
+                  tokenable_type: 'users',
+                  tokenable_id: u.id,
+                  name: 'Mobile device',
+                  token,
+                  abilities: '*',
+                  last_used_at: now,
+                  created_at: now,
+                  updated_at: now
+                })
+
+                return res.json({ token })
+              }
+              // The login was sucessful and session is required
               req.session.auth = {
                 userId: u.id,
                 guard
@@ -42,6 +63,11 @@ const auth = () => {
         .first()
     }
 
+    /**
+     * Get the current user
+     * @param {*} guard the guard to use default is users
+     * @returns
+     */
     req.user = (guard = 'users') => {
       const { userId } = req.session.auth
       return DB.table(guard)

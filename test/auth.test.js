@@ -83,4 +83,16 @@ describe('Authentication with personal API Tokens', () => {
     expect(res.status).equals(200)
     expect(res.body).to.haveOwnProperty('token')
   })
+
+  it('Should return a personal API token on login', async () => {
+    const res = await app
+      .post('/auth/login')
+      .set('X-requested-with', 'mobile')
+      .send({
+        email: 'john@mobile.com',
+        password: '12345678'
+      })
+    expect(res.status).equals(200)
+    expect(res.body).to.haveOwnProperty('token')
+  })
 })

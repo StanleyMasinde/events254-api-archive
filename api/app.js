@@ -17,8 +17,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-app.use(auth)
-
 app.use(session({
   secret: 'super-secret-cookie',
   resave: false,
@@ -30,6 +28,7 @@ app.use(session({
       type: 'redis'
     })
 }))
+app.use(auth)
 
 app.use('/users', usersRouter)
 app.use('/groups', groupsRouter)

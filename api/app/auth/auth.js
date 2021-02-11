@@ -104,6 +104,9 @@ const auth = () => {
        * ------------------------------------------------
        */
       const { userId } = req.session.auth
+      if (!userId) {
+        return res.status(401).json('You are not authenticated')
+      }
       return DB.table(guard)
         .where({ id: userId })
         .first()
@@ -112,7 +115,7 @@ const auth = () => {
         })
         .catch(() => {
           // TODO handle this properly for now we just return blank
-          return null
+          return res.status(401).json('You are not authenticated')
         })
     }
 

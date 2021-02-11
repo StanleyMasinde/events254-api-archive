@@ -24,7 +24,7 @@ const auth = () => {
                 const now = new Date()
 
                 // TODO move this into a reusable function
-                DB.table('personal_access_tokens').insert({
+                return DB.table('personal_access_tokens').insert({
                   tokenable_type: 'users',
                   tokenable_id: u.id,
                   name: 'Mobile device',
@@ -34,8 +34,12 @@ const auth = () => {
                   created_at: now,
                   updated_at: now
                 })
-
-                return res.json({ token })
+                  .then(() => {
+                    return res.json({ token })
+                  })
+                  .catch((e) => {
+                    return res.status(500).json(e)
+                  })
               }
               // The login was sucessful and session is required
               req.session.auth = {
@@ -69,6 +73,36 @@ const auth = () => {
      * @returns
      */
     req.user = (guard = 'users') => {
+      /**
+       * ------------------------------------------------
+       * The request requires a token hence no session is set
+       * We lookup for the exsistence of the token and use the token
+       * to get the owner
+       */
+      if (req.requiresToken()) {
+        // eslint-disable-next-line func-call-spacing
+        const token = req.header('Authorization').split(' ')[1]
+
+        // eslint-disable-next-line no-unexpected-multiline
+        return (async function () {
+          try {
+            const tk = await DB.table('personal_access_tokens')
+              .where({ token, tokenable_type: guard }).first()
+            const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'username', 'email', 'bio', 'created_at', 'updated_at'])
+            return u
+          } catch (e) {
+            return e // TODO handle this error properly
+          }
+        })()
+      }
+
+      /**
+       * -----------------------------------------------
+       * The request requires a session so we get
+       * the userId from the session and use it to fetch
+       * The user from the Database
+       * ------------------------------------------------
+       */
       const { userId } = req.session.auth
       return DB.table(guard)
         .where({ id: userId })
@@ -77,7 +111,7 @@ const auth = () => {
           return u
         })
         .catch(() => {
-        // TODO handle this properly for now we just return blank
+          // TODO handle this properly for now we just return blank
           return null
         })
     }

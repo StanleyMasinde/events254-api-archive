@@ -71,6 +71,7 @@ describe('Session Authentication tests', () => {
 })
 
 describe('Authentication with personal API Tokens', () => {
+  let token
   it('Should return a personal API token on registration', async () => {
     const res = await app
       .post('/auth/register')
@@ -94,5 +95,14 @@ describe('Authentication with personal API Tokens', () => {
       })
     expect(res.status).equals(200)
     expect(res.body).to.haveOwnProperty('token')
+    token = res.body.token
+  })
+
+  it('Should get the current user using the API token', async () => {
+    const res = await app
+      .get('/auth/user')
+      .set('X-requested-with', 'mobile')
+      .set('Authorization', `Bearer ${token}`)
+    expect(res.status).equals(200)
   })
 })

@@ -1,5 +1,6 @@
 const express = require('express')
 const usersController = require('../app/controllers/usersController')
+const authenticated = require('../app/middleware/authenticated')
 const router = express.Router()
 
 /**
@@ -59,7 +60,7 @@ router.post('/password/update', async (req, res) => {
 /**
  * Get the current authenticated user
  */
-router.get('/user', async (req, res) => {
+router.get('/user', authenticated(), async (req, res) => {
   const user = await req.user()
   res.json({ user })
 })

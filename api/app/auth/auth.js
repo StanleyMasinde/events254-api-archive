@@ -1,6 +1,6 @@
-const { randomBytes } = require('crypto')
 const { compareSync } = require('bcrypt')
 const { DB } = require('mevn-orm')
+const createToken = require('./createToken')
 
 const auth = () => {
   return function (req, res, next) {
@@ -18,25 +18,12 @@ const auth = () => {
           if (u) {
             if (compareSync(password, u.password)) {
               if (req.requiresToken()) {
-                // Create a new access token
-                // TODO the token name should include the device details and IP
-                const token = randomBytes(64).toString('hex')
-                const now = new Date()
-
-                // TODO move this into a reusable function
-                return DB.table('personal_access_tokens').insert({
-                  tokenable_type: 'users',
+                return createToken({
                   tokenable_id: u.id,
-                  name: 'Mobile device',
-                  token,
-                  abilities: '*',
-                  last_used_at: now,
-                  created_at: now,
-                  updated_at: now
+                  tokenable_type: 'users'
+                }).then((token) => {
+                  return res.json({ token })
                 })
-                  .then(() => {
-                    return res.json({ token })
-                  })
                   .catch((e) => {
                     return res.status(500).json(e)
                   })
@@ -74,26 +61,28 @@ const auth = () => {
      */
     req.user = (guard = 'users') => {
       /**
-       * ------------------------------------------------
+       * -------------------------------------------------------
        * The request requires a token hence no session is set
        * We lookup for the exsistence of the token and use the token
        * to get the owner
        */
       if (req.requiresToken()) {
-        // eslint-disable-next-line func-call-spacing
-        const token = req.header('Authorization').split(' ')[1]
-
-        // eslint-disable-next-line no-unexpected-multiline
-        return (async function () {
-          try {
-            const tk = await DB.table('personal_access_tokens')
-              .where({ token, tokenable_type: guard }).first()
-            const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'username', 'email', 'bio', 'created_at', 'updated_at'])
-            return u
-          } catch (e) {
-            return e // TODO handle this error properly
-          }
-        })()
+        if (req.header('Authorization')) {
+          // eslint-disable-next-line func-call-spacing
+          const token = req.header('Authorization').split(' ')[1]
+          // eslint-disable-next-line no-unexpected-multiline
+          return (async function () {
+            try {
+              const tk = await DB.table('personal_access_tokens')
+                .where({ token, tokenable_type: guard }).first()
+              const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'username', 'email', 'bio', 'created_at', 'updated_at'])
+              return u
+            } catch (e) {
+              return e // TODO handle this error properly
+            }
+          })()
+        }
+        return null
       }
 
       /**
@@ -114,12 +103,12 @@ const auth = () => {
           .then((u) => {
             return u
           })
-          .catch(() => {
-          // TODO handle this properly for now we just return blank
-            return res.status(401).json('You are not authenticated')
+          .catch((e) => {
+            // TODO handle this properly for now we just return blank
+            return res.status(401).json(e)
           })
       }
-      return res.status(401).json('You are not authenticated')
+      return null
     }
 
     /**
@@ -127,6 +116,10 @@ const auth = () => {
      */
     req.logOut = () => {
       req.session.auth = {}
+    }
+
+    req.isAuthenticated = (guard = 'users') => {
+      return !!req.user(guard)
     }
 
     /**

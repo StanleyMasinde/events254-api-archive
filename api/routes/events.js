@@ -1,13 +1,12 @@
 const router = require('express').Router()
 const multer = require('multer')
 const EventsController = require('../app/controllers/eventsController')
+const authenticated = require('../app/middleware/authenticated')
 
 /**
  * All these routes require auth
  */
-router.use((req, res, next) => {
-  req.user === undefined ? res.status(401).json('Unauthenticated') : next()
-})
+router.use(authenticated())
 
 /**
  * Get all events from the database

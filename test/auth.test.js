@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const fs = require('fs')
+const faker = require('faker')
 const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
@@ -48,10 +50,21 @@ describe('Session Authentication tests', () => {
     expect(res.status).equals(200)
   })
 
+  it('Get the current user', async () => {
+    const res = await app.get('/auth/user')
+    expect(res.status).equals(200)
+    expect(res.body).haveOwnProperty('user')
+  })
+
   it('Logout a user', async () => {
     const res = await app
       .post('/auth/logout')
     expect(res.status).equals(200)
+  })
+
+  it('Should return 401 when due to no authentication', async () => {
+    const res = await app.get('/auth/user')
+    expect(res.status).equals(401)
   })
 
   it('Send a password reset notification without email should fail', async () => {
@@ -104,5 +117,30 @@ describe('Authentication with personal API Tokens', () => {
       .set('X-requested-with', 'mobile')
       .set('Authorization', `Bearer ${token}`)
     expect(res.status).equals(200)
+  })
+
+  it('Should return 401 when no authorisation/token header', async () => {
+    const res = await app
+      .get('/auth/user')
+      .set('X-requested-with', 'mobile')
+    expect(res.status).equals(401)
+  })
+
+  it('Create an event using API token', async () => {
+    const res = await app
+      .post('/events')
+      .set('content-type', 'multipart/form-data')
+      .set('X-requested-with', 'mobile')
+      .set('Authorization', `Bearer ${token}`)
+      .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .field({
+        type: 'Physical',
+        title: 'Awesome event',
+        description: faker.lorem.paragraph(10),
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '09:30'
+      })
+
+    expect(res.status).equals(201)
   })
 })

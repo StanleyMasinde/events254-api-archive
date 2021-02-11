@@ -4,6 +4,7 @@ const { DB } = require('mevn-orm')
 const { hash } = require('bcrypt')
 const mail = require('../mail/mail')
 const User = require('../models/user')
+const createToken = require('../auth/createToken')
 const Controller = require('./controller')
 
 class UserController extends Controller {
@@ -53,17 +54,9 @@ class UserController extends Controller {
       })
       // Determine if the request requires a token and pass it if so
       if (request.requiresToken()) {
-        const token = randomBytes(64).toString('hex')
-        const now = new Date()
-        DB.table('personal_access_tokens').insert({
-          tokenable_type: 'users',
+        const token = await createToken({
           tokenable_id: u,
-          name: 'Mobile device',
-          token,
-          abilities: '*',
-          last_used_at: now,
-          created_at: now,
-          updated_at: now
+          tokenable_type: 'users'
         })
 
         return this.response({ token })
@@ -146,7 +139,7 @@ class UserController extends Controller {
             .update({
               password: newP
             })
-            /** Send a success message */
+          /** Send a success message */
           return this.response('Success')
         }
       }

@@ -4,7 +4,7 @@ exports.up = function (knex) {
     table.string('tokenable_type')
     table.bigInteger('tokenable_id').unsigned()
     table.string('name')
-    table.string('token', 64)
+    table.string('token')
     table.text('abilities')
     table.timestamp('last_used_at')
     table.timestamps()

@@ -20,12 +20,13 @@ class UserController extends Controller {
 
   /**
    * Register a new user
-   * @param {*} details
+   * @param {*} request the express request object
    */
-  async register (details = []) {
+  async register (request) {
+    const { body } = request
     try {
       // Validate the input
-      await new Validator(details, {
+      await new Validator(body, {
         name: 'required',
         email: 'required|email',
         password: 'required|min:8'
@@ -33,23 +34,40 @@ class UserController extends Controller {
         .validate()
 
       // user exists
-      const { email } = details
+      const { email } = body
       const exists = await User.whereFirst({ email })
       if (exists) {
         return this.response({ errors: { email: 'This email is already registerd' } }, 422)
       }
 
-      const u = await User.register(details)
+      const u = await User.register(body)
       // TODO use queing here
       await mail.sendMail({
         from: '"Events254" <no-reply@events254.com>',
-        to: details.email,
+        to: body.email,
         subject: 'Welcome to Events254',
         template: 'welcome',
         ctx: {
-          user: details
+          user: body
         }
       })
+      // Determine if the request requires a token and pass it if so
+      if (request.requiresToken()) {
+        const token = randomBytes(64).toString('hex')
+        const now = new Date()
+        DB.table('personal_access_tokens').insert({
+          tokenable_type: 'users',
+          tokenable_id: u,
+          name: 'Mobile device',
+          token,
+          abilities: '*',
+          last_used_at: now,
+          created_at: now,
+          updated_at: now
+        })
+
+        return this.response({ token })
+      }
       return this.response(u)
     } catch (error) {
       // If error is 422

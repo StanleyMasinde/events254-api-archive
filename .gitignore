@@ -29,3 +29,4 @@ sw.js
 .nuxt
 dist
 uploads
+.DS_Store

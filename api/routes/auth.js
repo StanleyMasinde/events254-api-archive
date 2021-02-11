@@ -1,5 +1,4 @@
 const express = require('express')
-const passport = require('passport')
 const usersController = require('../app/controllers/usersController')
 const router = express.Router()
 
@@ -8,7 +7,7 @@ const router = express.Router()
  */
 router.post('/register', async (req, res) => {
   try {
-    const { status, message } = await usersController.register(req.body)
+    const { status, message } = await usersController.register(req)
     res.status(status).json(message)
   } catch (error) {
     res.json(error)
@@ -18,8 +17,8 @@ router.post('/register', async (req, res) => {
 /**
  * Login a user using the local strategy
  */
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.json(req.user)
+router.post('/login', (req, res) => {
+  req.attempt()
 })
 
 /**
@@ -60,8 +59,8 @@ router.post('/password/update', async (req, res) => {
 /**
  * Get the current authenticated user
  */
-router.get('/user', (req, res) => {
-  const { user } = req
+router.get('/user', async (req, res) => {
+  const user = await req.user()
   res.json({ user })
 })
 

@@ -48,3 +48,14 @@ SECURE=false
 |`/:event` | PUT    | Update an event    | *Event body*        |
 |`/:event` | DELETE | Delete an event    | *Delete an event*   |
 
+## Mobile Devices
+> The above routes work for mobile devices only that mobile devices do not make use of sessions
+In order to use the above authenticated routes from mobile or desktop,
+1. You need to pass `X-requested-with` header along with your request and set the value to mobile (We only have for mobile now bit works with desktop applications)
+2. On login or logout with the above header you will receive an API token. Use this token to access authenticated routes. See the example below for the route used to get the current user
+```javascript
+app.get('/auth/user')
+    .set('X-requested-with', 'mobile')
+    .set('Authorization', `Bearer ${token}`)
+```
+3. Please note that the token are long lived and for now we accept requests from any endpoint. This is bound to change before we move to production. Confused? This simply means that we will only allow requests for applications we trust and know.

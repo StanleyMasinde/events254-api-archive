@@ -24,6 +24,14 @@ class User extends Model {
   events () {
     return this.morphMany('Event', 'organisable')
   }
+
+  /**
+   * Get the curreny users access tokens
+   * The access tokens are stored in the personal_access tokens table
+   */
+  tokens () {
+    return this.morphMany('Personal_access_token', 'tokenable')
+  }
 }
 
 module.exports = User

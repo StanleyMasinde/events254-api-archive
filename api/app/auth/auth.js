@@ -103,20 +103,23 @@ const auth = () => {
        * The user from the Database
        * ------------------------------------------------
        */
-      const { userId } = req.session.auth
-      if (!userId) {
-        return res.status(401).json('You are not authenticated')
-      }
-      return DB.table(guard)
-        .where({ id: userId })
-        .first()
-        .then((u) => {
-          return u
-        })
-        .catch(() => {
-          // TODO handle this properly for now we just return blank
+      if (req.session.auth) { // If the Auth Object is set in session
+        const { userId } = req.session.auth
+        if (!userId) {
           return res.status(401).json('You are not authenticated')
-        })
+        }
+        return DB.table(guard)
+          .where({ id: userId })
+          .first()
+          .then((u) => {
+            return u
+          })
+          .catch(() => {
+          // TODO handle this properly for now we just return blank
+            return res.status(401).json('You are not authenticated')
+          })
+      }
+      return res.status(401).json('You are not authenticated')
     }
 
     /**

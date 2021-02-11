@@ -44,8 +44,6 @@
     "nodemailer": "^6.4.17",
     "nodemailer-pug-engine": "^1.0.2",
     "nuxt": "^2.14.12",
-    "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
     "redis": "^3.0.2",
     "sessionstore": "^0.4.8",
     "sqlite3": "^5.0.0",

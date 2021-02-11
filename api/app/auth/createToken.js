@@ -1,6 +1,5 @@
 const { randomBytes } = require('crypto')
 const { DB } = require('mevn-orm')
-const moment = require('moment-timezone')
 
 /**
  * ---------------------------------------------------------------
@@ -11,11 +10,11 @@ const moment = require('moment-timezone')
  * --------------------------------------------------------------
  */
 const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users', name: 'My mobile Device' }) => {
-  const token = randomBytes(64).toString('hex')
+  const token = randomBytes(64).toString('base64')
   // eslint-disable-next-line camelcase
   const { tokenable_id, tokenable_type, name } = options
   const now = new Date()
-  return await DB.table('personal_access_tokens').insert({
+  await DB.table('personal_access_tokens').insert({
     tokenable_type,
     tokenable_id,
     name,
@@ -25,6 +24,7 @@ const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users',
     created_at: now,
     updated_at: now
   })
+  return token
 }
 
 module.exports = createToken

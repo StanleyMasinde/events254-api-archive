@@ -58,7 +58,6 @@ class UserController extends Controller {
           tokenable_id: u,
           tokenable_type: 'users'
         })
-
         return this.response({ token })
       }
       return this.response(u)

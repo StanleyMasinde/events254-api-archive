@@ -22,7 +22,7 @@ module.exports = {
       host: process.env.DB_HOST || 'localhost',
       database: process.env.DB_DATABASE || 'my_db',
       user: process.env.DB_USER || 'username',
-      password: process.env.DB_PASSWORD || 'password'
+      password: process.env.DB_PASSWORD
     },
     pool: {
       min: 2,
@@ -39,7 +39,7 @@ module.exports = {
       host: process.env.DB_HOST || 'localhost',
       database: process.env.DB_DATABASE || 'my_db',
       user: process.env.DB_USER || 'username',
-      password: process.env.DB_PASSWORD || 'password'
+      password: process.env.DB_PASSWORD
     },
     pool: {
       min: 2,

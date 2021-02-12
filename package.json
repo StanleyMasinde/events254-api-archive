@@ -20,9 +20,9 @@
     "start": "nuxt start --spa",
     "dev": "DEBUG=express:* nuxt",
     "dev:api": "DEBUG=express:* NODE_ENV=api nodemon api/app.js",
-    "pretest": "NODE_ENV=development knex migrate:latest",
-    "test": "NODE_ENV=testing mocha --timeout 12000 --exit",
-    "posttest": "rm dev.sqlite",
+    "pretest": "NODE_ENV=production knex migrate:latest",
+    "test": "NODE_ENV=testing TEST_DB_CLIENT=mysql mocha --timeout 12000 --exit",
+    "posttest": "npx knex migrate:rollback --env production",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "build": "nuxt build"
   },
@@ -46,7 +46,6 @@
     "nuxt": "^2.14.12",
     "redis": "^3.0.2",
     "sessionstore": "^0.4.8",
-    "sqlite3": "^5.0.0",
     "vee-validate": "^3.4.5"
   },
   "devDependencies": {

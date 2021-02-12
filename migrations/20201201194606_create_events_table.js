@@ -6,7 +6,7 @@ exports.up = function (knex) {
     table.string('type')
     table.string('meeting_link')
     table.string('title')
-    table.string('description')
+    table.text('description')
     table.dateTime('from') // It will contain both the date and time
     table.dateTime('to') // Can be null
     table.bigInteger('organisable_id')

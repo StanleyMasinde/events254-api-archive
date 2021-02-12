@@ -2,9 +2,13 @@ require('dotenv').config()
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: process.env.TEST_DB_CLIENT || 'sqlite3',
     connection: {
-      filename: './dev.sqlite'
+      filename: './dev.sqlite',
+      host: process.env.DB_HOST || 'localhost',
+      database: process.env.DB_DATABASE || 'my_db',
+      user: process.env.DB_USER || 'username',
+      password: process.env.DB_PASSWORD || 'password'
     },
     useNullAsDefault: true,
     migrations: {

@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - 12
+  - 14
+  - 15
+script:
+  - npm ci
+  - npm test
+  - npm run test

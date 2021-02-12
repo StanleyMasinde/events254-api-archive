@@ -46,7 +46,6 @@
     "nuxt": "^2.14.12",
     "redis": "^3.0.2",
     "sessionstore": "^0.4.8",
-    "sqlite3": "^5.0.0",
     "vee-validate": "^3.4.5"
   },
   "devDependencies": {

@@ -1,8 +1,10 @@
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE events254_test;'
 language: node_js
 node_js:
   - 12
-  - 14
-  - 15
 script:
   - npm test
   - npm run test

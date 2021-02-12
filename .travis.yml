@@ -1,6 +1,7 @@
 services:
   - mysql
 before_install:
+  - mysql -e 'DROP DATABASE IF EXISTS events254_test;'
   - mysql -e 'CREATE DATABASE events254_test;'
 language: node_js
 node_js:

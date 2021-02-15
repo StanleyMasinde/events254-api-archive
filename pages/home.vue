@@ -6,16 +6,15 @@
       </h1>
     </v-col>
     <v-col cols="12" md="6">
-      <v-card flat>
-        <v-card-text>
-          <v-text-field v-model="$auth.user.name" outlined label="Name" />
-          <v-text-field v-model="$auth.user.email" readonly outlined label="Email" />
-          <v-text-field v-model="$auth.user.username" outlined label="Username" />
-          <v-btn depressed large rounded color="accent">
-            Update
-          </v-btn>
-        </v-card-text>
-      </v-card>
+      <v-tabs>
+        <v-tab to="/home/profile">
+          Profile
+        </v-tab>
+        <v-tab to="/home/events">
+          My Events
+        </v-tab>
+      </v-tabs>
+      <nuxt-child />
     </v-col>
   </v-row>
 </template>

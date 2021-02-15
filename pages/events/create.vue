@@ -45,12 +45,18 @@
                 />
               </ValidationProvider>
 
-              <DateInput
-                v-model="event.date"
-                name="date"
-              />
-
-              <TimeInput v-model="event.time" label="From" />
+              <v-row>
+                <v-col cols="12" md="6">
+                  <DateInput
+                    v-model="event.from_date"
+                    name="from_date"
+                    label="Starting date"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <TimeInput v-model="event.from_time" label="Starting time" name="from_time" />
+                </v-col>
+              </v-row>
 
               <ValidationProvider v-slot="{errors}" rules="required">
                 <v-textarea
@@ -93,8 +99,8 @@ export default {
         meeting_link: null,
         title: null,
         description: null,
-        date: null,
-        time: null,
+        from_date: null,
+        from_time: null,
         duration: 'All day'
       }
     }
@@ -108,9 +114,8 @@ export default {
     async createEvent () {
       const form = document.querySelector('#eventForm')
       const formData = new FormData(form)
-      formData.append('date', this.event.date)
-      formData.append('time', this.event.time)
-      formData.append('duration', this.event.duration)
+      formData.append('from_date', this.event.from_date)
+      formData.append('from_time', this.event.from_time)
       try {
         await this.$axios.post('/api/events', formData)
         this.message.success = true

@@ -32,7 +32,7 @@ router.post('/', multer({ dest: './uploads' }).single('poster'), async (req, res
  */
 router.get('/currentUser', async (req, res) => {
   try {
-    const { message, status } = await EventsController.currentUserEvents(req.user)
+    const { message, status } = await EventsController.currentUserEvents(req)
     res.status(status).json(message)
   } catch (error) {
     res.status(500).json(error)

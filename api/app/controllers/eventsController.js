@@ -10,8 +10,9 @@ class EventsController extends Controller {
      * Store a new event in the database
      * @param {*} payload
      */
-  async store (payload) {
-    const { user, body, file } = payload
+  async store (request) {
+    const { body, file } = request
+    const user = await request.user()
     // eslint-disable-next-line camelcase
     const poster_url = await upload(file, 'event-posters')
 
@@ -118,8 +119,9 @@ class EventsController extends Controller {
    * Get the events for the current user
    * @param {*} user
    */
-  async currentUserEvents (user) {
+  async currentUserEvents (request) {
     try {
+      const user = await request.user()
       const events = await new User(user.id).events()
       return this.response(events)
     } catch (error) {

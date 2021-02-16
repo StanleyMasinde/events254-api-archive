@@ -11,7 +11,7 @@ exports.up = function (knex) {
     table.dateTime('to') // Can be null
     table.bigInteger('organisable_id')
     table.string('organisable_type') // Can be user or group
-    table.timestamps()
+    table.timestamps(true, true)
   })
 }
 

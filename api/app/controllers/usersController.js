@@ -36,12 +36,12 @@ class UserController extends Controller {
 
       // user exists
       const { email } = body
-      const exists = await User.whereFirst({ email })
+      const exists = await User.where({ email }).first()
       if (exists) {
         return this.response({ errors: { email: 'This email is already registerd' } }, 422)
       }
 
-      const u = await User.register(body)
+      const u = await User.register(body) // TODO This now returns a Model
       // TODO use queing here
       await mail.sendMail({
         from: '"Events254" <no-reply@events254.com>',
@@ -55,7 +55,7 @@ class UserController extends Controller {
       // Determine if the request requires a token and pass it if so
       if (request.requiresToken()) {
         const token = await createToken({
-          tokenable_id: u,
+          tokenable_id: u.id,
           tokenable_type: 'users'
         })
         return this.response({ token })
@@ -78,7 +78,7 @@ class UserController extends Controller {
         email: 'required'
       }).validate()
       // Make sure the user exists
-      const exists = await User.whereFirst({ email })
+      const exists = await User.where({ email }).first()
       if (exists) {
         // Generate a token
         const token = randomBytes(64).toString('hex')

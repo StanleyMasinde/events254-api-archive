@@ -148,7 +148,7 @@ class EventsController extends Controller {
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
 
-    return moment(fromDateTime).tz(timezone).format()
+    return moment.tz(fromDateTime, timezone).format()
   }
 }
 

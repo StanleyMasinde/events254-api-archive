@@ -7,7 +7,7 @@ exports.up = function (knex) {
     table.string('token')
     table.text('abilities')
     table.timestamp('last_used_at')
-    table.timestamps()
+    table.timestamps(true, true)
   })
 }
 

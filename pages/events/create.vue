@@ -117,20 +117,28 @@ export default {
       formData.append('from_date', this.event.from_date)
       formData.append('from_time', this.event.from_time)
       try {
-        await this.$axios.post('/api/events', formData)
+        const { data } = await this.$axios.post('/api/events', formData)
         this.message.success = true
-        this.$refs.observer.reset()
-        this.$refs.form.reset()
-        window.scrollTo({
-          top: 100,
-          left: 100,
-          behavior: 'smooth'
-        })
+        this.$router.push(`/events/${data}`)
+        // this.$refs.observer.reset()
+        // this.$refs.form.reset()
+        // window.scrollTo({
+        //   top: 100,
+        //   left: 100,
+        //   behavior: 'smooth'
+        // })
 
-        setTimeout(() => {
-          this.message.success = false
-        }, 5000)
-      } catch (error) {}
+        // setTimeout(() => {
+        //   this.message.success = false
+        // }, 5000)
+      } catch (error) {
+        if (error.response.status === 422) {
+          this.$refs.form.setErrors(error.response.data.errors)
+          return
+        }
+        // TODO add proper handling
+        throw new Error(error)
+      }
     }
   }
 }

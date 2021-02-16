@@ -105,7 +105,7 @@ const auth = () => {
           })
           .catch((e) => {
             // TODO handle this properly for now we just return blank
-            return res.status(401).json(e)
+            return e
           })
       }
       return null

@@ -1,3 +1,4 @@
+const fs = require('fs')
 const router = require('express').Router()
 const multer = require('multer')
 const EventsController = require('../app/controllers/eventsController')
@@ -21,6 +22,7 @@ router.get('/', (req, res) => {
 router.post('/', multer({ dest: './uploads' }).single('poster'), async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
+    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
     res.status(status).json(message)
   } catch (error) {
     res.status(500).json(error)

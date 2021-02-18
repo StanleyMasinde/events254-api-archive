@@ -2,7 +2,6 @@ const express = require('express')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const sessionstore = require('sessionstore')
-const useragent = require('express-useragent')
 
 const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
@@ -12,7 +11,6 @@ const auth = require('./app/auth/auth')
 
 const app = express()
 
-app.use(useragent.express())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())

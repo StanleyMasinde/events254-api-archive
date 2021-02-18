@@ -104,6 +104,9 @@
 export default {
   computed: {
     innitials () {
+      if (!this.$auth.user.name) {
+        return
+      }
       const [firstName, lastName] = this.$auth.user.name.split(' ')
       return `${firstName.split('')[0]}${lastName.split('')[0]}`
     }

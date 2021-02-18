@@ -136,7 +136,7 @@ class EventsController extends Controller {
   * @param {String} timezone
   * @returns new Date()
   */
-  formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
+  formatToDateTime (fromTime, fromDate, timezone = 'EST') {
     /** Format the date */
     const fromTimeArray = fromTime.split(':')
     const fromDateArray = fromDate.split('-')
@@ -147,7 +147,7 @@ class EventsController extends Controller {
     fromDateTime.setFullYear(fromDateArray[0]) // set the year
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
-    const t = moment(fromDateTime).tz(timezone).utc().toDate()
+    const t = moment(fromDateTime).tz(timezone).toISOString(true)
     return t
   }
 }

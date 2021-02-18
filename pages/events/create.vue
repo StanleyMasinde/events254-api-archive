@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col cols="12" md="10">
-      <h1 class="display-2">
+      <h1 class="display-1">
         New Event
       </h1>
     </v-col>
@@ -119,7 +119,7 @@ export default {
       try {
         const { data } = await this.$axios.post('/api/events', formData)
         this.message.success = true
-        this.$router.push(`/events/${data}`)
+        this.$router.push(`/events/${data.id}/manage`)
         // this.$refs.observer.reset()
         // this.$refs.form.reset()
         // window.scrollTo({

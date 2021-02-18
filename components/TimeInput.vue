@@ -11,7 +11,6 @@
         <v-text-field
           v-model="time"
           :error-messages="errors"
-          type="time"
           outlined
           :label="label"
           readonly
@@ -54,9 +53,15 @@ export default {
       default: ''
     }
   },
-  data () {
-    return {
-      time: null
+  computed: {
+    time: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.value = newVal
+      }
     }
   },
   watch: {

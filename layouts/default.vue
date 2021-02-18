@@ -1,7 +1,11 @@
 <template>
   <v-app>
     <v-app-bar flat app>
-      <v-toolbar-title>Events254</v-toolbar-title>
+      <v-toolbar-items>
+        <nuxt-link to="/">
+          <v-img height="70" width="70" src="/icon.png" />
+        </nuxt-link>
+      </v-toolbar-items>
       <v-spacer />
       <v-toolbar-items>
         <v-menu
@@ -22,7 +26,7 @@
                 color="brown"
                 size="48"
               >
-                <span class="white--text headline">JD</span>
+                <span class="white--text headline">{{ innitials }}</span>
               </v-avatar>
             </v-btn>
           </template>
@@ -32,7 +36,7 @@
                 <v-avatar
                   color="brown"
                 >
-                  <span class="white--text headline">JD</span>
+                  <span class="white--text headline">{{ innitials }}</span>
                 </v-avatar>
                 <h3>{{ $auth.user.name }}</h3>
                 <p class="caption mt-1">
@@ -96,3 +100,13 @@
     </v-main>
   </v-app>
 </template>
+<script>
+export default {
+  computed: {
+    innitials () {
+      const [firstName, lastName] = this.$auth.user.name.split(' ')
+      return `${firstName.split('')[0]}${lastName.split('')[0]}`
+    }
+  }
+}
+</script>

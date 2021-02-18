@@ -16,7 +16,6 @@
           :label="label"
           readonly
           v-bind="attrs"
-          type="date"
           v-on="on"
         />
       </ValidationProvider>
@@ -58,8 +57,18 @@ export default {
   },
   data () {
     return {
-      menu: false,
-      date: null
+      menu: false
+    }
+  },
+  computed: {
+    date: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        // eslint-disable-next-line vue/no-mutating-props
+        this.value = newVal
+      }
     }
   },
   watch: {

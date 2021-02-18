@@ -5,13 +5,19 @@
         Hi {{ $auth.user.name }}
       </h1>
     </v-col>
-    <v-col cols="12" md="6">
-      <v-tabs>
+    <v-col cols="12" lg="6">
+      <v-tabs grow>
+        <v-tab to="/home">
+          Home
+        </v-tab>
         <v-tab to="/home/profile">
           Profile
         </v-tab>
         <v-tab to="/home/events">
           My Events
+        </v-tab>
+        <v-tab to="/home/tickets">
+          Tickets
         </v-tab>
       </v-tabs>
       <nuxt-child />

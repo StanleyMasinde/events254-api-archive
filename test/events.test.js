@@ -30,7 +30,6 @@ describe('#Events test with protected routes', () => {
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '09:30'
       })
-
     expect(res.status).equals(201)
   })
 

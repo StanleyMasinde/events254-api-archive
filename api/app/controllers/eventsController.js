@@ -82,7 +82,6 @@ class EventsController extends Controller {
       // eslint-disable-next-line camelcase
       const { from_date, from_time, type, meeting_link, title, description } = body
       const from = this.formatToDateTime(from_time, from_date)
-      console.log(from);
       const to = null
       // Payload is valid
       const res = await currentEvent.update({ type, meeting_link, title, description, from, to })
@@ -148,8 +147,8 @@ class EventsController extends Controller {
     fromDateTime.setFullYear(fromDateArray[0]) // set the year
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
-
-    return new Date(moment.tz(fromDateTime, timezone).toISOString())
+    const t = moment(fromDateTime).tz(timezone).utc().toDate()
+    return new Date(t)
   }
 }
 

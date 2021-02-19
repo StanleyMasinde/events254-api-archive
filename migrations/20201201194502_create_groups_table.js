@@ -9,7 +9,6 @@ exports.up = function (knex) {
     table.text('description')
     table.timestamps()
 
-    // TODO enable this in prod
     table.foreign('user_id').references('id').inTable('users')
   })
 }

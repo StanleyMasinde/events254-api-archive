@@ -8,7 +8,14 @@
         Create your first event
       </v-btn>
     </div>
-    <v-card v-for="(e,i) in events" v-else :key="i" outlined class="mb-1">
+    <v-card
+      v-for="(e,i) in events"
+      v-else
+      :key="i"
+      :to="`/events/${e.id}/manage`"
+      outlined
+      class="mb-1"
+    >
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>{{ e.title }}</v-list-item-title>

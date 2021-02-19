@@ -1,7 +1,13 @@
 <template>
   <div class="mt-5">
+    <v-btn depressed color="primary" rounded>
+      Publish your event
+    </v-btn>
+    <v-btn text :to="`/events/${$route.params.event}`">
+      View event
+    </v-btn>
     <ValidationObserver ref="observer" v-slot="{ invalid }">
-      <v-form id="eventForm" ref="form" @submit.prevent="">
+      <v-form id="eventForm" ref="form" class="mt-4" @submit.prevent="">
         <ValidationProvider v-slot="{ errors }" rules="required">
           <v-select
             v-model="eventData.type"

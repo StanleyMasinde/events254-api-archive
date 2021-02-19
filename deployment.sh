@@ -11,4 +11,4 @@ echo "Building for production"
 npm run build
 
 echo "Please remember to restart your PM2 process I will restart all for now"
-pm2 restart 0
+# pm2 restart 0

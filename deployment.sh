@@ -5,7 +5,7 @@ echo "Installing dependencies with npm"
 npm i
 
 echo "Running the latest migrations"
-npx knex migrate:rollback --env production
+npx knex migrate:latest --env production
 
 echo "Building for production"
 npm run build

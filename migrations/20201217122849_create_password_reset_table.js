@@ -3,7 +3,7 @@ exports.up = function (knex) {
   return knex.schema.createTable('password_resets', (table) => {
     table.string('email').index()
     table.string('token')
-    table.dateTime('created_at')
+    table.timestamp('created_at')
   })
 }
 

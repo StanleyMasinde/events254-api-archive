@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.string('email').unique()
     table.string('password')
     table.text('bio')
-    table.timestamps()
+    table.timestamps(true, true)
   })
 }
 

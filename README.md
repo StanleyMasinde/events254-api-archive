@@ -12,10 +12,15 @@ If by any chance you might need to only run the api server alone you can do that
  *Please not that the api server does not have the `/api` prefix eg getting users is as simple as `/users` because `/api/users` will result in a 404 response*
 
 ## Production
-1. npm run lint
-2. npm run test
-3. npm run run build
-3. npm start --spa
+Please make sure you have pm2 installed before running the setup command and below
+```shell
+./setup.sh # if you have made it excecutable
+# or
+sh setup.sh
+# or
+bash setup.sh
+```
+The above script will get everything running all you'll have to do is to setup your reverse proxy from a web server
 
 ## Mail setup
 Both dev and prod send real worl emails. Please be sure to setup your SMTP settings in the `.env` like below for [mailhog](https://github.com/mailhog)

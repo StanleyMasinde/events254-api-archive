@@ -29,10 +29,13 @@
             {{ currentEvent.description }}
           </v-card-text>
           <v-card-actions>
+            <v-btn v-if="currentEvent.can_edit" text :to="`/events/${currentEvent.id}/manage`">
+              Manage event
+            </v-btn>
             <v-btn icon color="primary">
               <v-icon>mdi-share</v-icon>
             </v-btn>
-            <v-btn depressed color="primary">
+            <v-btn v-if="!currentEvent.can_edit" depressed color="primary">
               Register for this event
             </v-btn>
           </v-card-actions>

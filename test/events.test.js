@@ -30,7 +30,6 @@ describe('#Events test with protected routes', () => {
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '09:30'
       })
-
     expect(res.status).equals(201)
   })
 
@@ -42,6 +41,19 @@ describe('#Events test with protected routes', () => {
 
   it('Update an event', async () => {
     const res = await app
+      .put('/events/2')
+      .send({
+        type: 'Online',
+        title: 'New title',
+        description: faker.lorem.paragraph(10),
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '10:45'
+      })
+    expect(res.status).equals(201)
+  })
+
+  it('Updating an event you don\'t own should fail with 401', async () => {
+    const res = await app
       .put('/events/1')
       .send({
         type: 'Online',
@@ -50,12 +62,11 @@ describe('#Events test with protected routes', () => {
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
       })
-
-    expect(res.status).equals(201)
+    expect(res.status).equals(401)
   })
 
   it('Get the updated Event', async () => {
-    const res = await app.get('/events/1')
+    const res = await app.get('/events/2')
     expect(res.body.title).equals('New title')
   })
 

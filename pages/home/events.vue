@@ -1,6 +1,21 @@
 <template>
   <div>
-    <v-card v-for="(e,i) in events" :key="i" outlined class="mb-1">
+    <div v-if="events.length === 0" class="text-center">
+      <p class="title">
+        You have not created any events
+      </p>
+      <v-btn to="/events/create" depressed rounded color="primary">
+        Create your first event
+      </v-btn>
+    </div>
+    <v-card
+      v-for="(e,i) in events"
+      v-else
+      :key="i"
+      :to="`/events/${e.id}/manage`"
+      outlined
+      class="mb-1"
+    >
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>{{ e.title }}</v-list-item-title>

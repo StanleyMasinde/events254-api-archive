@@ -7,9 +7,8 @@ exports.up = function (knex) {
     table.enum('type', ['community', 'company']).defaultTo('company') // A group can be a company or a community like opensource254
     table.string('slug')
     table.text('description')
-    table.timestamps()
+    table.timestamps(true, true)
 
-    // TODO enable this in prod
     table.foreign('user_id').references('id').inTable('users')
   })
 }

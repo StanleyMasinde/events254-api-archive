@@ -1,3 +1,7 @@
+#!/bin/sh
+echo "Reseting local changes"
+git reset --hard
+
 echo "Starting the deployment process"
 git pull
 
@@ -10,5 +14,5 @@ npx knex migrate:latest --env production
 echo "Building for production"
 npm run build
 
-echo "Please remember to restart your PM2 process I will restart all for now"
+echo "Please remember to restart your PM2"
 # pm2 restart ecosystem.config.js

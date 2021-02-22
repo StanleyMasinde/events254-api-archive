@@ -1,20 +1,57 @@
 <template>
   <v-row class="mt-5" justify="center">
     <v-col cols="10">
-      <h3>Create a ticket</h3>
-      <ValidationObserver ref="ticketForm">
-        <v-form class="mt-2" @submit.prevent="createTicket">
-          <ValidationProvider name="price">
-            <v-text-field type="number" label="Price" outlined />
-          </ValidationProvider>
-          <ValidationProvider name="limit">
-            <v-text-field hint="The maximum number of tickets per person" type="number" label="Limit" outlined />
-          </ValidationProvider>
-          <ValidationProvider>
-            <v-textarea outlined auto-grow rows="1" hint="This field is optional" />
-          </ValidationProvider>
-        </v-form>
-      </ValidationObserver>
+      <!-- Show a success alert -->
+      <!-- <v-alert v-if="success" type="success">
+        {{ success }}
+      </v-alert> -->
+
+      <!-- When no tickets were found for the current event -->
+      <div v-if="tickets.length === 0" class="text-center">
+        <h2>
+          You have not created any tickets for this event
+        </h2>
+        <v-btn rounded depressed color="primary" @click="createTicketDialog = true">
+          Create a new ticket
+        </v-btn>
+      </div>
+
+      <!-- Hurray 🎉 we found some tickets -->
+      <template v-else>
+        <v-card v-for="(t,i) in tickets" :key="i" rounded outlined>
+          <v-card-text class="display-1">
+            <p>Desciption: {{ t.description }}</p>
+            <p>Limit: {{ t.limit }} </p>
+            <p>Price: {{ Intl.NumberFormat('en-US', { style: 'currency', currency: 'kes' }).format(t.price) }}</p>
+          </v-card-text>
+          <v-card-actions>
+            <!-- Ticket creation Dialog -->
+            <ticket-form :editing="true" :current-ticket="t" :show="showEditing" @updated="$fetch" @hide="showEditing=false" />
+            <v-btn icon large color="primary" @click="showEditing = true">
+              <v-icon>mdi-pencil-outline</v-icon>
+            </v-btn>
+            <v-btn icon large color="error">
+              <v-icon>mdi-delete-outline</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
     </v-col>
   </v-row>
 </template>
+<script>
+import TicketForm from '~/components/TicketForm.vue'
+export default {
+  components: { TicketForm },
+  data () {
+    return {
+      showEditing: false,
+      tickets: []
+    }
+  },
+  async fetch () {
+    const { data } = await this.$axios.get(`/api/events/${this.$route.params.event}/tickets`)
+    this.tickets = data
+  }
+}
+</script>

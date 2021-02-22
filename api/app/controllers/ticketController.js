@@ -1,4 +1,5 @@
 const { DB } = require('mevn-orm')
+const Validator = require('mevn-validator')
 const Ticket = require('../models/ticket')
 const Controller = require('./controller')
 
@@ -54,6 +55,10 @@ class TicketController extends Controller {
      */
   async upDateEventTicket (request) {
     try {
+      await new Validator(request.body, {
+        description: 'required'
+      }).validate()
+
       const ticket = await Ticket.find(request.params.ticket)
       const { price, limit, description } = request.body
       await ticket.update({
@@ -61,7 +66,7 @@ class TicketController extends Controller {
       })
       return this.response(await this.connection().where({ id: request.params.ticket }).first()) // TODO fix this spaghetti
     } catch (error) {
-      return this.response(error, 500)
+      return this.response(error, 422)
     }
   }
 

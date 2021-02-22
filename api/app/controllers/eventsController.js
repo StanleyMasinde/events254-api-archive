@@ -133,7 +133,7 @@ class EventsController extends Controller {
    * User registers for an event
    * @param {Array} param
    * @returns response
-   * 
+   *
    */
   async registerForEvent ({ body, params, user }) {
     try {

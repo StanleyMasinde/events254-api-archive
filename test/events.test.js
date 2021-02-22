@@ -44,7 +44,7 @@ describe('#Events test with protected routes', () => {
       .put('/events/2')
       .send({
         type: 'Online',
-        title: 'New title',
+        title: 'Event254 launch party',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
@@ -57,7 +57,7 @@ describe('#Events test with protected routes', () => {
       .put('/events/1')
       .send({
         type: 'Online',
-        title: 'New title',
+        title: 'Event254 launch party',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
@@ -67,11 +67,35 @@ describe('#Events test with protected routes', () => {
 
   it('Get the updated Event', async () => {
     const res = await app.get('/events/2')
-    expect(res.body.title).equals('New title')
+    expect(res.body.title).equals('Event254 launch party')
   })
 
   it('User deletes and event', async () => {
     const res = await app.delete('/events/1')
     expect(res.body).equals('Deleted')
+  })
+})
+
+describe('#Event registration', () => {
+  before(async () => {
+    // Authenticate a user
+    await app
+      .post('/auth/login')
+      .send({
+        email: 'john@example.com',
+        password: '12345678'
+      })
+    // create a ticket
+    await app.post('/events/2/tickets')
+  })
+
+  it('Register for event', async () => {
+    const res = await app.post('/events/2/register')
+      .send({
+        ticket_id: 1,
+        rsvp_count: 1
+      })
+    console.log(res.status)
+    console.log(res.body)
   })
 })

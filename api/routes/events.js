@@ -150,4 +150,14 @@ router.delete('/:event/tickets/:ticket', async (req, res) => {
   res.status(status).json(message)
 })
 
+/**
+ * -------------------------------------------------------------------
+ * Register for an event
+ * ------------------------------------------------------------------
+ */
+router.post('/:event/register', async (req, res) => {
+  const { message, status } = await EventsController.registerForEvent(req)
+  res.status(status).json(message)
+})
+
 module.exports = router

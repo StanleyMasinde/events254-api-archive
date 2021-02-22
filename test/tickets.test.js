@@ -29,26 +29,26 @@ describe('#Events test with protected routes', () => {
   })
 
   it('Create a ticket', async () => {
-    const res = await app.post('/events/3/tickets')
+    const res = await app.post('/events/4/tickets')
     expect(res.status).equals(201)
-    expect(res.body).to.haveOwnProperty('event_id', 3)
+    expect(res.body).to.haveOwnProperty('event_id', 4)
   })
 
   it('Get all tickets', async () => {
-    const res = await app.get('/events/3/tickets')
+    const res = await app.get('/events/4/tickets')
     expect(res.body).to.be.an('Array')
     expect(res.status).equals(200)
   })
 
   it('Get a specified ticket', async () => {
-    const res = await app.get('/events/3/tickets/1')
+    const res = await app.get('/events/4/tickets/1')
     expect(res.body).to.be.an('Object')
-    expect(res.body).to.haveOwnProperty('event_id', 3)
+    expect(res.body).to.haveOwnProperty('event_id', 2)
     expect(res.body).to.haveOwnProperty('id', 1)
   })
 
   it('Update a specified ticket', async () => {
-    const res = await app.put('/events/3/tickets/1')
+    const res = await app.put('/events/4/tickets/1')
       .send({
         price: 100,
         limit: 1,
@@ -60,7 +60,7 @@ describe('#Events test with protected routes', () => {
   })
 
   it('Delete a ticket', async () => {
-    const res = await app.delete('/events/3/tickets/1')
+    const res = await app.delete('/events/4/tickets/1')
     expect(res.status).equals(200)
   })
 })

@@ -71,8 +71,12 @@ class TicketController extends Controller {
      */
   async deleteEventTicket (request) {
     try {
-      await Ticket.delete(request.params.ticket)
-      return this.response('Ticket Deleted')
+      const ticket = await Ticket.find(request.params.ticket)
+      if (ticket) {
+        ticket.destroy()
+        return this.response('Ticket Deleted')
+      }
+      return this.response('Ticket not found', 404)
     } catch (error) {
       return this.response(error, 500)
     }

@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 const { pugEngine } = require('nodemailer-pug-engine')
 
 const mail = nodemailer.createTransport({
-  streamTransport: process.env.NODE_ENV === 'testing',
+  streamTransport: process.env.STREAM_MAIL === 'true',
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: process.env.MAIL_PORT || 2525,
   secure: false,

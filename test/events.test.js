@@ -100,7 +100,15 @@ describe('#Event registration', () => {
         ticket_id: 1,
         rsvp_count: 1
       })
-    console.log(res.status)
-    console.log(res.body)
+    expect(res.body).equals('You have registered for this event')
+  })
+
+  it('User cannot register for an event more than once', async () => {
+    const res = await app.post('/events/2/register')
+      .send({
+        ticket_id: 1,
+        rsvp_count: 1
+      })
+    expect(res.body).equals('You have already registerd for this event')
   })
 })

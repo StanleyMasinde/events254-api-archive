@@ -14,7 +14,7 @@ class EventsController extends Controller {
      * Store a new event in the database
      * @param {*} payload
      */
-  async store (request) {
+  async store(request) {
     const { body, file } = request
     const user = await request.user()
     // eslint-disable-next-line camelcase
@@ -51,7 +51,7 @@ class EventsController extends Controller {
    * Show an event
    * @param {Array} request
    */
-  async show (request) {
+  async show(request) {
     const e = await Event.find(request.params.event)
     const u = await request.user()
     if (!e) {
@@ -65,7 +65,7 @@ class EventsController extends Controller {
    * Update an event
    * @param {Array} request
    */
-  async update (request) {
+  async update(request) {
     const { body, params } = request
     const user = await request.user() // The current user
     const { event } = params // The the event Id
@@ -96,7 +96,7 @@ class EventsController extends Controller {
    * Delete the current model
    * @param {Array} payload
    */
-  async delete (payload = {}) {
+  async delete(payload = {}) {
     const { params } = payload
     // The the event Id
     const { event } = params
@@ -119,7 +119,7 @@ class EventsController extends Controller {
    * Get the events for the current user
    * @param {*} user
    */
-  async currentUserEvents (request) {
+  async currentUserEvents(request) {
     try {
       const user = await request.user()
       const events = await new User(user.id).events()
@@ -136,13 +136,18 @@ class EventsController extends Controller {
    * @returns response
    *
    */
-  async registerForEvent ({ body, params, user }) {
+  async registerForEvent({ body, params, user }) {
     try {
       await new Validator(body, { // Validate the input
         ticket_id: 'required',
         rsvp_count: 'required'
       }).validate()
       const currentUser = await user() // The user making the request
+      // Next we check if the current user has registerd for the current event
+      const alreadyRegisterd = await DB('event_rsvps').where({ event_id: params.event, user_id: currentUser.id }).first()
+      if (alreadyRegisterd) {
+        return this.response('You have already registerd for this event')
+      }
       const currentEvent = await Event.find(params.event)
       const currentTicket = await Ticket.find(body.ticket_id)
       const ticketId = await DB('event_rsvps').insert({
@@ -176,7 +181,7 @@ class EventsController extends Controller {
   * @param {String} timezone
   * @returns new Date()
   */
-  formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
+  formatToDateTime(fromTime, fromDate, timezone = 'Africa/Nairobi') {
     /** Format the date */
     const fromTimeArray = fromTime.split(':')
     const fromDateArray = fromDate.split('-')

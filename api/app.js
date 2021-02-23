@@ -3,6 +3,7 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const sessionstore = require('sessionstore')
 
+const publicRouter = require('./routes/public')
 const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
 const authRouter = require('./routes/auth')
@@ -32,7 +33,7 @@ app.use('/users', usersRouter)
 app.use('/groups', groupsRouter)
 app.use('/auth', authRouter)
 app.use('/events', eventsRouter)
-
+app.use('/p', publicRouter)
 if (process.env.NODE_ENV === 'api') {
   const port = process.env.PORT | 3000
   app.listen(port, () => {

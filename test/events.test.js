@@ -112,3 +112,22 @@ describe('#Event registration', () => {
     expect(res.body).equals('You have already registerd for this event')
   })
 })
+
+describe('Event routes that do not require authentication', () => {
+  // Logout the current user
+  before(async () => {
+    await app.post('/auth/logout')
+  })
+
+  it('Should get all events', async () => {
+    const res = await app.get('/p/events')
+    expect(res.status).equals(200)
+    expect(res.body).to.be.an('array')
+  })
+
+  it('Get a specified event', async () => {
+    const res = await app.get('/p/events/2')
+    expect(res.status).equals(200)
+    expect(res.body.title).equals('Event254 launch party')
+  })
+})

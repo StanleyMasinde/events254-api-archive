@@ -95,7 +95,7 @@ const auth = () => {
       if (req.session.auth) { // If the Auth Object is set in session
         const { userId } = req.session.auth
         if (!userId) {
-          return res.status(401).json('You are not authenticated')
+          return null
         }
         return DB.table(guard)
           .where({ id: userId })

@@ -11,10 +11,25 @@ const Controller = require('./controller')
 
 class EventsController extends Controller {
   /**
+   * GET all the events. This route is very unnecessary for normal users
+   * IT will be usefull for debugging though
+   * @param {*} request
+   */
+  async index () {
+    // TODO add pagination
+    try {
+      const events = await Event.all()
+      return this.response(events)
+    } catch (error) {
+      return this.response(error, 500)
+    }
+  }
+
+  /**
      * Store a new event in the database
      * @param {*} payload
      */
-  async store(request) {
+  async store (request) {
     const { body, file } = request
     const user = await request.user()
     // eslint-disable-next-line camelcase
@@ -51,9 +66,14 @@ class EventsController extends Controller {
    * Show an event
    * @param {Array} request
    */
-  async show(request) {
+  async show (request) {
     const e = await Event.find(request.params.event)
     const u = await request.user()
+    // No user in session
+    if (!u) {
+      e.can_edit = false
+      return this.response(e)
+    }
     if (!e) {
       return this.response('Model not found', 404)
     }
@@ -65,7 +85,7 @@ class EventsController extends Controller {
    * Update an event
    * @param {Array} request
    */
-  async update(request) {
+  async update (request) {
     const { body, params } = request
     const user = await request.user() // The current user
     const { event } = params // The the event Id
@@ -96,7 +116,7 @@ class EventsController extends Controller {
    * Delete the current model
    * @param {Array} payload
    */
-  async delete(payload = {}) {
+  async delete (payload = {}) {
     const { params } = payload
     // The the event Id
     const { event } = params
@@ -119,7 +139,7 @@ class EventsController extends Controller {
    * Get the events for the current user
    * @param {*} user
    */
-  async currentUserEvents(request) {
+  async currentUserEvents (request) {
     try {
       const user = await request.user()
       const events = await new User(user.id).events()
@@ -136,7 +156,7 @@ class EventsController extends Controller {
    * @returns response
    *
    */
-  async registerForEvent({ body, params, user }) {
+  async registerForEvent ({ body, params, user }) {
     try {
       await new Validator(body, { // Validate the input
         ticket_id: 'required',
@@ -181,7 +201,7 @@ class EventsController extends Controller {
   * @param {String} timezone
   * @returns new Date()
   */
-  formatToDateTime(fromTime, fromDate, timezone = 'Africa/Nairobi') {
+  formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
     /** Format the date */
     const fromTimeArray = fromTime.split(':')
     const fromDateArray = fromDate.split('-')

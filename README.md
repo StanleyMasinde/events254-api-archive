@@ -43,15 +43,29 @@ SECURE=false
 |`/user`     | GET    | Fetch the currently authenticated user |*none*               |
 |`/logout`   | POST   | Logout a user                          |*none                |
 
-> Route prefix `/api/events`
+> Route prefix `/api/events`. All these require auth
 
-| Path     | Method | Description        | Body                |
-|:---------|:-------|:-------------------|:--------------------|
-|`/`       | GET    | Get all events     | *N/A*               |
-|`/`       | POST   | Create a new event | *Not finalized yet* |
-|`/:event` | GET    | Get an event by id | *N/A*               |
-|`/:event` | PUT    | Update an event    | *Event body*        |
-|`/:event` | DELETE | Delete an event    | *Delete an event*   |
+| Path                      | Method | Description                      | Body                |
+|:--------------------------|:-------|:---------------------------------|:--------------------|
+|`/`                        | GET    | Get all events                   | *N/A*               |
+|`/`                        | POST   | Create a new event               | *Not finalized yet* |
+|`/:event`                  | GET    | Get an event by id               | *N/A*               |
+|`/:event`                  | PUT    | Update an event                  | *Event body*        |
+|`/:event`                  | DELETE | Delete an event                  | *Delete an event*   |
+|`/:event/tickets`          | GET    | Get all the tickets for an event | *N/A*               |
+|`/:event/tickets`          | POST   | Create a ticket for an event     | *Ticket body*       |
+|`/:event/tickets/:ticket`  | PUT    | Update the given ticket          | *N/A*               |
+|`/:event/tickets/:ticket`  | DELETE | Delete a ticket                  | *N/A*               |
+|`/:event/register`         | POST   | Register for an event            | *RSVP Body*         |
+
+
+To get events without auth see below for public routes
+
+Route prefix `/p/`
+| Path        | Method | Description          |
+|:------------|:-------|:--------------------:|
+|`/events`    | GET    | Get all the events   |
+|`/events/:id`| GET    | Get an event using ID|
 
 ## Mobile Devices
 > The above routes work for mobile devices only that mobile devices do not make use of sessions

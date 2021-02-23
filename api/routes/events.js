@@ -17,9 +17,9 @@ router.use(authenticated())
  * This route is used to get all events from the database
  * --------------------------------------------------------
  */
-router.get('/', (req, res) => {
-  res.json('All events')
-})
+// router.get('/', (req, res) => {
+//  res.json('All events')
+// })
 
 /**
  * -----------------------------------------------------------------------------

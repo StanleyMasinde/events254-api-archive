@@ -1,23 +1,69 @@
-extends ./layouts/main.pug
+extends ./layouts/ticket.pug
 block content
-    tr
-        td.content-wrap
-            table(width='100%' cellpadding='0' cellspacing='0')
+  tr
+    td.email-body(width='100%' cellpadding='0' cellspacing='0')
+      table.email-body_inner(align='center' width='570' cellpadding='0' cellspacing='0' role='presentation')
+        // Body content
+        tr
+          td.content-cell
+            .f-fallback
+              h1 Hi #{name},
+              p
+                | Thanks for using Events254. This email is the order confirmation for #{eventName} No payment is due.
+              p
+                | This purchase will appear as &ldquo;[Credit Card Statement Name]&rdquo; on your credit card statement for your {{credit_card_brand}} ending in {{credit_card_last_four}}. Need to 
+                a(href='{{billing_url}}') update your payment information
+                | ?
+              table.purchase(width='100%' cellpadding='0' cellspacing='0' role='presentation')
                 tr
-                    td.content-block
-                        h3 hi #{currentUser.name} 👋, your order has been confirmed
+                  td
+                    h3  EV254KE#{ticketId}
+                  td
+                    h3.align-right #{date}
                 tr
-                    td.content-block
-                        | You have booked #{ticketCount} ticket for 
-                        b #{currentEvent.title} 
-                        | The order ref number 
-                        b #EV254-#{ticketId}
+                  td(colspan='2')
+                    table.purchase_content(width='100%' cellpadding='0' cellspacing='0')
+                      tr
+                        th.purchase_heading(align='left')
+                          p.f-fallback Description
+                        th.purchase_heading(align='right')
+                          p.f-fallback Amount
+                      tr
+                        td.purchase_item(width='80%')
+                          span.f-fallback #{currentTicket.description}
+                        td.align-right(width='20%')
+                          span.f-fallback #{currentTicket.price}
+                      tr
+                        td.purchase_footer(width='80%' valign='middle')
+                          p.f-fallback.purchase_total.purchase_total--label Total
+                        td.purchase_footer(width='20%' valign='middle')
+                          p.f-fallback.purchase_total #{currentTicket.price}
+              p
+                | If you have any questions about this order, simply reply to this email or reach out to our 
+                a(href='{{support_url}}') support team
+                |  for help.
+              p
+                | Cheers,
+                br
+                | The Events254 Team
+              // Action
+              table.body-action(align='center' width='100%' cellpadding='0' cellspacing='0' role='presentation')
                 tr
-                    td.content-block
-                        h3 About this event
-                        h3 #{currentEvent.title}
-                        p #{currentEvent.description}
+                  td(align='center')
+                    //
+                      Border based button
+                      https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design
+                    table(width='100%' border='0' cellspacing='0' cellpadding='0' role='presentation')
+                      tr
+                        td(align='center')
+                          a.f-fallback.button.button--blue(href='{{action_url}}' target='_blank') Download as PDF
+              // Sub copy
+              table.body-sub(role='presentation')
                 tr
-                    td.content-block
-                        | &mdash; Events254
+                  td
+                    p.f-fallback.sub
+                      | Need a printable copy for your records? You can 
+                      a(href='{{action_url}}') download a PDF version
+                      | .
+
 //- TODO add QR code and PDF

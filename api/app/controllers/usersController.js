@@ -49,7 +49,7 @@ class UserController extends Controller {
         subject: 'Welcome to Events254',
         template: 'welcome',
         ctx: {
-          user: body
+          name: body.name
         }
       })
       // Determine if the request requires a token and pass it if so
@@ -99,6 +99,7 @@ class UserController extends Controller {
           subject: 'Password Reset notification',
           template: 'resetPassword',
           ctx: {
+            name: exists.name,
             url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
           }
         })

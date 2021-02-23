@@ -6,6 +6,7 @@ const User = require('../models/user')
 const upload = require('../filesystem/s3')
 const canEditEvent = require('../policies/canEditEvent')
 const mail = require('../mail/mail')
+const Ticket = require('../models/ticket')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -143,6 +144,7 @@ class EventsController extends Controller {
       }).validate()
       const currentUser = await user() // The user making the request
       const currentEvent = await Event.find(params.event)
+      const currentTicket = await Ticket.find(body.ticket_id)
       const ticketId = await DB('event_rsvps').insert({
         event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
       })
@@ -153,10 +155,12 @@ class EventsController extends Controller {
         subject: 'Your oder from Events254',
         template: 'ticket',
         ctx: {
-          currentEvent,
-          currentUser,
+          eventName: currentEvent.title,
+          name: currentUser.name,
           ticketId,
-          ticketCount: body.rsvp_count
+          ticketCount: body.rsvp_count,
+          currentTicket,
+          date: new Date().toDateString()
         }
       })
       return this.response('You have registered for this event')

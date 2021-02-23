@@ -30,6 +30,11 @@ describe('#Events test with protected routes', () => {
 
   it('Create a ticket', async () => {
     const res = await app.post('/events/4/tickets')
+      .send({
+        price: 100,
+        limit: 1,
+        description: 'General admission'
+      })
     expect(res.status).equals(201)
     expect(res.body).to.haveOwnProperty('event_id', 4)
   })

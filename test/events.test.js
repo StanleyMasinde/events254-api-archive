@@ -87,6 +87,11 @@ describe('#Event registration', () => {
       })
     // create a ticket
     await app.post('/events/2/tickets')
+      .send({
+        price: 100,
+        limit: 1,
+        description: 'General Admission'
+      })
   })
 
   it('Register for event', async () => {

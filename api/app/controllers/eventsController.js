@@ -1,9 +1,11 @@
 const Validator = require('mevn-validator')
 const moment = require('moment-timezone')
+const { DB } = require('mevn-orm')
 const Event = require('../models/event')
 const User = require('../models/user')
 const upload = require('../filesystem/s3')
 const canEditEvent = require('../policies/canEditEvent')
+const mail = require('../mail/mail')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -123,6 +125,43 @@ class EventsController extends Controller {
       return this.response(events)
     } catch (error) {
       return this.response(error, 500)
+    }
+  }
+
+  /**
+   * -----------------------------------------------------------------
+   * User registers for an event
+   * @param {Array} param
+   * @returns response
+   *
+   */
+  async registerForEvent ({ body, params, user }) {
+    try {
+      await new Validator(body, { // Validate the input
+        ticket_id: 'required',
+        rsvp_count: 'required'
+      }).validate()
+      const currentUser = await user() // The user making the request
+      const currentEvent = await Event.find(params.event)
+      const ticketId = await DB('event_rsvps').insert({
+        event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
+      })
+      // Send and email to user
+      await mail.sendMail({
+        from: '"Events254" <no-reply@events254.com>',
+        to: currentUser.email,
+        subject: 'Your oder from Events254',
+        template: 'ticket',
+        ctx: {
+          currentEvent,
+          currentUser,
+          ticketId,
+          ticketCount: body.rsvp_count
+        }
+      })
+      return this.response('You have registered for this event')
+    } catch (error) {
+      return this.response(error, 422)
     }
   }
 

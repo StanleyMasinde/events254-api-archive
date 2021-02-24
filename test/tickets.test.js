@@ -57,10 +57,10 @@ describe('#Events test with protected routes', () => {
       .send({
         price: 100,
         limit: 1,
-        description: 'Updated description'
+        type: 'Updated description'
       })
     expect(res.body).to.be.an('Object')
-    expect(res.body).to.haveOwnProperty('description', 'Updated description')
+    expect(res.body).to.haveOwnProperty('type', 'Updated description')
     expect(res.status).equals(200)
   })
 

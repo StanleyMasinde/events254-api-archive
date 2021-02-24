@@ -3,7 +3,7 @@ exports.up = function (knex) {
   return knex.schema.createTable('event_rsvps', (table) => {
     table.bigIncrements('id')
     table.bigInteger('event_id').unsigned()
-    table.bigInteger('user_id').unsigned()
+    table.bigInteger('user_id').unsigned() // The person registering
     table.bigInteger('ticket_id').unsigned() // An RSVP takes a ticket
     table.bigInteger('rsvp_count').defaultTo(1) // This is the option for guests etc
 

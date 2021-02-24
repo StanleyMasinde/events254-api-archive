@@ -24,8 +24,8 @@ describe('#Events test with protected routes', () => {
       .set('content-type', 'multipart/form-data')
       .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
-        type: 'Physical',
-        title: 'Awesome event',
+        location: faker.address.streetAddress(),
+        about: 'Awesome event',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '09:30'
@@ -43,8 +43,8 @@ describe('#Events test with protected routes', () => {
     const res = await app
       .put('/events/2')
       .send({
-        type: 'Online',
-        title: 'Event254 launch party',
+        location: 'virtual',
+        about: 'Event254 launch party',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
@@ -56,8 +56,8 @@ describe('#Events test with protected routes', () => {
     const res = await app
       .put('/events/1')
       .send({
-        type: 'Online',
-        title: 'Event254 launch party',
+        location: 'virtual',
+        about: 'Event254 launch party',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
         from_time: '10:45'
@@ -67,7 +67,7 @@ describe('#Events test with protected routes', () => {
 
   it('Get the updated Event', async () => {
     const res = await app.get('/events/2')
-    expect(res.body.title).equals('Event254 launch party')
+    expect(res.body.about).equals('Event254 launch party')
   })
 
   it('User deletes and event', async () => {
@@ -90,7 +90,7 @@ describe('#Event registration', () => {
       .send({
         price: 100,
         limit: 1,
-        description: 'General Admission'
+        type: 'General Admission'
       })
   })
 
@@ -128,6 +128,6 @@ describe('Event routes that do not require authentication', () => {
   it('Get a specified event', async () => {
     const res = await app.get('/p/events/2')
     expect(res.status).equals(200)
-    expect(res.body.title).equals('Event254 launch party')
+    expect(res.body.about).equals('Event254 launch party')
   })
 })

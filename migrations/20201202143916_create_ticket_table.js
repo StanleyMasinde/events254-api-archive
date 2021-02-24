@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.bigInteger('event_id').unsigned()
     table.bigInteger('price').defaultTo(0)
     table.bigInteger('limit').defaultTo(0)
-    table.text('description')
+    table.string('type')
   })
 }
 

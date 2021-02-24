@@ -25,10 +25,10 @@ class TicketController extends Controller {
   async createEventTicket (request) {
     const { params, body } = request
     const { event } = params // Get the event ID
-    const { price, limit, description } = body
+    const { price, limit, type } = body
     try {
       const ticket = await Ticket.create({
-        price, limit, description, event_id: event
+        price, limit, type, event_id: event
       })
       return this.response(ticket, 201)
     } catch (error) {
@@ -56,13 +56,13 @@ class TicketController extends Controller {
   async upDateEventTicket (request) {
     try {
       await new Validator(request.body, {
-        description: 'required'
+        type: 'required'
       }).validate()
 
       const ticket = await Ticket.find(request.params.ticket)
-      const { price, limit, description } = request.body
+      const { price, limit, type } = request.body
       await ticket.update({
-        price, limit, description
+        price, limit, type
       })
       return this.response(await this.connection().where({ id: request.params.ticket }).first()) // TODO fix this spaghetti
     } catch (error) {

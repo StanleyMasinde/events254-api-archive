@@ -1,7 +1,7 @@
 const faker = require('faker')
 
 const rows = []
-for (let index = 0; index < 5; index++) {
+for (let index = 0; index < 50; index++) {
   rows.push({
     name: faker.name.findName(),
     username: faker.internet.userName(),

@@ -132,7 +132,7 @@ describe('Authentication with personal API Tokens', () => {
       .set('content-type', 'multipart/form-data')
       .set('X-requested-with', 'mobile')
       .set('Authorization', `Bearer ${token}`)
-      .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
         location: 'virtual',
         about: 'Awesome event',

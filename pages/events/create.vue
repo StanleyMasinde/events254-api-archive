@@ -5,7 +5,7 @@
         New Event
       </h1>
     </v-col>
-    <v-col cols="12" md="7">
+    <v-col cols="12" md="6">
       <v-card flat rounded>
         <v-card-text>
           <v-alert v-if="message.success" type="success">
@@ -17,31 +17,48 @@
                 <v-file-input
                   v-model="event.poster"
                   :error-messages="errors"
-                  name="poster"
+                  name="image"
                   outlined
                   prepend-icon=""
                   label="Event picture"
                 />
               </ValidationProvider>
 
-              <ValidationProvider v-slot="{ errors }" rules="required">
+              <ValidationProvider v-slot="{ errors }" name="Location" rules="required">
                 <v-select
-                  v-model="event.type"
-                  name="type"
+                  v-model="event.location"
                   :error-messages="errors"
-                  label="Event type"
+                  label="Location"
                   outlined
-                  :items="['Physical', 'Online']"
+                  :items="['Enter location', 'Virtual']"
                 />
+              </ValidationProvider>
+
+              <!-- If the selected location is physical -->
+              <ValidationProvider v-if="event.location === 'Enter location'" v-slot="{ errors }" name="Address" rules="required">
+                <v-textarea
+                  v-model="event.address"
+                  label="Address"
+                  outlined
+                  auto-grow
+                  name="location"
+                  rows="1"
+                  :error-messages="errors"
+                />
+              </ValidationProvider>
+
+              <!-- If the seleted option is Virtual. We ask for an optional link -->
+              <ValidationProvider v-if="event.location === 'Virtual'" v-slot="{ errors }" name="Address" rules="required">
+                <v-text-field name="online_link" outlined hint="Can be blank" :error-messages="errors" label="Meeting Link" />
               </ValidationProvider>
 
               <ValidationProvider v-slot="{ errors }" rules="required">
                 <v-text-field
                   v-model="event.title"
                   :error-messages="errors"
-                  name="title"
+                  name="about"
                   outlined
-                  label="Title"
+                  label="What is the event about?"
                 />
               </ValidationProvider>
 
@@ -94,14 +111,13 @@ export default {
         err: null
       },
       event: {
-        poster: null,
-        type: null,
-        meeting_link: null,
-        title: null,
+        image: null,
+        location: null,
+        online_link: null,
+        about: null,
         description: null,
         from_date: null,
-        from_time: null,
-        duration: 'All day'
+        from_time: null
       }
     }
   },

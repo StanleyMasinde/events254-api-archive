@@ -22,7 +22,7 @@ describe('#Events test with protected routes', () => {
   it('User creates and event', async () => {
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
         location: faker.address.streetAddress(),
         about: 'Awesome event',

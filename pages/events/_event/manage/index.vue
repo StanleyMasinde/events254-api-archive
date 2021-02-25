@@ -21,7 +21,7 @@
 
         <ValidationProvider v-slot="{ errors }" rules="required">
           <v-text-field
-            v-model="eventData.title"
+            v-model="eventData.about"
             :error-messages="errors"
             name="title"
             outlined
@@ -32,7 +32,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <DateInput
-              v-model="eventData.from_date"
+              v-model="eventData.fromDate"
               name="from_date"
               label="Starting date"
             />

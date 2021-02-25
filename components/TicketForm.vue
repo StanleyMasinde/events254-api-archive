@@ -7,7 +7,7 @@
           <v-form class="mt-2" @submit.prevent="handleSubmit">
             <ValidationProvider v-slot="{ errors }" name="description" rules="required">
               <v-text-field
-                v-model="ticket.description"
+                v-model="ticket.type"
                 :error-messages="errors"
                 outlined
                 label="Name your ticket"
@@ -69,7 +69,7 @@ export default {
       success: null,
       tickets: [],
       ticket: {
-        description: 'General admission',
+        type: 'General admission',
         price: 0,
         limit: 0
       }

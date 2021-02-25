@@ -4,17 +4,17 @@
       <v-col cols="12" md="8">
         <v-card class="mx-auto" flat>
           <v-img
-            :src="currentEvent.poster_url"
+            :src="currentEvent.image"
             class="align-end"
-            height="350px"
+            height="400px"
           >
             <v-card-title>
-              <h1 class="custom-shadow white--text">
-                {{ currentEvent.title }}
+              <h1 class="custom-shadow display-1 white--text">
+                {{ currentEvent.about }}
               </h1>
             </v-card-title>
             <v-card-subtitle>
-              <h3 class="custom-shadow white--text">
+              <h3 class="title custom-shadow white--text">
                 <v-icon class="white--text">
                   mdi-map-marker
                 </v-icon>
@@ -24,7 +24,7 @@
                 <v-icon class="white--text">
                   mdi-calendar
                 </v-icon>
-                {{ new Date(currentEvent.from).toString() }}
+                {{ $moment(currentEvent.startDate).fromNow() }}
               </h3>
             </v-card-subtitle>
           </v-img>
@@ -162,6 +162,6 @@ export default {
 </script>
 <style lang="scss">
 .custom-shadow {
-  text-shadow: 3px 3px 6px black;
+  text-shadow: 5px 5px 6px #363636;
 }
 </style>

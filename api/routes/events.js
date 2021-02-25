@@ -28,7 +28,7 @@ router.use(authenticated())
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', multer({ dest: './uploads' }).single('poster'), async (req, res) => {
+router.post('/', multer({ dest: './uploads' }).single('image'), async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
     fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
@@ -59,7 +59,7 @@ router.get('/currentUser', async (req, res) => {
  * The same rules a the event creation route above
  * ---------------------------------------------------------------------
  */
-router.put('/:event', multer({ dest: './uploads' }).single('poster'), async (req, res) => {
+router.put('/:event', multer({ dest: './uploads' }).single('image'), async (req, res) => {
   try {
     const { message, status } = await EventsController.update(req)
     res.status(status).json(message)

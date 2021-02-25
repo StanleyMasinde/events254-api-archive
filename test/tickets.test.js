@@ -18,7 +18,7 @@ describe('#Events test with protected routes', () => {
       })
     await app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
         type: 'Physical',
         title: 'Third event',

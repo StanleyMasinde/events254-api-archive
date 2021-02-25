@@ -22,7 +22,7 @@
       <template v-else>
         <v-card v-for="(t,i) in tickets" :key="i" rounded outlined>
           <v-card-text class="display-1">
-            <p>Desciption: {{ t.description }}</p>
+            <p>Desciption: {{ t.type }}</p>
             <p>Limit: {{ t.limit }} </p>
             <p>Price: {{ Intl.NumberFormat('en-US', { style: 'currency', currency: 'kes' }).format(t.price) }}</p>
           </v-card-text>

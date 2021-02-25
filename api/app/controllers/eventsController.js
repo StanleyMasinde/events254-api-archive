@@ -7,6 +7,8 @@ const upload = require('../filesystem/s3')
 const canEditEvent = require('../policies/canEditEvent')
 const mail = require('../mail/mail')
 const Ticket = require('../models/ticket')
+const PDF = require('../services/pdf')
+const slugify = require('../actions/slugify')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -33,12 +35,12 @@ class EventsController extends Controller {
     const { body, file } = request
     const user = await request.user()
     // eslint-disable-next-line camelcase
-    const poster_url = await upload(file, 'event-posters')
+    const image = await upload(file, 'event-posters')
 
     try {
       await new Validator(body, {
-        type: 'required',
-        title: 'required',
+        about: 'required',
+        location: 'required',
         description: 'required',
         from_date: 'required',
         from_time: 'required'
@@ -47,14 +49,14 @@ class EventsController extends Controller {
 
       // The data is valid
       // eslint-disable-next-line camelcase
-      const { from_date, from_time, type, meeting_link, title, description } = body
-      const from = this.formatToDateTime(from_time, from_date)
-      const to = null // TODO Add this field
+      const { from_date, from_time, location, online_link, about, description } = body
+      const startDate = this.formatToDateTime(from_time, from_date)
+      const endDate = null // TODO Add this field
       // eslint-disable-next-line camelcase
       const organisable_id = user.id // The authenticated user's ID
       // eslint-disable-next-line camelcase
       const organisable_type = 'User' // The organiser's Model can be group or user
-      const e = await Event.create({ poster_url, type, meeting_link, title, description, from, to, organisable_id, organisable_type })
+      const e = await Event.create({ image, location, online_link, about, description, startDate, endDate, organisable_id, organisable_type })
       // Add the organiser
       return this.response(e, 201)
     } catch (error) {
@@ -93,17 +95,17 @@ class EventsController extends Controller {
     if (canEditEvent(currentEvent, user)) {
       try {
         await new Validator(body, { // Validate to input
-          type: 'required', // TODO refactor this
-          title: 'required',
+          about: 'required',
+          location: 'required',
           description: 'required',
           from_date: 'required',
           from_time: 'required'
         }).validate()
         // eslint-disable-next-line camelcase
-        const { from_date, from_time, type, meeting_link, title, description } = body
-        const from = this.formatToDateTime(from_time, from_date)
-        const to = null
-        const res = await currentEvent.update({ type, meeting_link, title, description, from, to }) // Payload is valid
+        const { from_date, from_time, location, about, description } = body
+        const startDate = this.formatToDateTime(from_time, from_date)
+        const endDate = null
+        const res = await currentEvent.update({ location, about, description, startDate, endDate }) // Payload is valid
         return this.response(res, 201) // Looks good
       } catch (error) {
         return this.response(error, error.status || 422)
@@ -173,14 +175,24 @@ class EventsController extends Controller {
       const ticketId = await DB('event_rsvps').insert({
         event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
       })
+
+      const ticket = new PDF({
+        currentEvent,
+        name: currentUser.name,
+        ticketId,
+        ticketCount: body.rsvp_count,
+        currentTicket,
+        date: new Date().toDateString()
+      })
       // Send and email to user
       await mail.sendMail({
         from: '"Events254" <no-reply@events254.com>',
         to: currentUser.email,
         subject: 'Your oder from Events254',
         template: 'ticket',
+        attachments: [{ filename: `${slugify(currentEvent.about)}.pdf`, content: ticket.createTicket() }],
         ctx: {
-          eventName: currentEvent.title,
+          eventName: currentEvent.about,
           name: currentUser.name,
           ticketId,
           ticketCount: body.rsvp_count,
@@ -212,8 +224,8 @@ class EventsController extends Controller {
     fromDateTime.setFullYear(fromDateArray[0]) // set the year
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
-    const t = moment(fromDateTime).tz(timezone).toISOString()
-    return new Date(t)
+    const t = moment(fromDateTime).tz(timezone).utc().toDate()
+    return t
   }
 }
 

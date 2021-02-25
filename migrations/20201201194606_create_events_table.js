@@ -1,15 +1,14 @@
-
 exports.up = function (knex) {
   return knex.schema.createTable('events', (table) => {
     table.bigIncrements('id')
-    table.string('poster_url')
-    table.string('type')
-    table.string('meeting_link')
-    table.string('title')
+    table.string('image')
+    table.string('about')
+    table.text('location') // Can be virtual
+    table.string('online_link') // If the meeting is virtual
     table.text('description')
-    table.dateTime('from') // It will contain both the date and time
-    table.dateTime('to') // Can be null
-    table.bigInteger('organisable_id')
+    table.dateTime('startDate') // It will contain both the date and time
+    table.dateTime('endDate')
+    table.bigInteger('organisable_id') // The database ID of the organiser
     table.string('organisable_type') // Can be user or group
     table.timestamps(true, true)
   })

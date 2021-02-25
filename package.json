@@ -20,9 +20,9 @@
     "start": "nuxt start --spa",
     "dev": "cross-env DEBUG=express:* nuxt",
     "dev:api": "cross-env DEBUG=express:* NODE_ENV=api nodemon api/app.js",
-    "pretest": "cross-env NODE_ENV=production knex migrate:latest",
-    "test": "cross-env NODE_ENV=testing TEST_DB_CLIENT=mysql2 mocha --timeout 12000 --exit",
-    "posttest": "cross-env npx knex migrate:rollback --env production",
+    "pretest": "knex migrate:latest --env production",
+    "test": "cross-env NODE_ENV=testing TEST_DB_CLIENT=mysql2 mocha --timeout 12000 --bail --exit",
+    "posttest": "knex migrate:rollback --env production",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "build": "nuxt build"
   },
@@ -49,6 +49,7 @@
     "nodemailer": "^6.4.18",
     "nodemailer-pug-engine": "^1.0.2",
     "nuxt": "^2.15.0",
+    "pdfkit": "^0.11.0",
     "redis": "^3.0.2",
     "sessionstore": "^0.4.8",
     "vee-validate": "^3.4.5"

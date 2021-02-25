@@ -134,11 +134,13 @@ describe('Authentication with personal API Tokens', () => {
       .set('Authorization', `Bearer ${token}`)
       .attach('poster', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
-        type: 'Physical',
-        title: 'Awesome event',
+        location: 'virtual',
+        about: 'Awesome event',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
-        from_time: '10:30'
+        from_time: '10:30',
+        end_date: new Date().toISOString().substr(0, 10),
+        end_time: '15:30'
       })
     expect(res.status).equals(201)
   })

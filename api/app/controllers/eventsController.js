@@ -34,8 +34,6 @@ class EventsController extends Controller {
   async store (request) {
     const { body, file } = request
     const user = await request.user()
-    // eslint-disable-next-line camelcase
-    const image = await upload(file, 'event-posters')
 
     try {
       await new Validator(body, {
@@ -46,6 +44,9 @@ class EventsController extends Controller {
         from_time: 'required'
       })
         .validate()
+
+      // eslint-disable-next-line camelcase
+      const image = await upload(file, 'event-posters')
 
       // The data is valid
       // eslint-disable-next-line camelcase
@@ -224,7 +225,7 @@ class EventsController extends Controller {
     fromDateTime.setFullYear(fromDateArray[0]) // set the year
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
-    const t = moment(fromDateTime).tz(timezone).utc().toDate()
+    const t = moment(fromDateTime, true).tz(timezone, true).toDate()
     return t
   }
 }

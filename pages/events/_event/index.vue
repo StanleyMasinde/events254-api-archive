@@ -24,7 +24,7 @@
                 <v-icon class="white--text">
                   mdi-calendar
                 </v-icon>
-                {{ $moment(currentEvent.startDate).fromNow() }}
+                {{ $moment(currentEvent.startDate) }}
               </h3>
             </v-card-subtitle>
           </v-img>

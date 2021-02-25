@@ -4,13 +4,13 @@ exports.seed = function (knex) {
 
   for (let row = 0; row < 50; row++) {
     rows.push({
-      poster_url: faker.image.abstract(),
-      type: 'offline',
-      meeting_link: faker.internet.url(),
-      title: faker.lorem.sentence(5),
-      description: faker.lorem.paragraphs(3),
-      from: faker.date.future(),
-      to: faker.date.future(),
+      image: faker.image.abstract(),
+      location: faker.address.streetAddress(),
+      online_link: faker.internet.url(),
+      about: faker.lorem.words(),
+      description: faker.lorem.paragraphs(4),
+      startDate: faker.date.future(),
+      endDate: faker.date.future(),
       organisable_id: 10,
       organisable_type: 'User'
     })

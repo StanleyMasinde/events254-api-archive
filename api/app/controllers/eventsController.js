@@ -7,6 +7,8 @@ const upload = require('../filesystem/s3')
 const canEditEvent = require('../policies/canEditEvent')
 const mail = require('../mail/mail')
 const Ticket = require('../models/ticket')
+const PDF = require('../services/pdf')
+const slugify = require('../actions/slugify')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -173,14 +175,24 @@ class EventsController extends Controller {
       const ticketId = await DB('event_rsvps').insert({
         event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
       })
+
+      const ticket = new PDF({
+        currentEvent,
+        name: currentUser.name,
+        ticketId,
+        ticketCount: body.rsvp_count,
+        currentTicket,
+        date: new Date().toDateString()
+      })
       // Send and email to user
       await mail.sendMail({
         from: '"Events254" <no-reply@events254.com>',
         to: currentUser.email,
         subject: 'Your oder from Events254',
         template: 'ticket',
+        attachments: [{ filename: `${slugify(currentEvent.about)}.pdf`, content: ticket.createTicket() }],
         ctx: {
-          eventName: currentEvent.title,
+          eventName: currentEvent.about,
           name: currentUser.name,
           ticketId,
           ticketCount: body.rsvp_count,
@@ -212,8 +224,8 @@ class EventsController extends Controller {
     fromDateTime.setFullYear(fromDateArray[0]) // set the year
     fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
-    const t = moment(fromDateTime).tz(timezone).toISOString()
-    return new Date(t)
+    const t = moment(fromDateTime).tz(timezone).utc().toDate()
+    return t
   }
 }
 

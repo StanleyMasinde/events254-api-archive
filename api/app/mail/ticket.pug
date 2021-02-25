@@ -9,15 +9,13 @@ block content
             .f-fallback
               h1 Hi #{name},
               p
-                | Thanks for using Events254. This email is the order confirmation for #{eventName} No payment is due.
-              p
-                | This purchase will appear as &ldquo;[Credit Card Statement Name]&rdquo; on your credit card statement for your {{credit_card_brand}} ending in {{credit_card_last_four}}. Need to 
-                a(href='{{billing_url}}') update your payment information
-                | ?
+                | Thanks for using Events254. This email is the order confirmation for 
+                b #{eventName}. 
+                | No payment is due.
               table.purchase(width='100%' cellpadding='0' cellspacing='0' role='presentation')
                 tr
                   td
-                    h3  EV254KE#{ticketId}
+                    h3  #EV254KE#{ticketId}
                   td
                     h3.align-right #{date}
                 tr
@@ -25,12 +23,12 @@ block content
                     table.purchase_content(width='100%' cellpadding='0' cellspacing='0')
                       tr
                         th.purchase_heading(align='left')
-                          p.f-fallback Description
+                          p.f-fallback Ticket type
                         th.purchase_heading(align='right')
                           p.f-fallback Amount
                       tr
                         td.purchase_item(width='80%')
-                          span.f-fallback #{currentTicket.description}
+                          span.f-fallback #{currentTicket.type}
                         td.align-right(width='20%')
                           span.f-fallback #{currentTicket.price}
                       tr
@@ -38,11 +36,6 @@ block content
                           p.f-fallback.purchase_total.purchase_total--label Total
                         td.purchase_footer(width='20%' valign='middle')
                           p.f-fallback.purchase_total #{currentTicket.price}
-              p
-                | If you have any questions about this order, simply reply to this email or reach out to our 
-                a(href='{{support_url}}') support team
-                |  for help.
-              p
                 | Cheers,
                 br
                 | The Events254 Team
@@ -50,19 +43,15 @@ block content
               table.body-action(align='center' width='100%' cellpadding='0' cellspacing='0' role='presentation')
                 tr
                   td(align='center')
-                    //
-                      Border based button
-                      https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design
                     table(width='100%' border='0' cellspacing='0' cellpadding='0' role='presentation')
                       tr
                         td(align='center')
                           a.f-fallback.button.button--blue(href='{{action_url}}' target='_blank') Download as PDF
-              // Sub copy
               table.body-sub(role='presentation')
                 tr
                   td
                     p.f-fallback.sub
-                      | Need a printable copy for your records? You can 
+                      | Need a printable copy for your ticket? You can 
                       a(href='{{action_url}}') download a PDF version
                       | .
 

@@ -6,64 +6,37 @@
     <v-btn text :to="`/events/${$route.params.event}`">
       View event
     </v-btn>
-    <ValidationObserver ref="observer" v-slot="{ invalid }">
-      <v-form id="eventForm" ref="form" class="mt-4" @submit.prevent="">
-        <ValidationProvider v-slot="{ errors }" rules="required">
-          <v-select
-            v-model="eventData.type"
-            name="type"
-            :error-messages="errors"
-            label="Event type"
-            outlined
-            :items="['Physical', 'Online']"
-          />
-        </ValidationProvider>
-
-        <ValidationProvider v-slot="{ errors }" rules="required">
-          <v-text-field
-            v-model="eventData.about"
-            :error-messages="errors"
-            name="title"
-            outlined
-            label="Title"
-          />
-        </ValidationProvider>
-
-        <v-row>
-          <v-col cols="12" md="6">
-            <DateInput
-              v-model="eventData.fromDate"
-              name="from_date"
-              label="Starting date"
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <TimeInput v-model="eventData.from_time" label="Starting time" name="from_time" />
-          </v-col>
-        </v-row>
-
-        <ValidationProvider v-slot="{errors}" rules="required">
-          <v-textarea
-            v-model="eventData.description"
-            :error-messages="errors"
-            outlined
-            rows="1"
-            auto-grow
-            label="Describe your event"
-            name="description"
-          />
-        </ValidationProvider>
-        <v-btn
-          :disabled="invalid"
-          type="submit"
-          large
-          depressed
-          color="accent"
-        >
-          Update information
-        </v-btn>
-      </v-form>
-    </ValidationObserver>
+    <!-- Featured Image -->
+    <h1 class="display-1">
+      Featured image
+    </h1>
+    <v-img :src="currentEvent.image" height="100" contain width="200" />
+    <ValidationProvider v-slot="{ errors }" rules="required">
+      <v-file-input
+        v-model="updatedEvent.poster"
+        :error-messages="errors"
+        name="image"
+        outlined
+        prepend-icon=""
+        label="Change featured image"
+      />
+    </ValidationProvider>
+    <!-- About information -->
+    <h1 class="display-1">
+      About event
+    </h1>
+    <h3>
+      {{ currentEvent.about }}
+    </h3>
+    <ValidationProvider v-slot="{ errors }" rules="required">
+      <v-text-field
+        v-model="updatedEvent.title"
+        :error-messages="errors"
+        name="about"
+        outlined
+        label="New event subject"
+      />
+    </ValidationProvider>
   </div>
 </template>
 <script>
@@ -71,6 +44,7 @@ import moment from 'moment-timezone'
 export default {
   data () {
     return {
+      updatedEvent: {},
       currentEvent: {}
     }
   },

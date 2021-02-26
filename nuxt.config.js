@@ -60,7 +60,11 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/axios', '~/plugins/veevalidate.js', '~/plugins/moment.js'],
+  plugins: [
+    '~/plugins/axios',
+    '~/plugins/veevalidate.js',
+    '~/plugins/moment.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */

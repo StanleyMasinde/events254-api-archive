@@ -18,14 +18,15 @@
                 <v-icon class="white--text">
                   mdi-map-marker
                 </v-icon>
-                {{ currentEvent.venue || "To be decided" }}
+                {{ currentEvent.location || "To be decided" }}
               </h3>
-              <h3 class="custom-shadow white--text">
+              <h4 class="custom-shadow white--text">
                 <v-icon class="white--text">
                   mdi-calendar
                 </v-icon>
-                {{ $moment(currentEvent.startDate) }}
-              </h3>
+                {{ $moment(currentEvent.startDate) }} |
+                {{ $moment(currentEvent.startDate).fromNow() }}
+              </h4>
             </v-card-subtitle>
           </v-img>
           <v-card-actions>
@@ -48,10 +49,8 @@
               Register for this event
             </v-btn>
           </v-card-actions>
-          <v-card-text class="body-1">
-            <h3>About this event</h3>
-            {{ currentEvent.description }}
-          </v-card-text>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <v-card-text class="body-1" v-html="currentEvent.description" />
         </v-card>
       </v-col>
     </v-row>

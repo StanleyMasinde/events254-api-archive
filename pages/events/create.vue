@@ -75,17 +75,10 @@
                 </v-col>
               </v-row>
 
-              <ValidationProvider v-slot="{errors}" rules="required">
-                <v-textarea
-                  v-model="event.description"
-                  :error-messages="errors"
-                  outlined
-                  rows="1"
-                  auto-grow
-                  label="Describe your event"
-                  name="description"
-                />
+              <ValidationProvider rules="required">
+                <RichEditor v-model="event.description" />
               </ValidationProvider>
+
               <v-btn
                 :disabled="invalid"
                 type="submit"
@@ -103,7 +96,9 @@
   </v-row>
 </template>
 <script>
+import RichEditor from '~/components/RichEditor.vue'
 export default {
+  components: { RichEditor },
   data () {
     return {
       message: {

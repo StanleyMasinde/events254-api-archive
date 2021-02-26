@@ -8,7 +8,7 @@ exports.seed = function (knex) {
       location: faker.address.streetAddress(),
       online_link: faker.internet.url(),
       about: faker.lorem.words(),
-      description: faker.lorem.paragraphs(4),
+      description: faker.unique(),
       startDate: faker.date.future(),
       endDate: faker.date.future(),
       organisable_id: 10,

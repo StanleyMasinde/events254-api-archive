@@ -1,15 +1,19 @@
-
+ //const knexx = require('knex')(0
 exports.up = function (knex) {
   return knex.schema.createTable('groups', (table) => {
     table.bigIncrements('id')
-    table.bigInteger('user_id').unsigned() // The creator of the group
     table.string('name')
-    table.enum('type', ['community', 'company']).defaultTo('company') // A group can be a company or a community like opensource254
     table.string('slug')
-    table.text('description')
+    table.string('description')
+    table.string('country') // This will be usefull in the landing page
+    table.string('city') // Local are in case of group
+    table.string('visibility').defaultTo('public') // A group can be public
+    table.boolean('isCompany')
+    table.string('timezone') // To autoconvert event times to it's local time
     table.timestamps(true, true)
 
-    table.foreign('user_id').references('id').inTable('users')
+    // A compnay can also have many categories
+    // TODO create categories && A table for all images
   })
 }
 

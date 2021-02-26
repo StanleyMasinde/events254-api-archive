@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 const faker = require('faker')
 chai.use(chaiHttp)
-const application = require('../api/app')
+const application = require('../backend/app')
 const app = chai.request.agent(application).keepOpen() // This will keep the request open and so the session
 
 describe('#Events test with protected routes', () => {

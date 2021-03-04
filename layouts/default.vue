@@ -58,9 +58,19 @@
                   rounded
                   text
                 >
-                  Edit Account
+                  My account
                 </v-btn>
                 <v-divider class="my-3" />
+                <v-btn
+                  to="/groups/create"
+                  depressed
+                  rounded
+                  text
+                >
+                  Start your group
+                </v-btn>
+                <v-divider class="my-3" />
+
                 <v-btn
                   to="/events/create"
                   depressed

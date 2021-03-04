@@ -5,7 +5,13 @@
  * @returns String
  */
 const slugify = (text = '', separator = '-') => {
-  return text.toLocaleLowerCase().split(' ').join(separator)
+  const from = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;'
+  const to = 'aaaaeeeeiiiioooouuuunc------'
+  for (let i = 0, l = from.length; i < l; i++) {
+    text.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
+  }
+
+  return text.toLocaleLowerCase().trim().replace(/[^a-z0-9 -]/g, '').split(' ').join(separator)
 }
 
 module.exports = slugify

@@ -1,4 +1,5 @@
 const Validator = require('mevn-validator')
+const slugify = require('../actions/slugify')
 const Group = require('../models/group')
 const Controller = require('./controller')
 
@@ -23,7 +24,15 @@ class GroupController extends Controller {
    * @returns response
    */
   async create (request) {
-
+    const { body } = request
+    try {
+      await this.validate(body) // 👀 Looks good let us add it to the DB
+      body.slug = slugify(body.name) // TODO add group picture and Organiser's
+      const group = await Group.create(body)
+      return this.response(group, 201)
+    } catch (error) {
+      return this.response(error, 422)
+    }
   }
 
   /**
@@ -33,7 +42,16 @@ class GroupController extends Controller {
    * @param {Array} request
    * @returns Group
    */
-  show (request) {}
+  async show (request) {
+    const { params } = request
+    try {
+      await Group.where({
+        slug: params.slug
+      }).first()
+    } catch (error) {
+      return this.response(error, error.status | 500)
+    }
+  }
 
   /**
    * Update information of a given group
@@ -54,12 +72,11 @@ class GroupController extends Controller {
    * @param {Array} body
    * @returns Promise
    */
-  async validate (body) {
-    await new Validator(body, {
+  validate (body) {
+    return new Validator(body, {
       name: 'required',
-      type: 'required',
-      
-    })
+      description: 'required'
+    }).validate()
   }
 }
 

@@ -52,8 +52,10 @@ export default {
       try {
         await this.$auth.loginWith('local', { data: this.cred })
       } catch (error) {
-        this.err = 'These credentials do not match our records'
-
+        if (error.response.status === 500) {
+          throw new Error(error)
+        }
+        this.err = error.response.data.message
         setTimeout(() => {
           this.err = null
         }, 5000)

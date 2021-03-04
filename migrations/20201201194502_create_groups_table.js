@@ -1,14 +1,14 @@
- //const knexx = require('knex')(0
+// const knexx = require('knex')(0
 exports.up = function (knex) {
   return knex.schema.createTable('groups', (table) => {
     table.bigIncrements('id')
     table.string('name')
-    table.string('slug')
+    table.string('slug').unique()
     table.string('description')
-    table.string('country') // This will be usefull in the landing page
+    table.string('country') // This will be useful in the landing page
     table.string('city') // Local are in case of group
     table.string('visibility').defaultTo('public') // A group can be public
-    table.boolean('isCompany')
+    table.boolean('isCompany').defaultTo(0)
     table.string('timezone') // To autoconvert event times to it's local time
     table.timestamps(true, true)
 

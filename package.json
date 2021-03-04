@@ -24,6 +24,8 @@
     "test": "cross-env NODE_ENV=testing TEST_DB_CLIENT=mysql2 mocha --timeout 12000 --bail --exit",
     "posttest": "knex migrate:rollback --env production",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "migrate": "knex migrate:latest --env production",
+    "migrate:rollback": "knex migrate:rollback --env production",
     "build": "nuxt build"
   },
   "dependencies": {

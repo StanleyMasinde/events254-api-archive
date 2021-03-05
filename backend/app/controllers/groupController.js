@@ -45,9 +45,14 @@ class GroupController extends Controller {
   async show (request) {
     const { params } = request
     try {
-      await Group.where({
+      const group = await Group.where({
         slug: params.slug
       }).first()
+
+      if (group) {
+        return this.response(group)
+      }
+      return this.response('Group not found', 404)
     } catch (error) {
       return this.response(error, error.status | 500)
     }

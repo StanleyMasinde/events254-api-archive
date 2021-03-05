@@ -28,7 +28,6 @@ router.post('/', async (req, res) => {
     const { status, message } = await GroupController.create(req)
     res.status(status).json(message)
   } catch (error) {
-    console.log(error);
     res.status(500).json(error)
   }
 })

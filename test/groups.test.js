@@ -10,6 +10,9 @@ const application = require('../backend/app')
 const app = chai.request.agent(application).keepOpen()
 
 describe('Groups', () => {
+  const name = faker.company.companyName()
+  const slug = slugify(name)
+
   before(async () => {
     await app
       .post('/auth/login')
@@ -25,8 +28,7 @@ describe('Groups', () => {
     expect(res.body).to.be.an('array')
   })
 
-  it('Create a new group', async () => {
-    const name = faker.company.companyName()
+  it('#Create a new group', async () => {
     const res = await app.post('/groups')
       .send({
         name,
@@ -36,6 +38,12 @@ describe('Groups', () => {
       })
     expect(res.status).equals(201)
     expect(res.body).to.haveOwnProperty('name', name)
-    expect(res.body).to.haveOwnProperty('slug', slugify(name))
+    expect(res.body).to.haveOwnProperty('slug', slug)
+  })
+
+  it('#Read information about a group', async () => {
+    const res = await app.get(`/groups/${slug}`)
+    expect(res.body).to.haveOwnProperty('name', name)
+    expect(res.body).to.haveOwnProperty('slug', slug)
   })
 })

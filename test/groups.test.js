@@ -12,6 +12,8 @@ const app = chai.request.agent(application).keepOpen()
 describe('Groups', () => {
   const name = faker.company.companyName()
   const slug = slugify(name)
+  const newName = faker.company.companyName()
+  const newSlug = slugify(newName)
 
   before(async () => {
     await app
@@ -45,5 +47,21 @@ describe('Groups', () => {
     const res = await app.get(`/groups/${slug}`)
     expect(res.body).to.haveOwnProperty('name', name)
     expect(res.body).to.haveOwnProperty('slug', slug)
+  })
+
+  it('#Update a given group', async () => {
+    const res = await app.put(`/groups/${slug}`)
+      .send({
+        name: newName,
+        description: faker.company.catchPhrase(),
+        country: faker.address.county(),
+        city: faker.address.city()
+      })
+    expect(res.status).equals(201)
+  })
+
+  it('#Delete a given group', async () => {
+    const res = await app.delete(`/groups/${newSlug}`)
+    console.log(res.body)
   })
 })

@@ -63,14 +63,42 @@ class GroupController extends Controller {
    * @param {Array} request
    * @returns response
    */
-  update (request) {}
+  async update (request) {
+    const { body, params } = request
+
+    try {
+      await this.validate(body)
+      const group = await Group.where({
+        slug: params.slug
+      }).first()
+
+      body.slug = slugify(body.name) // TODO make sure the slug is unique
+      if (group) {
+        const res = await group.update(body)
+        return this.response(res, 201)
+      }
+      return this.response('We could not find the group 😢', 404)
+    } catch (error) {
+      return this.response(error, 422)
+    }
+  }
 
   /**
    * Delete a given group from the database
    * @param {Array} request
    * @returns response
    */
-  delete (request) {}
+  async delete (request) {
+    const group = await Group.where({
+      slug: request.params.slug
+    }).first()
+
+    if (group) {
+      await group.destroy()
+      return this.response(`${group.name} has been deleted.`)
+    }
+    return this.response('Could not find the group 😢')
+  }
 
   /**
    * Make sure the payload is valid

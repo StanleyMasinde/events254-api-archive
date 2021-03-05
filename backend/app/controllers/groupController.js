@@ -97,7 +97,7 @@ class GroupController extends Controller {
       await group.destroy()
       return this.response(`${group.name} has been deleted.`)
     }
-    return this.response('Could not find the group 😢')
+    return this.response('Could not find the group 😢', 404)
   }
 
   /**

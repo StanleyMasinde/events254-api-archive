@@ -62,6 +62,6 @@ describe('Groups', () => {
 
   it('#Delete a given group', async () => {
     const res = await app.delete(`/groups/${newSlug}`)
-    console.log(res.body)
+    expect(res.status).equals(200)
   })
 })

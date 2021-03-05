@@ -1,5 +1,7 @@
+const { DB } = require('mevn-orm')
 const Validator = require('mevn-validator')
 const slugify = require('../actions/slugify')
+const upload = require('../filesystem/s3')
 const Group = require('../models/group')
 const Controller = require('./controller')
 
@@ -24,11 +26,20 @@ class GroupController extends Controller {
    * @returns response
    */
   async create (request) {
-    const { body } = request
+    const { body, file } = request
     try {
+      const user = await request.user() // The current user
       await this.validate(body) // 👀 Looks good let us add it to the DB
+      const pictureUrl = await upload(file, 'groups')
+      body.pictureUrl = pictureUrl
       body.slug = slugify(body.name) // TODO add group picture and Organiser's
       const group = await Group.create(body)
+      await DB('group_organisers').insert({
+        group_id: group.id,
+        user_id: user.id
+      })
+      group.organisers = await group.organisers()
+      group.organisers.map(o => delete o.password) // TODO this should happend at the model level
       return this.response(group, 201)
     } catch (error) {
       return this.response(error, 422)
@@ -50,6 +61,8 @@ class GroupController extends Controller {
       }).first()
 
       if (group) {
+        group.organisers = await group.organisers()
+        group.organisers.map(o => delete o.password)
         return this.response(group)
       }
       return this.response('Group not found', 404)
@@ -64,13 +77,17 @@ class GroupController extends Controller {
    * @returns response
    */
   async update (request) {
-    const { body, params } = request
+    const { body, params, file } = request
 
     try {
       await this.validate(body)
       const group = await Group.where({
         slug: params.slug
       }).first()
+
+      if (file) { // Append the picture URL id the file has been uploaded
+        body.pictureUrl = await upload(file, 'groups')
+      }
 
       body.slug = slugify(body.name) // TODO make sure the slug is unique
       if (group) {

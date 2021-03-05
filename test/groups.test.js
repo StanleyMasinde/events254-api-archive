@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+const fs = require('fs')
 const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
@@ -32,7 +33,9 @@ describe('Groups', () => {
 
   it('#Create a new group', async () => {
     const res = await app.post('/groups')
-      .send({
+      .set('content-type', 'multipart/form-data')
+      .attach('picture', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .field({
         name,
         description: faker.company.catchPhrase(),
         country: faker.address.county(),
@@ -51,13 +54,21 @@ describe('Groups', () => {
 
   it('#Update a given group', async () => {
     const res = await app.put(`/groups/${slug}`)
-      .send({
+      .set('content-type', 'multipart/form-data')
+      .attach('picture', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .field({
         name: newName,
         description: faker.company.catchPhrase(),
         country: faker.address.county(),
         city: faker.address.city()
       })
     expect(res.status).equals(201)
+  })
+
+  it('Get the updated event', async () => {
+    const res = await app.get(`/groups/${newSlug}`)
+    expect(res.body).to.haveOwnProperty('name', newName)
+    expect(res.body).to.haveOwnProperty('slug', newSlug)
   })
 
   it('#Delete a given group', async () => {

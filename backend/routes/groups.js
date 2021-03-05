@@ -1,4 +1,6 @@
+const fs = require('fs')
 const router = require('express').Router()
+const multer = require('multer')
 const GroupController = require('../app/controllers/groupController')
 
 /**
@@ -23,9 +25,10 @@ router.get('/', async (req, res) => {
  * The request is validated before any creation event
  * ------------------------------------------------------------
  */
-router.post('/', async (req, res) => {
+router.post('/', multer({ dest: './uploads' }).single('picture'), async (req, res) => {
   try {
     const { status, message } = await GroupController.create(req)
+    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
     res.status(status).json(message)
   } catch (error) {
     res.status(500).json(error)
@@ -56,10 +59,11 @@ router.get('/:slug', async (req, res) => {
  * This route requires both authentication and authorization
  * ------------------------------------------------------------------
  */
-router.put('/:slug', async (req, res) => {
+router.put('/:slug', multer({ dest: './uploads' }).single('picture'), async (req, res) => {
   try {
     const { status, message } = await GroupController.update(req)
     res.status(status).json(message)
+    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
   } catch (error) {
     res.status(500).json(error)
   }

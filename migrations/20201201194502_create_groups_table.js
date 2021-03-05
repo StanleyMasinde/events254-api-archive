@@ -2,6 +2,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('groups', (table) => {
     table.bigIncrements('id')
+    table.string('pictureUrl')
     table.string('name')
     table.string('slug').unique()
     table.string('description')

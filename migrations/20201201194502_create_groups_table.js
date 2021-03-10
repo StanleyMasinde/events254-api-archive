@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.string('pictureUrl')
     table.string('name')
     table.string('slug').unique()
-    table.string('description')
+    table.text('description')
     table.string('country') // This will be useful in the landing page
     table.string('city') // Local are in case of group
     table.string('visibility').defaultTo('public') // A group can be public

@@ -5,7 +5,7 @@ const chai = require('chai')
 const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
-const application = require('../api/app')
+const application = require('../backend/app')
 const app = chai.request.agent(application).keepOpen()
 
 describe('Session Authentication tests', () => {

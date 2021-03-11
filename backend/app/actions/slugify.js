@@ -5,7 +5,13 @@
  * @returns String
  */
 const slugify = (text = '', separator = '-') => {
-  return text.toLocaleLowerCase().split(' ').join(separator)
+  return text
+    .toLocaleLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036F]/g, '')
+    .trim()
+    .replace(/[^a-z0-9 ]/g, '')
+    .replace(/\s+/g, separator)
 }
 
 module.exports = slugify

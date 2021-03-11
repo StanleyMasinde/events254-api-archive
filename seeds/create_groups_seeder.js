@@ -1,13 +1,19 @@
 /* eslint-disable camelcase */
 
 const faker = require('faker')
+const slugify = require('../backend/app/actions/slugify')
 const rows = []
 for (let index = 0; index < 5; index++) {
+  const name = faker.lorem.sentence()
   rows.push({
-    user_id: 1,
-    name: faker.commerce.productName(),
-    slug: faker.helpers.slugify(faker.commerce.productName()),
-    description: faker.lorem.words(20)
+    pictureUrl: faker.image.business(),
+    name,
+    slug: slugify(name),
+    description: faker.lorem.paragraphs(3),
+    country: faker.address.country(),
+    city: faker.address.city(),
+    visibility: 'public',
+    timezone: 'Africa/Nairobi'
   })
 }
 exports.seed = function (knex) {

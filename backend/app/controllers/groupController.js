@@ -3,6 +3,7 @@ const Validator = require('mevn-validator')
 const slugify = require('../actions/slugify')
 const upload = require('../filesystem/s3')
 const Group = require('../models/group')
+const canManageGroup = require('../policies/canManageGroup')
 const Controller = require('./controller')
 
 class GroupController extends Controller {
@@ -54,7 +55,8 @@ class GroupController extends Controller {
    * @returns Group
    */
   async show (request) {
-    const { params } = request
+    const { params, user } = request
+    const u = await user()
     try {
       const group = await Group.where({
         slug: params.slug
@@ -63,6 +65,7 @@ class GroupController extends Controller {
       if (group) {
         group.organisers = await group.organisers()
         group.organisers.map(o => delete o.password)
+        group.isManager = canManageGroup(group, u)
         return this.response(group)
       }
       return this.response('Group not found', 404)

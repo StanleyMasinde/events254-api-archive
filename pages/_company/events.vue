@@ -1,5 +1,15 @@
 <template>
-  <h1>{{ group.name }} Events Page</h1>
+  <v-row justify="center">
+    <v-col cols="12">
+      <v-btn color="primary" text :to="`/${$route.params.company}`">
+        Back to {{ group.name }}
+      </v-btn>
+    </v-col>
+
+    <v-col cols="12" md="8">
+      <h1>Events here</h1>
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {

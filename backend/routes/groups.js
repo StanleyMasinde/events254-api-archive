@@ -36,6 +36,21 @@ router.post('/', multer({ dest: './uploads' }).single('picture'), async (req, re
 })
 
 /**
+ * ----------------------------------------------------------------
+ * Get the groups managed by the current user
+ * This will be shown in the user's home page
+ * -----------------------------------------------------------------
+ */
+router.get('/currentUser', async (req, res) => {
+  try {
+    const { status, message } = await GroupController.currentUser(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
  * -----------------------------------------------------------------------
  * Get a specific group using it's slug
  * e.g /api/groups/opensource254.

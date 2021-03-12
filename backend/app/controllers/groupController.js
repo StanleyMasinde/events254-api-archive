@@ -121,6 +121,26 @@ class GroupController extends Controller {
   }
 
   /**
+   * Get the groups managed by the current
+   * @param {*} body
+   * @returns
+   */
+  async currentUser (request) {
+    const { user } = request
+    try {
+      const u = await user()
+      const rows = await DB('group_organisers').where({ user_id: u.id })
+      const groupIds = rows.map((group) => {
+        return group.group_id
+      })
+      const groups = await DB('groups').whereIn('id', groupIds)
+      return this.response(groups)
+    } catch (error) {
+      return this.response(error, 500)
+    }
+  }
+
+  /**
    * Make sure the payload is valid
    * @param {Array} body
    * @returns Promise

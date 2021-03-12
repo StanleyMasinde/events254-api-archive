@@ -16,6 +16,9 @@
         <v-tab to="/home/events">
           My Events
         </v-tab>
+        <v-tab to="/home/groups">
+          My Groups
+        </v-tab>
         <v-tab to="/home/tickets">
           Tickets
         </v-tab>

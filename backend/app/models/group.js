@@ -14,6 +14,13 @@ class Group extends Model {
     return organisers
     // return this.belongsToMany('group_organiser') // TODO this should be it
   }
+
+  /**
+   * Get the events created by the current Group
+   */
+  events () {
+    return this.morphMany('Event', 'organisable')
+  }
 }
 
 module.exports = Group

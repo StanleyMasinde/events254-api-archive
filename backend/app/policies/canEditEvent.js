@@ -5,6 +5,6 @@
  * @param {*} guard The guard to use
  * @returns Boolean
  */
-module.exports = function canEditEvent (event, user, guard = 'users') {
-  return event.organisable_id === user.id
+module.exports = function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
+  return event.organisable_id === user.id && event.organisable_type === organisableType
 }

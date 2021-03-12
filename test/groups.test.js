@@ -10,12 +10,11 @@ const application = require('../backend/app')
 
 const app = chai.request.agent(application).keepOpen()
 
+const name = faker.company.companyName()
+const slug = slugify(name)
+const newName = faker.company.companyName()
+const newSlug = slugify(newName)
 describe('Groups', () => {
-  const name = faker.company.companyName()
-  const slug = slugify(name)
-  const newName = faker.company.companyName()
-  const newSlug = slugify(newName)
-
   before(async () => {
     await app
       .post('/auth/login')
@@ -71,8 +70,66 @@ describe('Groups', () => {
     expect(res.body).to.haveOwnProperty('slug', newSlug)
   })
 
-  it('#Delete a given group', async () => {
-    const res = await app.delete(`/groups/${newSlug}`)
+  // it('#Delete a given group', async () => {
+  //   const res = await app.delete(`/groups/${newSlug}`)
+  //   expect(res.status).equals(200)
+  // })
+})
+
+describe('Group events', () => {
+  it('Group creates and event', async () => {
+    const res = await app.post(`/groups/${newSlug}/events`)
+      .set('content-type', 'multipart/form-data')
+      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .field({
+        location: faker.address.streetAddress(),
+        about: 'Awesome event',
+        description: faker.lorem.paragraph(10),
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '09:30'
+      })
+    expect(res.status).equals(201)
+  })
+
+  it('Get current group\'s events', async () => {
+    const res = await app.get(`/groups/${newSlug}/events/`)
     expect(res.status).equals(200)
+    expect(res.body).to.be.an('Array')
+  })
+
+  it('Update an event', async () => {
+    const res = await app
+      .put(`/groups/${newSlug}/events/3`)
+      .send({
+        location: faker.address.streetAddress(true),
+        about: 'Events254 launch party (Group)',
+        description: faker.lorem.paragraph(10),
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '10:45'
+      })
+    expect(res.status).equals(201)
+  })
+
+  it('Updating an event you don\'t own should fail with 401', async () => {
+    const res = await app
+      .put(`/groups/${newSlug}/events/2`)
+      .send({
+        location: 'virtual',
+        about: 'Events254 launch party',
+        description: faker.lorem.paragraph(10),
+        from_date: new Date().toISOString().substr(0, 10),
+        from_time: '10:45'
+      })
+    expect(res.status).equals(401)
+  })
+
+  it('Get the updated Event', async () => {
+    const res = await app.get('/events/3')
+    expect(res.body.about).equals('Events254 launch party (Group)')
+  })
+
+  it('Group deletes an event', async () => {
+    const res = await app.delete(`/groups/${newSlug}/events/3`)
+    expect(res.body).equals('Deleted')
   })
 })

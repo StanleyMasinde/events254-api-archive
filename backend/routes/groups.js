@@ -100,4 +100,62 @@ router.delete('/:slug', async (req, res) => {
   }
 })
 
+/**
+ * --------------------------------------------------------------------
+ * Get all the events in the group
+ * current group
+ * --------------------------------------------------------------------
+ */
+router.get('/:slug/events', async (req, res) => {
+  try {
+    const { status, message } = await GroupController.groupEvents(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
+ * --------------------------------------------------------------------
+ * Create a group's event. An event that will be owned and managed by
+ * the current group
+ * --------------------------------------------------------------------
+ */
+router.post('/:slug/events', multer({ dest: './uploads' }).single('image'), async (req, res) => {
+  try {
+    const { status, message } = await GroupController.createEvent(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
+ * --------------------------------------------------------------------
+ * Update a given event
+ * --------------------------------------------------------------------
+ */
+router.put('/:slug/events/:event', async (req, res) => {
+  try {
+    const { status, message } = await GroupController.updateEvent(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
+ * --------------------------------------------------------------------
+ * Delete an event
+ * --------------------------------------------------------------------
+ */
+router.delete('/:slug/events/:event', async (req, res) => {
+  try {
+    const { status, message } = await GroupController.deleteEvent(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
 module.exports = router

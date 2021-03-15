@@ -19,7 +19,7 @@
   "scripts": {
     "start": "nuxt start --spa",
     "dev": "cross-env DEBUG=express:* nuxt",
-    "dev:api": "cross-env DEBUG=express:* NODE_ENV=api nodemon api/app.js",
+    "dev:api": "cross-env DEBUG=express:* NODE_ENV=api nodemon backend/app.js",
     "pretest": "knex migrate:latest --env production",
     "test": "cross-env NODE_ENV=testing TEST_DB_CLIENT=mysql2 mocha --timeout 12000 --bail --exit",
     "posttest": "knex migrate:rollback --env production",

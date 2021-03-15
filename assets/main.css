@@ -19,5 +19,9 @@
 }
 
 .ProseMirror [contenteditable="true"] {
-  white-space: pre-wrap;
+  white-space: normal;
+}
+
+[contenteditable] {
+  outline: 0px solid transparent;
 }

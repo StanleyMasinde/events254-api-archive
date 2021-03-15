@@ -7,7 +7,7 @@
     </v-col>
 
     <v-col cols="12" md="8">
-      <h1>Events here</h1>
+      <CreateEvent :create-url="`/api/groups/${group.slug}/events`" />
     </v-col>
   </v-row>
 </template>

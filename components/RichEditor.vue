@@ -1,7 +1,10 @@
 <template>
   <div>
-    <h3>Describe your event</h3>
+    <span class="subtitle text--secondary">
+      Describe your event
+    </span>
     <div class="editor">
+      <editor-content auto-focus="true" class="editor__content" :editor="editor" />
       <editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
         <div class="menubar">
           <button
@@ -99,30 +102,9 @@
           >
             <v-icon>mdi-format-quote-close-outline</v-icon>
           </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code_block() }"
-            @click.prevent="commands.code_block"
-          >
-            <v-icon>mdi-code-braces</v-icon>
-          </button>
-
-          <button class="menubar__button" @click.prevent="commands.horizontal_rule">
-            Hr
-          </button>
-
-          <button class="menubar__button" @click.prevent="commands.undo">
-            <v-icon>mdi-undo</v-icon>
-          </button>
-
-          <button class="menubar__button" @click.prevent="commands.redo">
-            <v-icon>mdi-redo</v-icon>
-          </button>
         </div>
       </editor-menu-bar>
-      <editor-content auto-focus="true" class="editor__content" :editor="editor" />
-      <input v-model="currentInput" type="hidden" name="description">
+      <textarea v-model="currentInput" hidden name="description" />
     </div>
   </div>
 </template>
@@ -203,13 +185,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 div {
+  button{
+    &.is-active {
+      background-color: #49c5b6;
+      color: white!important;
+    }
+  }
     .editor {
         border: 1px solid #919191;
         border-radius: 5px;
         padding: 5px;
     }
     .menubar {
-        border-bottom: 1px solid #919191;
+        border-top: 1px solid #919191;
     }
 }
 </style>

@@ -26,6 +26,6 @@ exports.seed = function (knex) {
   }
   // Deletes ALL existing entries
   return knex('events').insert(events).then(() => {
-    knex('tickets').insert(tickets)
+    return knex('tickets').insert(tickets)
   })
 }

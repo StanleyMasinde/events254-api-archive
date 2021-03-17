@@ -8,26 +8,26 @@
         Create your first event
       </v-btn>
     </div>
-    <v-card
-      v-for="(e,i) in events"
-      v-else
-      :key="i"
-      :to="`/events/${e.id}/manage`"
-      outlined
-      class="mb-1"
-    >
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>{{ e.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ e.description }}</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-list-item-action-text>
-            Manage
-          </v-list-item-action-text>
-        </v-list-item-action>
-      </v-list-item>
-    </v-card>
+    <!-- A list of events -->
+    <v-row v-else>
+      <v-col
+        v-for="(e,i) in events"
+        :key="i"
+        cols="12"
+        md="6"
+      >
+        <v-card
+          class="ma-5"
+          :to="`/events/${e.id}/manage`"
+          outlined
+        >
+          <v-img height="150" :src="e.image" />
+          <v-card-text>
+            {{ e.about }}
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>

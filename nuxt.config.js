@@ -18,6 +18,8 @@ module.exports = {
 
   /**
    * server middleware
+   * This is where the backend routes go
+   *
    */
   serverMiddleware: {
     '/api': '~/backend/app.js'
@@ -86,7 +88,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Auth
-    '@nuxtjs/auth'
+    '@nuxtjs/auth-next'
   ],
   // Vuetify config
   vuetify: {
@@ -127,7 +129,7 @@ module.exports = {
     strategies: {
       local: {
         user: {
-          property: false
+          property: 'user'
         },
         token: {
           required: false,

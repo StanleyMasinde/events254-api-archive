@@ -8,9 +8,6 @@
     <v-col cols="12" md="6">
       <v-card flat rounded>
         <v-card-text>
-          <v-alert v-if="message.success" type="success">
-            Event created
-          </v-alert>
           <CreateEvent />
         </v-card-text>
       </v-card>

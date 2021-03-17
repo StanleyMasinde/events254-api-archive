@@ -1,83 +1,89 @@
 <template>
-  <ValidationObserver ref="observer" v-slot="{ invalid }">
-    <v-form id="eventForm" ref="form" @submit.prevent="createEvent">
-      <ValidationProvider v-slot="{ errors }" rules="required">
-        <v-file-input
-          v-model="event.poster"
-          :error-messages="errors"
-          name="image"
-          outlined
-          prepend-icon=""
-          label="Event picture"
-        />
-      </ValidationProvider>
-
-      <ValidationProvider v-slot="{ errors }" name="Location" rules="required">
-        <v-select
-          v-model="event.location"
-          :error-messages="errors"
-          label="Location"
-          outlined
-          :items="['Enter location', 'Virtual']"
-        />
-      </ValidationProvider>
-
-      <!-- If the selected location is physical -->
-      <ValidationProvider v-if="event.location === 'Enter location'" v-slot="{ errors }" name="Address" rules="required">
-        <v-textarea
-          v-model="event.address"
-          label="Address"
-          outlined
-          auto-grow
-          name="location"
-          rows="1"
-          :error-messages="errors"
-        />
-      </ValidationProvider>
-
-      <!-- If the seleted option is Virtual. We ask for an optional link -->
-      <ValidationProvider v-if="event.location === 'Virtual'" v-slot="{ errors }" name="Address" rules="required">
-        <v-text-field name="online_link" outlined hint="Can be blank" :error-messages="errors" label="Meeting Link" />
-      </ValidationProvider>
-
-      <ValidationProvider v-slot="{ errors }" rules="required">
-        <v-text-field
-          v-model="event.title"
-          :error-messages="errors"
-          name="about"
-          outlined
-          label="What is the event about?"
-        />
-      </ValidationProvider>
-
-      <v-row>
-        <v-col cols="12" md="6">
-          <DateInput
-            v-model="event.from_date"
-            name="from_date"
-            label="Starting date"
+  <div>
+    <v-alert v-if="message.success" type="success">
+      Event created
+    </v-alert>
+    <ValidationObserver ref="observer" v-slot="{ invalid }">
+      <v-form id="eventForm" ref="form" @submit.prevent="createEvent">
+        <ValidationProvider v-slot="{ errors }" rules="required">
+          <v-file-input
+            v-model="event.poster"
+            :error-messages="errors"
+            name="image"
+            accept="image/*"
+            outlined
+            prepend-icon=""
+            label="Event picture"
           />
-        </v-col>
-        <v-col cols="12" md="6">
-          <TimeInput v-model="event.from_time" label="Starting time" name="from_time" />
-        </v-col>
-      </v-row>
+        </ValidationProvider>
 
-      <ValidationProvider rules="required">
-        <RichEditor v-model="event.description" />
-      </ValidationProvider>
+        <ValidationProvider v-slot="{ errors }" name="Location" rules="required">
+          <v-select
+            v-model="event.location"
+            :error-messages="errors"
+            label="Location"
+            outlined
+            :items="['Enter location', 'Virtual']"
+          />
+        </ValidationProvider>
 
-      <v-btn
-        :disabled="invalid"
-        type="submit"
-        large
-        depressed
-        color="accent"
-      >
-        Create event
-      </v-btn>
-    </v-form>
-  </ValidationObserver>
+        <!-- If the selected location is physical -->
+        <ValidationProvider v-if="event.location === 'Enter location'" v-slot="{ errors }" name="Address" rules="required">
+          <v-textarea
+            v-model="event.address"
+            label="Address"
+            outlined
+            auto-grow
+            name="location"
+            rows="1"
+            :error-messages="errors"
+          />
+        </ValidationProvider>
+
+        <!-- If the seleted option is Virtual. We ask for an optional link -->
+        <ValidationProvider v-if="event.location === 'Virtual'" v-slot="{ errors }" name="Address" rules="required">
+          <v-text-field name="online_link" outlined hint="Can be blank" :error-messages="errors" label="Meeting Link" />
+        </ValidationProvider>
+
+        <ValidationProvider v-slot="{ errors }" rules="required">
+          <v-text-field
+            v-model="event.title"
+            :error-messages="errors"
+            name="about"
+            outlined
+            label="What is the event about?"
+          />
+        </ValidationProvider>
+
+        <v-row>
+          <v-col cols="12" md="6">
+            <DateInput
+              v-model="event.from_date"
+              name="from_date"
+              label="Starting date"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <TimeInput v-model="event.from_time" label="Starting time" name="from_time" />
+          </v-col>
+        </v-row>
+
+        <ValidationProvider rules="required">
+          <RichEditor v-model="event.description" />
+        </ValidationProvider>
+
+        <v-btn
+          :disabled="invalid"
+          type="submit"
+          large
+          depressed
+          color="accent"
+        >
+          Create event
+        </v-btn>
+      </v-form>
+    </ValidationObserver>
+  </div>
 </template>
 <script>
 export default {
@@ -132,7 +138,7 @@ export default {
         // }, 5000)
       } catch (error) {
         if (error.response.status === 422) {
-          this.$refs.form.setErrors(error.response.data.errors)
+          this.$refs.observer.setErrors(error.response.data.errors)
           return
         }
         // TODO add proper handling

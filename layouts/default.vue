@@ -18,6 +18,7 @@
         >
           <template #activator="{ on }">
             <v-btn
+              data-profile-menu
               icon
               x-large
               v-on="on"
@@ -62,6 +63,7 @@
                 </v-btn>
                 <v-divider class="my-3" />
                 <v-btn
+                  data-start-your-group
                   to="/groups/create"
                   depressed
                   rounded

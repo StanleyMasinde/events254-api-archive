@@ -7,15 +7,29 @@
     <ValidationObserver ref="form" v-slot="{ invalid }">
       <v-form @submit.prevent="register">
         <ValidationProvider v-slot="{ errors }" name="name" rules="required">
-          <v-text-field v-model="user.name" :error-messages="errors" label="Name" outlined />
+          <v-text-field v-model="user.name" name="name" :error-messages="errors" label="Name" outlined />
         </ValidationProvider>
 
         <ValidationProvider v-slot="{ errors }" name="email" rules="required|email">
-          <v-text-field v-model="user.email" :error-messages="errors" type="email" outlined label="Email" />
+          <v-text-field
+            v-model="user.email"
+            name="email"
+            :error-messages="errors"
+            type="email"
+            outlined
+            label="Email"
+          />
         </ValidationProvider>
 
         <ValidationProvider v-slot="{ errors }" name="password" rules="required">
-          <v-text-field v-model="user.password" type="password" :error-messages="errors" outlined label="Password" />
+          <v-text-field
+            v-model="user.password"
+            name="password"
+            type="password"
+            :error-messages="errors"
+            outlined
+            label="Password"
+          />
         </ValidationProvider>
 
         <v-btn :disabled="invalid" type="submit" rounded large color="accent">

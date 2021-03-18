@@ -216,6 +216,7 @@ class EventsController extends Controller {
   */
   formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
     /** Format the date */
+    console.log(fromDate);
     const fromTimeArray = fromTime.split(':')
     const fromDateArray = fromDate.split('-')
     const fromDateTime = new Date() // New date instance

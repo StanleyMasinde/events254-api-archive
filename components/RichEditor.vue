@@ -104,7 +104,7 @@
           </button>
         </div>
       </editor-menu-bar>
-      <textarea v-model="currentInput" hidden name="description" />
+      <textarea v-model="currentInput" hidden :name="name" />
     </div>
   </div>
 </template>
@@ -136,7 +136,12 @@ export default {
     EditorContent,
     EditorMenuBar
   },
+
   props: {
+    name: {
+      type: String,
+      default: 'description'
+    },
     value: {
       type: String,
       default: 'Hahaha'
@@ -170,11 +175,7 @@ export default {
           new Underline(),
           new History()
         ],
-        content: `<h3>Agenda</h3>
-        <ul>
-        <li>Check in</li>
-        <li>Snacks</li>
-        </ul>`
+        content: null
       })
     }
   },

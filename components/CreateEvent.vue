@@ -20,6 +20,7 @@
         <ValidationProvider v-slot="{ errors }" name="Location" rules="required">
           <v-select
             v-model="event.location"
+            data-evtype
             :error-messages="errors"
             label="Location"
             outlined
@@ -64,7 +65,7 @@
             />
           </v-col>
           <v-col cols="12" md="6">
-            <TimeInput v-model="event.from_time" label="Starting time" name="from_time" />
+            <TimeInput v-model="event.from_time" label="Starting time" input-name="from_time" />
           </v-col>
         </v-row>
 

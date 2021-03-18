@@ -10,11 +10,13 @@
       <ValidationProvider v-slot="{errors}" :name="label" rules="required">
         <v-text-field
           v-model="time"
+          data-time-input
           :error-messages="errors"
           outlined
           :label="label"
           readonly
           v-bind="attrs"
+          type="time"
           v-on="on"
         />
       </ValidationProvider>
@@ -32,6 +34,7 @@
         Cancel
       </v-btn>
       <v-btn
+        data-save-time
         text
         color="primary"
         @click="$refs.menu.save(time)"
@@ -44,6 +47,10 @@
 <script>
 export default {
   props: {
+    inputName: {
+      type: String,
+      default: 'time'
+    },
     label: {
       type: String,
       default: 'Time'

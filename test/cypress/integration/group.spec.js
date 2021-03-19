@@ -4,7 +4,7 @@ const faker = require('faker')
 const delay = 50
 
 describe('User creates a group', () => {
-  it('test one', () => {
+  it('Create and manage a group', () => {
     cy.fixture('../../../static/icon.png').as('icon')
     cy.visit('/register')
     cy.get('input[name=name]').type(faker.name.findName(), { delay })
@@ -24,6 +24,9 @@ describe('User creates a group', () => {
     })
     cy.get('input[name=name]').type(faker.company.companyName('full'), { delay })
     cy.get('textarea[name=description]').type(faker.lorem.sentences(20))
+    cy.get('button[type="submit"]').click()
+    cy.get('[data-edit-group]').click()
+    cy.get('input[name=name]').clear().type(faker.company.companyName('full'), { delay })
     cy.get('button[type="submit"]').click()
 
     expect(1).equals(1)

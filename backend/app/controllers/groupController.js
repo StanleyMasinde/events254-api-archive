@@ -97,8 +97,8 @@ class GroupController extends Controller {
 
       body.slug = slugify(body.name) // TODO make sure the slug is unique
       if (group) {
-        const res = await group.update(body)
-        return this.response(res, 201)
+        await group.update(body)
+        return this.response(await Group.find(group.id), 201)
       }
       return this.response('We could not find the group 😢', 404)
     } catch (error) {

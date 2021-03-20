@@ -67,7 +67,7 @@ class PDF {
       .text(this.data.currentTicket.type, 215, 205)
       .text(this.data.currentTicket.price === 0 ? 'Free' : Intl.NumberFormat('en-US', { style: 'currency', currency: 'kes' }).format(this.data.currentTicket.price))
       .moveDown()
-    const stream = doc.pipe(fs.createWriteStream('uploads/ticket.pdf'))
+    const stream = doc.pipe(fs.createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
     doc.end()
     stream.end()
     return fs.createReadStream(stream.path)

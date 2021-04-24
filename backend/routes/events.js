@@ -10,7 +10,7 @@ const authenticated = require('../app/middleware/authenticated')
  * All this routes require an authenticated user
  * --------------------------------------------------------
  */
-router.use(authenticated())
+// router.use(authenticated())
 
 /**
  * --------------------------------------------------------
@@ -28,7 +28,7 @@ router.use(authenticated())
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', multer({ dest: './uploads' }).single('image'), async (req, res) => {
+router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
     fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
@@ -44,7 +44,7 @@ router.post('/', multer({ dest: './uploads' }).single('image'), async (req, res)
  * The user can be fecthed via session or access token
  * -----------------------------------------------------------------
  */
-router.get('/currentUser', async (req, res) => {
+router.get('/currentUser', authenticated(), async (req, res) => {
   try {
     const { message, status } = await EventsController.currentUserEvents(req)
     res.status(status).json(message)
@@ -59,7 +59,7 @@ router.get('/currentUser', async (req, res) => {
  * The same rules a the event creation route above
  * ---------------------------------------------------------------------
  */
-router.put('/:event', multer({ dest: './uploads' }).single('image'), async (req, res) => {
+router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res) => {
   try {
     const { message, status } = await EventsController.update(req)
     res.status(status).json(message)
@@ -91,7 +91,7 @@ router.get('/:event', async (req, res) => {
  * on success
  * -------------------------------------------------------------------------
  */
-router.delete('/:event', async (req, res) => {
+router.delete('/:event', authenticated(), async (req, res) => {
   try {
     const { message, status } = await EventsController.delete(req)
     res.status(status).json(message)
@@ -115,7 +115,7 @@ router.get('/:event/tickets', async (req, res) => {
  * Add a ticket to an event. An event can have multiple tickets e.g VIP, Regular
  * -----------------------------------------------------------------------------
  */
-router.post('/:event/tickets', async (req, res) => {
+router.post('/:event/tickets', authenticated(), async (req, res) => {
   const { message, status } = await ticketController.createEventTicket(req)
   res.status(status).json(message)
 })
@@ -135,7 +135,7 @@ router.get('/:event/tickets/:ticket', async (req, res) => {
  * Modifiy a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.put('/:events/tickets/:ticket', async (req, res) => {
+router.put('/:events/tickets/:ticket', authenticated(), async (req, res) => {
   const { message, status } = await ticketController.upDateEventTicket(req)
   res.status(status).json(message)
 })
@@ -155,7 +155,7 @@ router.delete('/:event/tickets/:ticket', async (req, res) => {
  * Register for an event
  * ------------------------------------------------------------------
  */
-router.post('/:event/register', async (req, res) => {
+router.post('/:event/register', authenticated(), async (req, res) => {
   const { message, status } = await EventsController.registerForEvent(req)
   res.status(status).json(message)
 })

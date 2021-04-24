@@ -1,15 +1,35 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" md="8">
+  <div>
+    <!-- Still loading the group information -->
+    <v-row v-if="$fetchState.pending" justify="center">
+      <h1>Loading</h1>
+    </v-row>
+
+    <!-- Something went wrong! 😭 -->
+    <v-row v-else-if="$fetchState.error">
+      <div class="full-height">
+        <v-img height="300" contain src="/not_found.svg">
+          <v-container>
+            <v-row justify="center">
+              <v-col cols="12" md="8">
+                <h1 class="display-1 gray--text">
+                  Sorry 😢 There's nothing here
+                </h1>
+                <v-btn text x-large color="primary" to="/">
+                  Go home
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-img>
+      </div>
+    </v-row>
+    <v-row v-else justify="center">
+      <v-col cols="12">
         <v-card class="mx-auto" flat>
-          <v-img
-            :src="currentEvent.image"
-            class="align-end"
-            height="400px"
-          >
+          <v-img :src="currentEvent.image" class="align-end custom-dark" height="400px">
             <v-card-title>
-              <h1 class="custom-shadow display-1 white--text">
+              <h1 class="custom-shadow display-3 white--text">
                 {{ currentEvent.about }}
               </h1>
             </v-card-title>
@@ -29,6 +49,10 @@
               </h4>
             </v-card-subtitle>
           </v-img>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-card flat>
           <v-card-actions>
             <v-btn
               v-if="currentEvent.can_edit"
@@ -92,10 +116,11 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 <script>
 export default {
+  auth: false,
   data () {
     return {
       availableTickets: [],
@@ -121,7 +146,7 @@ export default {
     ticks () {
       return this.availableTickets.map((t) => {
         return {
-          text: `${t.description} - ${this.formatCurrency(t.price)}`,
+          text: `${t.type} - ${this.formatCurrency(t.price)}`,
           value: t
         }
       })
@@ -162,5 +187,8 @@ export default {
 <style lang="scss">
 .custom-shadow {
   text-shadow: 5px 5px 6px #363636;
+}
+.custom-dark {
+  filter: opacity(40);
 }
 </style>

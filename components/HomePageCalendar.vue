@@ -109,8 +109,10 @@ div {
     width: 100vw;
     text-align: center;
     cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 5rem;
 
-    &:hover {
+    &:hover, &:active {
         color: #ffffff;
         background-color: teal;
     }

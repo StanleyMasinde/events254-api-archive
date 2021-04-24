@@ -106,9 +106,7 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-main>
   </v-app>
 </template>

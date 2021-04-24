@@ -32,7 +32,7 @@
         </h3>
       </v-col>
       <v-col cols="12" md="8">
-        <v-chip-group>
+        <v-chip-group v-model="filter.category" color="primary" multiple>
           <v-chip>Technology</v-chip>
           <v-chip>Sports</v-chip>
           <v-chip>Religious</v-chip>
@@ -41,39 +41,40 @@
           <v-chip>Better living</v-chip>
           <v-chip>Webinars</v-chip>
           <v-chip>Hackathons</v-chip>
+          <v-chip>Birthdays</v-chip>
+          <v-chip>Hiking</v-chip>
+          <v-chip>Camping</v-chip>
         </v-chip-group>
       </v-col>
     </v-row>
 
     <v-row justify="center">
-      <v-col cols="12" md="6">
-        <h3>Events near Nairobi</h3>
+      <v-col cols="12" md="8">
+        <v-row>
+          <v-col cols="12">
+            <h3>Events near Nairobi</h3>
+          </v-col>
 
-        <v-card
-          v-for="(e, i) in events"
-          :key="i"
-          outlined
-          :to="`/events/${e.id}`"
-          class="ma-2"
-          rounded
-        >
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>{{ e.about }}</v-list-item-title>
-              <v-list-item-subtitle>
-                <v-icon>mdi-calendar</v-icon>
-                {{ new Date(e.startDate).toDateString() }}
-              </v-list-item-subtitle>
-              <v-list-item-subtitle>
-                <v-icon>mdi-map-marker</v-icon>
-                {{ e.location }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-img height="100" width="100" :src="e.image" />
-            </v-list-item-icon>
-          </v-list-item>
-        </v-card>
+          <v-col v-for="(e, i) in events" :key="i" cols="12" md="4">
+            <v-card outlined :to="`/events/${e.id}`" class="ma-2" rounded>
+              <v-img height="150" :src="e.image" />
+              <v-card-title>
+                <h4 class="one-line" :title="e.about">
+                  {{ e.about }}
+                </h4>
+              </v-card-title>
+              <v-card-text class="body-1">
+                <p>
+                  <v-icon>mdi-calendar</v-icon>
+                  {{ new Date(e.startDate).toDateString() }}
+                  <br>
+                  <v-icon>mdi-map-marker</v-icon>
+                  {{ e.location }}
+                </p>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -95,6 +96,9 @@
 export default {
   data () {
     return {
+      filter: {
+        category: []
+      },
       events: []
     }
   },
@@ -109,3 +113,10 @@ export default {
   auth: false
 }
 </script>
+
+<style lang="scss" scoped>
+.one-line {
+  white-space: nowrap;
+  overflow: hidden;
+}
+</style>

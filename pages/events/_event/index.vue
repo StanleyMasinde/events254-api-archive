@@ -64,21 +64,31 @@
             <v-btn icon color="primary">
               <v-icon>mdi-share</v-icon>
             </v-btn>
-            <v-btn
-              v-if="!currentEvent.can_edit"
-              depressed
-              color="primary"
-              @click="showRegistrationDialog"
-            >
-              Register for this event
-            </v-btn>
+            <template v-if="!currentEvent.currentUserTicket">
+              <v-btn
+                v-if="!currentEvent.can_edit"
+                depressed
+                color="primary"
+                @click="showRegistrationDialog"
+              >
+                Register for this event
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-btn text disabled>
+                You are going to this event
+              </v-btn>
+              <v-btn color="primary" depressed large rounded to="/home/tickets">
+                View your ticket
+              </v-btn>
+            </template>
           </v-card-actions>
           <!-- eslint-disable-next-line vue/no-v-html -->
           <v-card-text class="body-1" v-html="currentEvent.description" />
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="registerDialog" width="400">
+    <v-dialog v-if="!currentEvent.currentUserTicket" v-model="registerDialog" width="400">
       <v-card>
         <v-card-title>Register for event</v-card-title>
         <v-card-text>
@@ -162,6 +172,7 @@ export default {
             rsvp_count: this.eventRsvp.rsvp_count
           }
         )
+        this.$router.push('/home/tickets')
         // TODO I honestly don't know what to do here
         // I will just close the Modal for now
       } catch (error) {

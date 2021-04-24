@@ -1,4 +1,5 @@
 const express = require('express')
+const ticketController = require('../app/controllers/ticketController')
 const usersController = require('../app/controllers/usersController')
 const authenticated = require('../app/middleware/authenticated')
 const router = express.Router()
@@ -62,7 +63,25 @@ router.post('/password/update', async (req, res) => {
  */
 router.get('/user', authenticated(), async (req, res) => {
   const user = await req.user()
+  if (user) {
+    delete user.password
+  }
   res.json({ user })
+})
+
+/**
+ * -----------------------------------------------------------------
+ * This route is used to get the tickets purchased by the current user
+ * The user can be fecthed via session or access token
+ * -----------------------------------------------------------------
+ */
+router.get('/tickets', authenticated(), async (req, res) => {
+  try {
+    const { message, status } = await ticketController.currentUser(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
 })
 
 module.exports = router

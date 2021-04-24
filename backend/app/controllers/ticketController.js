@@ -88,6 +88,27 @@ class TicketController extends Controller {
   }
 
   /**
+   * Get the current user's tickets
+   *
+   * @param {*} request
+   */
+  async currentUser (request) {
+    try {
+      const user = await request.user()
+      const tickets = await DB('event_rsvps')
+        .join('tickets', 'event_rsvps.ticket_id', 'tickets.id')
+        .join('events', 'tickets.event_id', 'events.id')
+        .where({
+          'event_rsvps.user_id': user.id
+        })
+        .select('events.about AS eventName', 'events.startDate AS eventDate', 'events.location AS eventLocation', 'event_rsvps.id AS ticketId', 'event_rsvps.rsvp_count AS ticketCount', 'tickets.type AS ticketType', 'tickets.price AS ticketPrice')
+      return this.response(tickets)
+    } catch (error) {
+      return this.response(error, 500)
+    }
+  }
+
+  /**
    * The database connection
    * @returns {DB}
    */

@@ -70,18 +70,30 @@ class EventsController extends Controller {
    * @param {Array} request
    */
   async show (request) {
-    const e = await Event.find(request.params.event)
-    const u = await request.user()
-    // No user in session
-    if (!u) {
-      e.can_edit = false
+    try {
+      const e = await Event.find(request.params.event)
+      if (!e) { // The event was not found in the database
+        return this.response('Model not found', 404)
+      }
+      const u = await request.user()
+      if (!u) { // No user in session
+        e.can_edit = false
+        return this.response(e)
+      }
+      e.can_edit = canEditEvent(e, u)
+      e.currentUserTicket = await DB('event_rsvps')
+        .join('tickets', 'event_rsvps.ticket_id', '=', 'tickets.id')
+        .where({
+          'event_rsvps.event_id': e.id,
+          'event_rsvps.user_id': u.id
+        })
+        .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
+      delete e.organisable_id
+      delete e.organisable_type
       return this.response(e)
+    } catch (error) {
+      return this.response(error, 500)
     }
-    if (!e) {
-      return this.response('Model not found', 404)
-    }
-    e.can_edit = canEditEvent(e, u)
-    return this.response(e)
   }
 
   /**

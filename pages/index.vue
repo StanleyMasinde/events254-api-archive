@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-row justify="center">
       <v-col cols="12" md="8">
         <h1 class="display-1">
@@ -90,7 +90,7 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-col>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {

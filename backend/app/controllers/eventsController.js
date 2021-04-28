@@ -21,7 +21,7 @@ class EventsController extends Controller {
   async index () {
     // TODO add pagination
     try {
-      const events = await Event()
+      const events = await Event.all()
       const mapped = events.map((e) => {
         return {
           id: e.id,

@@ -6,7 +6,7 @@ exports.seed = function (knex) {
   for (let row = 0; row < 50; row++) {
     // Create events
     events.push({
-      image: faker.image.abstract(),
+      image: faker.image.imageUrl(null, 500, null, true, true),
       location: faker.address.streetAddress(),
       online_link: faker.internet.url(),
       about: faker.lorem.words(),

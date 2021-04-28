@@ -92,10 +92,7 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
-      e.organiser = await DB(pluralize(e.organisable_type))
-        .where({
-          id: e.organisable_id
-        }).first('name', 'id') || null
+      e.organiser = this.getEventOrganiser(e)
       delete e.organisable_id
       delete e.organisable_type
       const u = await request.user()
@@ -268,7 +265,7 @@ class EventsController extends Controller {
    * @returns Object || null
    */
   async getEventOrganiser (event = {}) {
-    return await DB(pluralize(event.organisable_type))
+    return await DB(pluralize(event.organisable_type.toLowerCase()))
       .where({
         id: event.organisable_id
       }).first('name', 'id') || null

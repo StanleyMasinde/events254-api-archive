@@ -18,10 +18,18 @@ class EventsController extends Controller {
    * IT will be usefull for debugging though
    * @param {*} request
    */
-  async index () {
+  async index (request) {
     // TODO add pagination
     try {
-      const events = await Event.all()
+      let events = []
+      if (request.query.paginate) {
+        const eventsObject = await Event.landingPage(request.query.paginate, request.query.page)
+        events = eventsObject.events
+        // eslint-disable-next-line no-var
+        var lastPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
+      } else {
+        events = await Event.all() // TODO deprecate this
+      }
       const mapped = events.map((e) => {
         return {
           id: e.id,
@@ -32,12 +40,22 @@ class EventsController extends Controller {
           description: e.description,
           startDate: e.startDate,
           endDate: e.endDate,
-          start: moment(e.startDate).tz('Africa/Nairobi').toString(),
-          end: moment(e.endDate).tz('Africa/Nairobi').toString(),
+          start: moment(e.startDate).tz('Africa/Nairobi').toLocaleString(),
+          end: moment(e.endDate).tz('Africa/Nairobi').toLocaleString(),
           created_at: e.created_at,
           updated_at: e.updated_at
         }
       })
+      if (request.query.paginate) {
+        const currentPage = request.query.page || 0
+        const nextPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
+        return this.response({
+          currentPage,
+          nextPageUrl,
+          lastPageUrl,
+          events: mapped
+        })
+      }
       return this.response(mapped)
     } catch (error) {
       return this.response(error, 500)

@@ -206,9 +206,6 @@ export default {
 }
 </script>
 <style lang="scss">
-.custom-shadow {
-  text-shadow: 2px 0px 14px #000000;
-}
 .custom-dark {
   filter: opacity(40);
 }

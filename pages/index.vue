@@ -55,9 +55,18 @@
             <h3>Events near Nairobi</h3>
           </v-col>
 
-          <v-col v-for="(e, i) in events" :key="i" cols="12" md="6">
+          <v-col
+            v-for="(e, i) in eventsObject.events"
+            :key="i"
+            cols="12"
+            md="6"
+          >
             <v-card outlined :to="`/events/${e.id}`" class="ma-2" rounded>
-              <v-img height="150" :src="e.image" />
+              <v-img height="250" class="pa-3" :src="e.image">
+                <h1 class="white--text custom-shadow display-2">
+                  {{ new Date(e.startDate).getDate() }} {{ months[$moment(e.startDate).month()] }}
+                </h1>
+              </v-img>
               <v-card-title>
                 <h4 class="one-line" :title="e.about">
                   {{ e.about }}
@@ -75,6 +84,22 @@
             </v-card>
           </v-col>
         </v-row>
+      </v-col>
+    </v-row>
+
+    <v-row justify="center">
+      <v-col cols="12" md="4">
+        <v-btn
+          v-if="!noMoreEvents"
+          large
+          color="primary"
+          block
+          rounded
+          depressed
+          @click="loadMore"
+        >
+          Load more
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -96,21 +121,36 @@
 export default {
   data () {
     return {
+      noMoreEvents: false,
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       filter: {
         category: []
       },
-      events: []
+      eventsObject: {}
     }
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get('/api/p/events')
-      this.events = data
+      const { data } = await this.$axios.get('/api/p/events?paginate=6')
+      this.eventsObject = data
     } catch (error) {
       throw new Error(error)
     }
   },
-  auth: false
+  auth: false,
+  methods: {
+    async loadMore () {
+      const { data } = await this.$axios.get(this.eventsObject.nextPageUrl)
+      if (data.events.length === 0) {
+        this.noMoreEvents = true
+        return
+      }
+      this.eventsObject.nextPageUrl = data.nextPageUrl
+      data.events.forEach((ev) => {
+        this.eventsObject.events.push(ev)
+      })
+    }
+  }
 }
 </script>
 

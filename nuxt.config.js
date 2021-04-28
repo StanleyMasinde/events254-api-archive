@@ -110,7 +110,7 @@ module.exports = {
     },
     defaultAssets: {
       font: {
-        family: 'Ubuntu'
+        family: 'Poppins'
       },
       icons: 'mdi'
     }

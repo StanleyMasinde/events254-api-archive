@@ -1,6 +1,7 @@
 const Validator = require('mevn-validator')
 const moment = require('moment-timezone')
 const { DB } = require('mevn-orm')
+const pluralize = require('pluralize')
 const Event = require('../models/event')
 const User = require('../models/user')
 const upload = require('../filesystem/s3')
@@ -20,8 +21,24 @@ class EventsController extends Controller {
   async index () {
     // TODO add pagination
     try {
-      const events = await Event.all()
-      return this.response(events)
+      const events = await Event()
+      const mapped = events.map((e) => {
+        return {
+          id: e.id,
+          image: e.image,
+          about: e.about,
+          location: e.location,
+          online_link: e.online_link,
+          description: e.description,
+          startDate: e.startDate,
+          endDate: e.endDate,
+          start: moment(e.startDate).tz('Africa/Nairobi').toString(),
+          end: moment(e.endDate).tz('Africa/Nairobi').toString(),
+          created_at: e.created_at,
+          updated_at: e.updated_at
+        }
+      })
+      return this.response(mapped)
     } catch (error) {
       return this.response(error, 500)
     }
@@ -75,6 +92,12 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
+      e.organiser = await DB(pluralize(e.organisable_type))
+        .where({
+          id: e.organisable_id
+        }).first('name', 'id') || null
+      delete e.organisable_id
+      delete e.organisable_type
       const u = await request.user()
       if (!u) { // No user in session
         e.can_edit = false
@@ -88,8 +111,6 @@ class EventsController extends Controller {
           'event_rsvps.user_id': u.id
         })
         .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
-      delete e.organisable_id
-      delete e.organisable_type
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)
@@ -239,6 +260,18 @@ class EventsController extends Controller {
     fromDateTime.setDate(fromDateArray[2]) // The day of the month
     const t = moment(fromDateTime, true).tz(timezone, true).toDate()
     return t
+  }
+
+  /**
+   * Get the event organisers
+   * @param {Array} event
+   * @returns Object || null
+   */
+  async getEventOrganiser (event = {}) {
+    return await DB(pluralize(event.organisable_type))
+      .where({
+        id: event.organisable_id
+      }).first('name', 'id') || null
   }
 }
 

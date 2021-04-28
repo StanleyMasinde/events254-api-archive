@@ -29,24 +29,30 @@
         <v-card class="mx-auto" flat>
           <v-img :src="currentEvent.image" class="align-end custom-dark" height="400px">
             <v-card-title>
-              <h1 class="custom-shadow display-3 white--text">
+              <h1 class="custom-shadow display-2 white--text">
                 {{ currentEvent.about }}
               </h1>
             </v-card-title>
             <v-card-subtitle>
               <h3 class="title custom-shadow white--text">
                 <v-icon class="white--text">
+                  mdi-user-outline
+                </v-icon>
+                Event by {{ currentEvent.organiser.name }}
+              </h3>
+              <h3 class="title custom-shadow white--text">
+                <v-icon class="white--text">
                   mdi-map-marker
                 </v-icon>
                 {{ currentEvent.location || "To be decided" }}
               </h3>
-              <h4 class="custom-shadow white--text">
+              <h3 class="custom-shadow white--text">
                 <v-icon class="white--text">
                   mdi-calendar
                 </v-icon>
                 {{ $moment(currentEvent.startDate) }} |
                 {{ $moment(currentEvent.startDate).fromNow() }}
-              </h4>
+              </h3>
             </v-card-subtitle>
           </v-img>
         </v-card>
@@ -186,6 +192,10 @@ export default {
       }).format(value)
     },
     async showRegistrationDialog () {
+      if (!this.$auth.loggedIn) {
+        this.$store.state.auth.redirect = this.$router.path
+        this.$router.push('/login')
+      }
       this.registerDialog = true
       const { data } = await this.$axios.get(
         `/api/events/${this.$route.params.event}/tickets`
@@ -197,7 +207,7 @@ export default {
 </script>
 <style lang="scss">
 .custom-shadow {
-  text-shadow: 5px 5px 6px #363636;
+  text-shadow: 2px 0px 14px #000000;
 }
 .custom-dark {
   filter: opacity(40);

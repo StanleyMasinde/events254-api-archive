@@ -55,7 +55,7 @@
             <h3>Events near Nairobi</h3>
           </v-col>
 
-          <v-col v-for="(e, i) in events" :key="i" cols="12" md="4">
+          <v-col v-for="(e, i) in events" :key="i" cols="12" md="6">
             <v-card outlined :to="`/events/${e.id}`" class="ma-2" rounded>
               <v-img height="150" :src="e.image" />
               <v-card-title>

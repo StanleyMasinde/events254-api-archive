@@ -71,7 +71,7 @@ export default {
         await this.$auth.loginWith('local', {
           data: this.user
         })
-        this.$router.push('/home')
+        this.$router.push(this.$store.state.auth.redirect || '/home')
       } catch (error) {
         if (error.response.status === 422) {
           this.$refs.form.setErrors(error.response.data.errors)

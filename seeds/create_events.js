@@ -4,24 +4,25 @@ exports.seed = function (knex) {
   const tickets = []
 
   for (let row = 0; row < 50; row++) {
+    const about = faker.lorem.sentence()
     // Create events
     events.push({
       image: faker.image.imageUrl(null, 500, null, true, true),
       location: faker.address.streetAddress(),
       online_link: faker.internet.url(),
-      about: faker.lorem.words(),
+      about: about.charAt(0).toLocaleUpperCase() + about.slice(1),
       description: faker.lorem.paragraphs(5),
       startDate: faker.date.future(),
       endDate: faker.date.future(),
-      organisable_id: 10,
-      organisable_type: 'User'
+      organisable_id: faker.random.arrayElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+      organisable_type: faker.random.arrayElement(['User', 'Group'])
     })
     // Create tickets
     tickets.push({
       event_id: row + 1,
-      price: faker.commerce.price(100),
+      price: faker.commerce.price(1000, 10000),
       limit: 0,
-      type: 'General admission'
+      type: faker.random.arrayElement(['VIP', 'Regular', 'General'])
     })
   }
   // Deletes ALL existing entries

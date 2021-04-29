@@ -118,6 +118,9 @@ export default {
         return
       }
       const [firstName, lastName] = this.$auth.user.name.split(' ')
+      if (!lastName) {
+        return `${firstName.split('')[0]}`
+      }
       return `${firstName.split('')[0]}${lastName.split('')[0]}`
     }
   }

@@ -1,11 +1,11 @@
 const faker = require('faker')
 
 const rows = []
-for (let index = 0; index < 50; index++) {
+for (let index = 0; index < 500; index++) {
   rows.push({
     name: faker.name.findName(),
     username: faker.internet.userName(),
-    email: faker.internet.email(),
+    email: faker.internet.exampleEmail(),
     password: faker.internet.password(8),
     Bio: faker.lorem.words(10)
   })

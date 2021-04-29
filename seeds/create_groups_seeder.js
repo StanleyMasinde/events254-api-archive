@@ -3,7 +3,7 @@
 const faker = require('faker')
 const slugify = require('../backend/app/actions/slugify')
 const rows = []
-for (let index = 0; index < 10; index++) {
+for (let index = 0; index < 5000; index++) {
   const name = faker.lorem.sentence()
   rows.push({
     pictureUrl: faker.image.business(),

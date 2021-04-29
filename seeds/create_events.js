@@ -2,8 +2,12 @@ const faker = require('faker')
 exports.seed = function (knex) {
   const events = []
   const tickets = []
+  const organisableIds = []
+  for (let index = 1; index < 100; index++) {
+    organisableIds.push(index)
+  }
 
-  for (let row = 0; row < 50; row++) {
+  for (let row = 0; row < 5000; row++) {
     const about = faker.lorem.sentence()
     // Create events
     events.push({
@@ -14,7 +18,7 @@ exports.seed = function (knex) {
       description: faker.lorem.paragraphs(5),
       startDate: faker.date.future(),
       endDate: faker.date.future(),
-      organisable_id: faker.random.arrayElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+      organisable_id: faker.random.arrayElement(organisableIds),
       organisable_type: faker.random.arrayElement(['User', 'Group'])
     })
     // Create tickets

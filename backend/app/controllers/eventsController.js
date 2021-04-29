@@ -110,7 +110,7 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
-      e.organiser = this.getEventOrganiser(e)
+      e.organiser = await this.getEventOrganiser(e)
       delete e.organisable_id
       delete e.organisable_type
       const u = await request.user()

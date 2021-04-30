@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" md="8">
-        <h1 class="display-1">
+        <h1 class="display-2">
           Discover upcoming events
         </h1>
       </v-col>
@@ -59,26 +59,27 @@
             v-for="(e, i) in eventsObject.events"
             :key="i"
             cols="12"
-            md="6"
+            md="4"
           >
-            <v-card outlined :to="`/events/${e.id}`" class="ma-2" rounded>
-              <v-img height="250" class="pa-3" :src="e.image">
+            <v-card
+              height="300"
+              outlined
+              :to="`/events/${e.id}`"
+              class="ma-2 no-overflow"
+              rounded
+            >
+              <v-img height="150" class="pa-3" :src="e.image">
                 <h1 class="white--text custom-shadow display-2">
-                  {{ new Date(e.startDate).getDate() }} {{ months[$moment(e.startDate).month()] }}
+                  {{ new Date(e.startDate).getDate() }}
+                  {{ months[$moment(e.startDate).month()] }}
                 </h1>
               </v-img>
-              <v-card-title>
-                <h4 class="one-line" :title="e.about">
+              <v-card-text class="body-2">
+                <p class="red--text">
+                  {{ $moment(e.startDate).format('MMMM Do YYYY [at] h:mm a') }}
+                </p>
+                <p :title="e.about">
                   {{ e.about }}
-                </h4>
-              </v-card-title>
-              <v-card-text class="body-1">
-                <p>
-                  <v-icon>mdi-calendar</v-icon>
-                  {{ new Date(e.startDate).toDateString() }}
-                  <br>
-                  <v-icon>mdi-map-marker</v-icon>
-                  {{ e.location }}
                 </p>
               </v-card-text>
             </v-card>
@@ -122,7 +123,20 @@ export default {
   data () {
     return {
       noMoreEvents: false,
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      months: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ],
       filter: {
         category: []
       },

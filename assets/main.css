@@ -28,3 +28,7 @@
 .custom-shadow {
   text-shadow: 2px 0px 14px #000000;
 }
+
+.no-overflow {
+  overflow: hidden!important;
+}

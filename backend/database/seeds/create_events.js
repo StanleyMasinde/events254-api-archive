@@ -9,6 +9,7 @@ exports.seed = function (knex) {
 
   for (let row = 0; row < 5000; row++) {
     const about = faker.lorem.sentence()
+    const date = faker.date.future(0.04)
     // Create events
     events.push({
       image: faker.image.imageUrl(null, 500, null, true, true),
@@ -16,8 +17,8 @@ exports.seed = function (knex) {
       online_link: faker.internet.url(),
       about: about.charAt(0).toLocaleUpperCase() + about.slice(1),
       description: faker.lorem.paragraphs(5),
-      startDate: faker.date.future(),
-      endDate: faker.date.future(),
+      startDate: date,
+      endDate: faker.date.future(0.001, date),
       organisable_id: faker.random.arrayElement(organisableIds),
       organisable_type: faker.random.arrayElement(['User', 'Group'])
     })

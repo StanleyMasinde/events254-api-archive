@@ -39,7 +39,7 @@ module.exports = {
    */
   head: {
     titleTemplate: null,
-    title: process.env.npm_package_name || '',
+    title: 'Events254',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid>
     <!-- Still loading the group information -->
     <v-row v-if="$fetchState.pending" justify="center">
       <h1>Loading</h1>
@@ -24,77 +24,83 @@
         </v-img>
       </div>
     </v-row>
+    <!-- Event body -->
     <v-row v-else justify="center">
-      <v-col cols="12">
-        <v-card class="mx-auto" flat>
-          <v-img :src="currentEvent.image" class="align-end custom-dark" height="400px">
-            <v-card-title>
-              <h1 class="custom-shadow display-2 white--text">
-                {{ currentEvent.about }}
-              </h1>
-            </v-card-title>
-            <v-card-subtitle>
-              <h3 class="title custom-shadow white--text">
-                <v-icon class="white--text">
-                  mdi-user-outline
-                </v-icon>
-                Event by {{ currentEvent.organiser.name }}
-              </h3>
-              <h3 class="title custom-shadow white--text">
-                <v-icon class="white--text">
-                  mdi-map-marker
-                </v-icon>
-                {{ currentEvent.location || "To be decided" }}
-              </h3>
-              <h3 class="custom-shadow white--text">
-                <v-icon class="white--text">
-                  mdi-calendar
-                </v-icon>
-                {{ $moment(currentEvent.startDate) }} |
-                {{ $moment(currentEvent.startDate).fromNow() }}
-              </h3>
-            </v-card-subtitle>
-          </v-img>
-        </v-card>
+      <v-col cols="12" md="10">
+        <p>
+          <span class="text--secondary">{{
+            $moment(currentEvent.startDate).format("MMMM Do YYYY [at] h:mm a")
+          }}</span>
+          <br>
+          <span class="text-h4 font-weight-bold">
+            {{ currentEvent.about }}
+          </span>
+        </p>
       </v-col>
-      <v-col cols="12" md="8">
-        <v-card flat>
-          <v-card-actions>
-            <v-btn
-              v-if="currentEvent.can_edit"
-              text
-              :to="`/events/${currentEvent.id}/manage`"
-            >
-              Manage event
-            </v-btn>
-            <v-btn icon color="primary">
-              <v-icon>mdi-share</v-icon>
-            </v-btn>
-            <template v-if="!currentEvent.currentUserTicket">
-              <v-btn
-                v-if="!currentEvent.can_edit"
-                depressed
-                color="primary"
-                @click="showRegistrationDialog"
-              >
-                Register for this event
-              </v-btn>
-            </template>
-            <template v-else>
-              <v-btn text disabled>
-                You are going to this event
-              </v-btn>
-              <v-btn color="primary" depressed large rounded to="/home/tickets">
-                View your ticket
-              </v-btn>
-            </template>
-          </v-card-actions>
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <v-card-text class="body-1" v-html="currentEvent.description" />
-        </v-card>
+      <v-col cols="12" md="10">
+        <v-row>
+          <v-col cols="12" md="8">
+            <v-img height="300" :src="currentEvent.image" />
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-card flat>
+              <v-card-text class="body-2">
+                <span class="red--text">{{ $moment(currentEvent.startDate).calendar() }} to {{ $moment(currentEvent.endDate).calendar() }}</span> <br>
+                Event by: {{ currentEvent.organiser ? currentEvent.organiser.name : 'N/A' }}
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  v-if="currentEvent.can_edit"
+                  text
+                  :to="`/events/${currentEvent.id}/manage`"
+                >
+                  Manage event
+                </v-btn>
+                <v-btn icon color="primary">
+                  <v-icon>mdi-share</v-icon>
+                </v-btn>
+                <template v-if="!currentEvent.currentUserTicket">
+                  <v-btn
+                    v-if="!currentEvent.can_edit"
+                    depressed
+                    color="primary"
+                    @click="showRegistrationDialog"
+                  >
+                    Register for this event
+                  </v-btn>
+                </template>
+                <template v-else>
+                  <v-btn text disabled>
+                    You are going to this event
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    depressed
+                    large
+                    rounded
+                    to="/home/tickets"
+                  >
+                    View your ticket
+                  </v-btn>
+                </template>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="8">
+            <v-card flat>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <v-card-text class="body-1" v-html="currentEvent.description" />
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
-    <v-dialog v-if="!currentEvent.currentUserTicket" v-model="registerDialog" width="400">
+    <!-- End of event body -->
+    <v-dialog
+      v-if="!currentEvent.currentUserTicket"
+      v-model="registerDialog"
+      width="400"
+    >
       <v-card>
         <v-card-title>Register for event</v-card-title>
         <v-card-text>
@@ -132,7 +138,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {

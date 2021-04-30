@@ -45,7 +45,7 @@
             <h3><v-icon>mdi-account-group</v-icon> Members 0</h3>
             <h3>
               <v-icon>mdi-account</v-icon> Managed by
-              {{ group.organisers[0].name }}
+              {{ group.organisers[0] ? group.organisers[0].name : 'N/A' }}
             </h3>
           </v-card-text>
           <v-card-actions v-if="group.isManager">

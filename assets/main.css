@@ -1,19 +1,19 @@
-.layout-enter-active,
-.layout-leave-active {
+.layout-enter-active, .layout-leave-active {
   transition: opacity 0.5s;
 }
-.layout-enter,
-.layout-leave-active {
+
+.layout-enter, .layout-leave-active {
   opacity: 0;
 }
-.page-enter-active,
-.page-leave-active {
+
+.page-enter-active, .page-leave-active {
   transition: opacity 0.5s;
 }
-.page-enter,
-.page-leave-to {
+
+.page-enter, .page-leave-to {
   opacity: 0;
 }
+
 .ProseMirror [contenteditable="false"] {
   white-space: normal;
 }
@@ -25,10 +25,29 @@
 [contenteditable] {
   outline: 0px solid transparent;
 }
+
 .custom-shadow {
   text-shadow: 2px 0px 14px #000000;
 }
 
 .no-overflow {
   overflow: hidden!important;
+}
+
+@media only screen and (max-width: 768px) {
+  .sticky-top {
+    position: sticky!important;
+    position: -webkit-sticky!important;
+    top: 0vh!important;
+    z-index: 1000;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .sticky-top {
+    position: sticky!important;
+    position: -webkit-sticky!important;
+    top: 9vh!important;
+    z-index: 1000;
+  }
 }

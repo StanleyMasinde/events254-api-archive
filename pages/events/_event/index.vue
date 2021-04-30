@@ -42,11 +42,23 @@
           <v-col cols="12" md="8">
             <v-img height="300" :src="currentEvent.image" />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col class="sticky-top" cols="12" md="4">
             <v-card flat>
-              <v-card-text class="body-2">
-                <span class="red--text">{{ $moment(currentEvent.startDate).calendar() }} to {{ $moment(currentEvent.endDate).calendar() }}</span> <br>
-                Event by: {{ currentEvent.organiser ? currentEvent.organiser.name : 'N/A' }}
+              <v-card-text class="body-1">
+                <span
+                  class="red--text"
+                >From {{ $moment(currentEvent.startDate).format("LT") }} to
+                  {{ $moment(currentEvent.endDate).format("LT") }}
+                </span>
+                <br>
+                Event by:
+                <router-link :to="organiserLink">
+                  {{
+                    currentEvent.organiser ? currentEvent.organiser.name : "N/A"
+                  }}
+                </router-link>
+                <br>
+                Location: {{ currentEvent.location || "Online" }}
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -62,6 +74,7 @@
                 <template v-if="!currentEvent.currentUserTicket">
                   <v-btn
                     v-if="!currentEvent.can_edit"
+                    rounded
                     depressed
                     color="primary"
                     @click="showRegistrationDialog"
@@ -96,6 +109,7 @@
       </v-col>
     </v-row>
     <!-- End of event body -->
+
     <v-dialog
       v-if="!currentEvent.currentUserTicket"
       v-model="registerDialog"
@@ -165,6 +179,13 @@ export default {
     }
   },
   computed: {
+    organiserLink () {
+      const organiser = this.currentEvent.organiser
+      if (organiser.type === 'user') {
+        return `/u/${organiser.id}`
+      }
+      return `/${organiser.slug}`
+    },
     ticks () {
       return this.availableTickets.map((t) => {
         return {

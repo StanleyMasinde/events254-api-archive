@@ -3,6 +3,13 @@
 const faker = require('faker')
 const slugify = require('../../app/actions/slugify')
 const rows = []
+const organisers = []
+for (let index = 1; index < 51; index++) {
+  organisers.push({
+    group_id: index + 1,
+    user_id: index + 1
+  })
+}
 for (let index = 0; index < 5000; index++) {
   const name = faker.lorem.sentence()
   rows.push({
@@ -21,6 +28,8 @@ exports.seed = function (knex) {
   return knex('groups').del()
     .then(function () {
       // Inserts seed entries
-      return knex('groups').insert(rows)
+      return knex('groups').insert(rows).then(() => {
+        return knex('group_organisers').insert(organisers)
+      })
     })
 }

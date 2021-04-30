@@ -20,6 +20,21 @@ class UserController extends Controller {
   }
 
   /**
+   *
+   * @param {*} request
+   * @returns
+   */
+  async show ({ params }) {
+    try {
+      const user = await User.find(params.id)
+      delete user.password
+      return this.response(user)
+    } catch (error) {
+      return this.response(error, 500)
+    }
+  }
+
+  /**
    * Register a new user
    * @param {*} request the express request object
    */

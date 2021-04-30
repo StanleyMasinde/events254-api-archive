@@ -283,10 +283,25 @@ class EventsController extends Controller {
    * @returns Object || null
    */
   async getEventOrganiser (event = {}) {
-    return await DB(pluralize(event.organisable_type.toLowerCase()))
+    const organisableType = event.organisable_type
+    if (organisableType === 'User') {
+      const organiser = await DB(pluralize(organisableType.toLowerCase()))
+        .where({
+          id: event.organisable_id
+        }).first('name', 'id')
+      if (organiser) {
+        organiser.type = 'user'
+      }
+      return organiser
+    }
+    const organiser = await DB(pluralize(organisableType.toLowerCase()))
       .where({
         id: event.organisable_id
-      }).first('name', 'id') || null
+      }).first('name', 'slug', 'id')
+    if (organiser) {
+      organiser.type = 'group'
+    }
+    return organiser
   }
 }
 

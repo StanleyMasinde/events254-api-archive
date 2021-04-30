@@ -10,7 +10,11 @@ module.exports = {
       password: process.env.DB_PASSWORD
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
+      directory: './backend/database/migrations'
+    },
+    seeds: {
+      directory: './backend/database/seeds'
     }
   },
 
@@ -27,7 +31,11 @@ module.exports = {
       max: 10
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
+      directory: './backend/database/migrations'
+    },
+    seeds: {
+      directory: './backend/database/seeds'
     }
   },
 
@@ -44,7 +52,11 @@ module.exports = {
       max: 10
     },
     migrations: {
-      tableName: 'migrations'
+      tableName: 'migrations',
+      directory: './backend/database/migrations'
+    },
+    seeds: {
+      directory: './backend/database/seeds'
     }
   }
 

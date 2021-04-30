@@ -3,13 +3,13 @@ exports.up = function (knex) {
     table.bigIncrements('id')
     table.string('image')
     table.string('about')
-    table.text('location') // Can be virtual
-    table.string('online_link') // If the meeting is virtual
+    table.text('location')
+    table.string('online_link')
     table.text('description')
-    table.dateTime('startDate') // It will contain both the date and time
+    table.dateTime('startDate')
     table.dateTime('endDate')
-    table.bigInteger('organisable_id') // The database ID of the organiser
-    table.string('organisable_type') // Can be user or group
+    table.bigInteger('organisable_id')
+    table.string('organisable_type')
     table.timestamps(true, true)
   })
 }

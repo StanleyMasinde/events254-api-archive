@@ -4,6 +4,7 @@ exports.up = function (knex) {
     table.bigIncrements('id')
     table.bigInteger('event_id').unsigned()
     table.bigInteger('price').defaultTo(0)
+    table.string('currency').defaultTo('KES')
     table.bigInteger('limit').defaultTo(0)
     table.string('type')
   })

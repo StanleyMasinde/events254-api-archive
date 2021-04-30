@@ -10,7 +10,7 @@ exports.up = function (knex) {
     table.string('city') // Local are in case of group
     table.string('visibility').defaultTo('public') // A group can be public
     table.boolean('isCompany').defaultTo(0)
-    table.string('timezone') // To autoconvert event times to it's local time
+    table.string('timezone').defaultTo('Africa/Nairobi') // To autoconvert event times to it's local time
     table.timestamps(true, true)
 
     // A compnay can also have many categories

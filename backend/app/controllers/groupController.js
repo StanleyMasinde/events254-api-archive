@@ -144,6 +144,23 @@ class GroupController extends Controller {
   }
 
   /**
+   * Get the members of a particular group
+   * @param {*} request
+   * @returns
+   */
+  async members (request) {
+    const slug = request.params.slug
+    try {
+      const group = await Group.where({
+        slug
+      }).first()
+      return this.response(await group.members())
+    } catch (error) {
+      return this.response(error, 500)
+    }
+  }
+
+  /**
    * List all group events
    * @param {*} request
    */

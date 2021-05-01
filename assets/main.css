@@ -47,7 +47,7 @@
   .sticky-top {
     position: sticky!important;
     position: -webkit-sticky!important;
-    top: 9vh!important;
+    top: 11.2vh!important;
     z-index: 1000;
   }
 }

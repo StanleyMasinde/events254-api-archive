@@ -44,6 +44,17 @@ class Group extends Model {
       organisable_id: this.id
     }).where('startDate', '<', new Date())
   }
+
+  /**
+   * This get the group members
+   *
+   */
+  async members () {
+    return await DB('group_user')
+      .where('group_id', this.id)
+      .join('users', 'group_user.user_id', '=', 'users.id')
+      .select('users.id AS userId', 'users.name', 'users.bio', 'group_user.created_at AS memberSince')
+  }
 }
 
 module.exports = Group

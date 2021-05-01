@@ -101,6 +101,20 @@ router.delete('/:slug', async (req, res) => {
 })
 
 /**
+ * ------------------------------------------------------------------
+ * Get the group members
+ * ------------------------------------------------------------------
+ */
+router.get('/:slug/members', async (req, res) => {
+  try {
+    const { status, message } = await GroupController.members(req)
+    res.status(status).json(message)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+})
+
+/**
  * --------------------------------------------------------------------
  * Get all the events in the group
  * current group

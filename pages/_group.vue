@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <!-- Still loading the group information -->
     <v-row v-if="$fetchState.pending" justify="center">
       <h1>Loading</h1>
@@ -26,11 +26,11 @@
     </v-row>
 
     <!-- We found the group 😎 -->
-    <v-row v-else justify="center">
-      <v-col cols="12" md="5">
-        <v-img height="400" :src="group.pictureUrl" />
+    <v-row v-else>
+      <v-col cols="12" md="8">
+        <v-img height="300" :src="group.pictureUrl" />
       </v-col>
-      <v-col cols="12" md="5">
+      <v-col cols="12" md="4">
         <v-card outlined>
           <v-card-title>
             <h1 class="display-1">
@@ -178,7 +178,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="12" md="10">
+      <v-col class="sticky-top" cols="12" md="8">
         <v-tabs>
           <v-tab>About</v-tab>
           <v-tab :to="`/${$route.params.group}/events/all`">
@@ -190,9 +190,11 @@
 
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
-                <h1>About {{ group.name }}</h1>
-                <p class="body-1">
+              <v-card-text class="body-1">
+                <h1 class="headline">
+                  About {{ group.name }}
+                </h1>
+                <p>
                   {{ group.description }}
                 </p>
               </v-card-text>
@@ -202,7 +204,7 @@
         <nuxt-child />
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {

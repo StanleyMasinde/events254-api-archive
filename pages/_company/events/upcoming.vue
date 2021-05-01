@@ -39,7 +39,8 @@
               {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
             </p>
             <p :title="e.about">
-              {{ e.about }}
+              {{ e.about }} <br>
+              <i>{{ $moment(e.startDate).fromNow() }}</i>
             </p>
           </v-card-text>
         </v-card>

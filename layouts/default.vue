@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar flat app>
+    <v-app-bar flat app hide-on-scroll>
       <v-toolbar-items>
         <nuxt-link to="/">
           <v-img height="70" width="70" src="/icon.png" />

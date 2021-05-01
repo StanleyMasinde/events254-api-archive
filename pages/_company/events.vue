@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12">
-        <h1 class="display-1">
+        <h1 class="headline">
           {{ group.name }} - Events
         </h1>
       </v-col>

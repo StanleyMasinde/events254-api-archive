@@ -6,7 +6,7 @@ const rows = []
 const organisers = []
 const members = []
 const ids = []
-for (let i = 1; i < 51; i++) {
+for (let i = 1; i < 101; i++) {
   ids.push(i)
 }
 for (let index = 1; index < 5001; index++) {
@@ -20,9 +20,9 @@ for (let index = 1; index < 5001; index++) {
   })
 }
 for (let index = 0; index < 5000; index++) {
-  const name = `${faker.company.companyName()},${faker.company.catchPhrase()}`
+  const name = `${faker.company.companyName()}, ${faker.company.catchPhrase()}`
   rows.push({
-    pictureUrl: faker.image.business(),
+    pictureUrl: faker.image.imageUrl(700, null, 'business', false, true),
     name,
     slug: slugify(name),
     description: faker.lorem.paragraphs(3),

@@ -3,7 +3,7 @@ exports.seed = function (knex) {
   const events = []
   const tickets = []
   const organisableIds = []
-  for (let index = 1; index < 50; index++) {
+  for (let index = 1; index < 10; index++) {
     organisableIds.push(index)
   }
 
@@ -16,7 +16,7 @@ exports.seed = function (knex) {
       location: faker.address.streetAddress(),
       online_link: faker.internet.url(),
       about: about.charAt(0).toLocaleUpperCase() + about.slice(1),
-      description: faker.lorem.paragraphs(5),
+      description: faker.lorem.paragraphs(10, '\\n'),
       startDate: date,
       endDate: faker.date.future(0.001, date),
       organisable_id: faker.random.arrayElement(organisableIds),

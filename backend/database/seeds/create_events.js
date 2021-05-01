@@ -3,7 +3,7 @@ exports.seed = function (knex) {
   const events = []
   const tickets = []
   const organisableIds = []
-  for (let index = 1; index < 100; index++) {
+  for (let index = 1; index < 50; index++) {
     organisableIds.push(index)
   }
 

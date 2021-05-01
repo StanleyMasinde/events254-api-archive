@@ -148,12 +148,25 @@ class GroupController extends Controller {
    * @param {*} request
    */
   async groupEvents (request) {
+    const filter = request.query.filter
     const { slug } = request.params
     try {
       const group = await Group.where({
         slug
       }).first()
-      return this.response(await group.events())
+      let events = []
+      switch (filter) {
+        case 'upcoming':
+          events = await group.upcomingEvents()
+          break
+        case 'past':
+          events = await group.pastEvents()
+          break
+        default:
+          events = await group.events()
+          break
+      }
+      return this.response(events)
     } catch (error) {
       return this.response(error, 500)
     }

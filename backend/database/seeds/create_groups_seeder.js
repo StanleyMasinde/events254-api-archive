@@ -10,8 +10,8 @@ for (let index = 1; index < 51; index++) {
     user_id: index + 1
   })
 }
-for (let index = 0; index < 5000; index++) {
-  const name = faker.lorem.sentence()
+for (let index = 0; index < 50; index++) {
+  const name = faker.company.companyName()
   rows.push({
     pictureUrl: faker.image.business(),
     name,

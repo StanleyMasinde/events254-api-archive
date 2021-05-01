@@ -17,9 +17,32 @@ class Group extends Model {
 
   /**
    * Get the events created by the current Group
+   * All events by default
    */
   events () {
     return this.morphMany('Event', 'organisable')
+  }
+
+  /**
+   * Upcoming events
+   * All events in the future
+   */
+  async upcomingEvents () {
+    return await DB('events').where({
+      organisable_type: 'Group',
+      organisable_id: this.id
+    }).where('startDate', '>', new Date())
+  }
+
+  /**
+   * This shows the past events from the group
+   * @returns
+   */
+  async pastEvents () {
+    return await DB('events').where({
+      organisable_type: 'Group',
+      organisable_id: this.id
+    }).where('startDate', '<', new Date())
   }
 }
 

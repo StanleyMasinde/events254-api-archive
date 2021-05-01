@@ -181,7 +181,7 @@
       <v-col cols="12" md="10">
         <v-tabs>
           <v-tab>About</v-tab>
-          <v-tab :to="`/${$route.params.group}/events`">
+          <v-tab :to="`/${$route.params.group}/events/all`">
             Events
           </v-tab>
           <v-tab :to="`/${$route.params.group}/members`">

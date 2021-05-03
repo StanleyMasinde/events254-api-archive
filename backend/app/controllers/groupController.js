@@ -26,7 +26,7 @@ class GroupController extends Controller {
   /**
    * Create a new group.
    * A group will contain the user that created it
-   * @param {Array} request
+   * @param {Express.Request} request
    * @returns response
    */
   async create (request) {
@@ -54,7 +54,7 @@ class GroupController extends Controller {
    * Show a specified group
    * We use the slug to identify a group.
    * e.g events-254-kenya
-   * @param {Array} request
+   * @param {Express.Request} request
    * @returns Group
    */
   async show (request) {
@@ -79,7 +79,7 @@ class GroupController extends Controller {
 
   /**
    * Update information of a given group
-   * @param {Array} request
+   * @param {Express.Request} request
    * @returns response
    */
   async update (request) {
@@ -108,7 +108,7 @@ class GroupController extends Controller {
 
   /**
    * Delete a given group from the database
-   * @param {Array} request
+   * @param {Express.Request} request
    * @returns response
    */
   async delete (request) {
@@ -125,7 +125,7 @@ class GroupController extends Controller {
 
   /**
    * Get the groups managed by the current
-   * @param {*} body
+   * @param {Express.Request} request
    * @returns
    */
   async currentUser (request) {
@@ -145,7 +145,7 @@ class GroupController extends Controller {
 
   /**
    * Get the members of a particular group
-   * @param {*} request
+   * @param {Express.Request} request
    * @returns
    */
   async members (request) {
@@ -162,7 +162,7 @@ class GroupController extends Controller {
 
   /**
    * List all group events
-   * @param {*} request
+   * @param {Express.Request} request
    */
   async groupEvents (request) {
     const filter = request.query.filter
@@ -191,7 +191,7 @@ class GroupController extends Controller {
 
   /**
    * Create a new event
-   * @param {*} request
+   * @param {Express.Request} request
    */
   async createEvent (request) {
     const { body, file, params } = request
@@ -229,7 +229,7 @@ class GroupController extends Controller {
 
   /**
    * Update a given event
-   * @param {*} request
+   * @param {Express.Request} request
    */
   async updateEvent (request) {
     const { body, params } = request
@@ -260,7 +260,7 @@ class GroupController extends Controller {
 
   /**
    * Delete a given event
-   * @param {*} request
+   * @param {Express.Request} request
    */
   async deleteEvent (request) {
     const { params } = request

@@ -6,10 +6,9 @@ const Event = require('../models/event')
 const User = require('../models/user')
 const upload = require('../filesystem/s3')
 const canEditEvent = require('../policies/canEditEvent')
-const mail = require('../mail/mail')
+const Mail = require('../mail/mail')
 const Ticket = require('../models/ticket')
-const PDF = require('../services/pdf')
-const slugify = require('../actions/slugify')
+const formatToDateTime = require('../actions/formatToDateTime')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -86,7 +85,7 @@ class EventsController extends Controller {
       // The data is valid
       // eslint-disable-next-line camelcase
       const { from_date, from_time, location, online_link, about, description } = body
-      const startDate = this.formatToDateTime(from_time, from_date)
+      const startDate = formatToDateTime(from_time, from_date)
       const endDate = null // TODO Add this field
       // eslint-disable-next-line camelcase
       const organisable_id = user.id // The authenticated user's ID
@@ -152,7 +151,7 @@ class EventsController extends Controller {
         }).validate()
         // eslint-disable-next-line camelcase
         const { from_date, from_time, location, about, description } = body
-        const startDate = this.formatToDateTime(from_time, from_date)
+        const startDate = formatToDateTime(from_time, from_date)
         const endDate = null
         const res = await currentEvent.update({ location, about, description, startDate, endDate }) // Payload is valid
         return this.response(res, 201) // Looks good
@@ -188,7 +187,7 @@ class EventsController extends Controller {
 
   /**
    * Get the events for the current user
-   * @param {*} user
+   * @param {Express.Request} request
    */
   async currentUserEvents (request) {
     try {
@@ -203,7 +202,7 @@ class EventsController extends Controller {
   /**
    * -----------------------------------------------------------------
    * User registers for an event
-   * @param {Array} param
+   * @param {Express.Request} param
    * @returns response
    *
    */
@@ -224,31 +223,17 @@ class EventsController extends Controller {
       const ticketId = await DB('event_rsvps').insert({
         event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
       })
-
-      const ticket = new PDF({
-        currentEvent,
+      // Send and email to user
+      // TODO add attachments and refactor
+      const data = {
+        eventName: currentEvent.about,
         name: currentUser.name,
         ticketId,
         ticketCount: body.rsvp_count,
         currentTicket,
         date: new Date().toDateString()
-      })
-      // Send and email to user
-      await mail.sendMail({
-        from: '"Events254" <no-reply@events254.com>',
-        to: currentUser.email,
-        subject: 'Your oder from Events254',
-        template: 'ticket',
-        attachments: [{ filename: `${slugify(currentEvent.about)}.pdf`, content: ticket.createTicket() }],
-        ctx: {
-          eventName: currentEvent.about,
-          name: currentUser.name,
-          ticketId,
-          ticketCount: body.rsvp_count,
-          currentTicket,
-          date: new Date().toDateString()
-        }
-      })
+      }
+      await new Mail(currentUser, 'Your oder from Events254', { template: 'resetPassword', data }).send()
       return this.response('You have registered for this event')
     } catch (error) {
       return this.response(error, 422)
@@ -256,30 +241,8 @@ class EventsController extends Controller {
   }
 
   /**
-  * Format the date and time into a datetime field
-  * @param {String} fromTime
-  * @param {String} fromDate
-  * @param {String} timezone
-  * @returns new Date()
-  */
-  formatToDateTime (fromTime, fromDate, timezone = 'Africa/Nairobi') {
-    /** Format the date */
-    const fromTimeArray = fromTime.split(':')
-    const fromDateArray = fromDate.split('-')
-    const fromDateTime = new Date() // New date instance
-    fromDateTime.setHours(fromTimeArray[0]) // Set the hours from the input
-    fromDateTime.setMinutes(fromTimeArray[1]) // set the minutes from the input
-    fromDateTime.setSeconds(0) // Seconds should always be zero
-    fromDateTime.setFullYear(fromDateArray[0]) // set the year
-    fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
-    fromDateTime.setDate(fromDateArray[2]) // The day of the month
-    const t = moment(fromDateTime, true).tz(timezone, true).toDate()
-    return t
-  }
-
-  /**
    * Get the event organisers
-   * @param {Array} event
+   * @param {Event} event
    * @returns Object || null
    */
   async getEventOrganiser (event = {}) {

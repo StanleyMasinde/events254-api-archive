@@ -6,7 +6,7 @@ const auth = () => {
   return function (req, res, next) {
     /**
        * Attempt to login a user with the given credentials
-       * @param {*} guard
+       * @param {String} guard The current user table
        */
     req.attempt = function (guard = 'users') {
       const { email, password } = this.body

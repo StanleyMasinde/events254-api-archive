@@ -2,14 +2,14 @@ const { randomBytes } = require('crypto')
 const Validator = require('mevn-validator')
 const { DB } = require('mevn-orm')
 const { hash } = require('bcrypt')
-const mail = require('../mail/mail')
+const Mail = require('../mail/mail')
 const User = require('../models/user')
 const createToken = require('../auth/createToken')
 const Controller = require('./controller')
 
 class UserController extends Controller {
   /**
-  * @returns {Object} A collection of users
+  * @returns {Array} A collection of users
   */
   async index () {
     try {
@@ -21,7 +21,7 @@ class UserController extends Controller {
 
   /**
    *
-   * @param {*} request
+   * @param {Express.Request} request
    * @returns
    */
   async show ({ params }) {
@@ -36,7 +36,7 @@ class UserController extends Controller {
 
   /**
    * Register a new user
-   * @param {*} request the express request object
+   * @param {Express.Request} request the express request object
    */
   async register (request) {
     const { body } = request
@@ -57,16 +57,10 @@ class UserController extends Controller {
       }
 
       const u = await User.register(body) // TODO This now returns a Model
-      // TODO use queing here
-      await mail.sendMail({
-        from: '"Events254" <no-reply@events254.com>',
-        to: body.email,
-        subject: 'Welcome to Events254',
-        template: 'welcome',
-        ctx: {
-          name: body.name
-        }
-      })
+      const data = {
+        name: body.name
+      }
+      await new Mail(body, 'Password Reset Notification', { template: 'resetPassword', data }).send()
       // Determine if the request requires a token and pass it if so
       if (request.requiresToken()) {
         const token = await createToken({
@@ -84,17 +78,17 @@ class UserController extends Controller {
 
   /**
    * Send a password reset Email
-   * @param {*} email
+   * @param {String} email - The email of the user
    */
-  async sendPasswordResetEmail (email = '') {
+  async sendPasswordResetEmail (email) {
     try {
       // Validate the input
       await new Validator({ email }, {
         email: 'required'
       }).validate()
       // Make sure the user exists
-      const exists = await User.where({ email }).first()
-      if (exists) {
+      const user = await User.where({ email }).first()
+      if (user) {
         // Generate a token
         const token = randomBytes(64).toString('hex')
         // Delete any existing tokens
@@ -108,16 +102,11 @@ class UserController extends Controller {
           created_at: new Date()
         })
         // Send the token to the user
-        await mail.sendMail({
-          from: '"Events254" <no-reply@events254.com>',
-          to: email,
-          subject: 'Password Reset notification',
-          template: 'resetPassword',
-          ctx: {
-            name: exists.name,
-            url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
-          }
-        })
+        const data = {
+          name: user.name,
+          url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
+        }
+        await new Mail(user, 'Password Reset Notification', { template: 'resetPassword', data }).send()
         // Return a response to the user
         return this.response('Please check your email for a password reset link')
       }

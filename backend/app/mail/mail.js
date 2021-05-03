@@ -15,35 +15,38 @@ mail.use('compile', pugEngine({
   templateDir: __dirname
 }))
 
-// TODO Create a resusbale mail class or package
-// class BaseMail {
-//   constructor (subject, message, to, from, replyTo) {
-//     this.subject = subject
-//     this.recipient = to
-//     this.sender = from
-//     this.replyTo = replyTo
-//     this.message = message
-//   }
+class Mail {
+  /**
+   * Send a new email
+   * @param {Object} recipient - The user receiving the email
+   * @param {String} subject - the subject of the email
+   * @param {Object} Options - The email params
+   */
+  constructor (recipient, subject, options = { template: null, data: null }) {
+    this.sender = '"Events254" <no-reply@events254.com>'
+    this.recipient = recipient
+    this.subject = subject
+    this.template = options.template
+    this.data = options.data
+  }
 
-//   /**
-//    * Send the email immediately
-//    */
-//   sendNow () {
-//     mail.sendMail({
-//       subject: this.subject,
-//       to: this.recipient,
-//       from: this.sender,
-//       replyTo: this.replyTo
-//     })
-//   }
+  /**
+   * Send the email
+   */
+  async send () {
+    try {
+      await mail.sendMail({
+        from: this.sender,
+        to: this.recipient.email,
+        subject: this.subject,
+        template: this.template,
+        ctx: this.data
+      })
+    } catch (error) {
+      error.status = 500
+      throw error
+    }
+  }
+}
 
-//   /**
-//    * Add mail to queue
-//    * // TODO add queueing
-//    */
-//   queue () {
-
-//   }
-// }
-
-module.exports = mail
+module.exports = Mail

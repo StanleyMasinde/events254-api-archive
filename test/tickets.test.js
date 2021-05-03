@@ -9,6 +9,7 @@ const application = require('../backend/app')
 const app = chai.request.agent(application).keepOpen()
 
 describe('#Events test with protected routes', () => {
+  let eventId
   before(async () => {
     await app
       .post('/auth/login')
@@ -16,20 +17,21 @@ describe('#Events test with protected routes', () => {
         email: 'john@example.com',
         password: '12345678'
       })
-    await app.post('/events')
+    const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
       .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
       .field({
-        type: 'Physical',
-        title: 'Third event',
+        location: faker.address.streetAddress(),
+        about: 'Awesome event',
         description: faker.lorem.paragraph(10),
         from_date: new Date().toISOString().substr(0, 10),
-        from_time: '06:45'
+        from_time: '09:30'
       })
+    eventId = res.body.id
   })
 
   it('Create a ticket', async () => {
-    const res = await app.post('/events/4/tickets')
+    const res = await app.post(`/events/${eventId}/tickets`)
       .send({
         price: 100,
         limit: 1,

@@ -90,7 +90,7 @@ class TicketController extends Controller {
   /**
    * Get the current user's tickets
    *
-   * @param {*} request
+   * @param {Express.Request} request
    */
   async currentUser (request) {
     try {

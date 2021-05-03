@@ -4,7 +4,10 @@ exports.up = function (knex) {
     table.bigIncrements('id')
     table.bigInteger('group_id').unsigned()
     table.bigInteger('user_id').unsigned()
-    table.string('role').defaultTo('organiser') // TODO more research on this
+    table.string('role').defaultTo('organiser')
+
+    table.foreign('group_id').references('id').inTable('groups')
+    table.foreign('user_id').references('id').inTable('users')
   })
 }
 

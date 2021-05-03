@@ -7,6 +7,8 @@ exports.up = function (knex) {
     table.string('currency').defaultTo('KES')
     table.bigInteger('limit').defaultTo(0)
     table.string('type')
+
+    table.foreign('event_id').references('id').inTable('events')
   })
 }
 

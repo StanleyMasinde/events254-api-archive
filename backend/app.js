@@ -12,11 +12,15 @@ const auth = require('./app/auth/auth')
 
 const app = express()
 
+app.locals.applicationName = 'Events254'
+app.locals.applicationemail = 'info@events254.co.ke'
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
 app.use(session({
+  rolling: true,
   secret: 'super-secret-cookie',
   resave: false,
   saveUninitialized: true,

@@ -19,7 +19,7 @@ describe('#Events test with protected routes', () => {
       })
   })
 
-  it('User creates and event', async () => {
+  it('User creates an event', async () => {
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
       .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')

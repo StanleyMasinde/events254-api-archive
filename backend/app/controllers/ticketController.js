@@ -26,6 +26,7 @@ class TicketController extends Controller {
     const { params, body } = request
     const { event } = params // Get the event ID
     const { price, limit, type } = body
+
     try {
       const ticket = await Ticket.create({
         price, limit, type, event_id: event

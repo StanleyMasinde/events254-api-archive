@@ -7,11 +7,9 @@ block content
         tr
           td.content-cell
             .f-fallback
-              h1 Hi #{name},
+              h1 Hi #{name}, see you at #{eventName}
               p
-                | Thanks for using Events254. This email is the order confirmation for 
-                b #{eventName}. 
-                | No payment is due.
+                | Thanks for using Events254. This email is the order confirmation for No payment is due.
               table.purchase(width='100%' cellpadding='0' cellspacing='0' role='presentation')
                 tr
                   td
@@ -30,12 +28,12 @@ block content
                         td.purchase_item(width='80%')
                           span.f-fallback #{currentTicket.type}
                         td.align-right(width='20%')
-                          span.f-fallback #{currentTicket.price}
+                          span.f-fallback #{Intl.NumberFormat().format(currentTicket.price)}
                       tr
                         td.purchase_footer(width='80%' valign='middle')
                           p.f-fallback.purchase_total.purchase_total--label Total
                         td.purchase_footer(width='20%' valign='middle')
-                          p.f-fallback.purchase_total #{currentTicket.price}
+                          p.f-fallback.purchase_total #{Intl.NumberFormat().format(currentTicket.price)}
                 | Cheers,
                 br
                 | The Events254 Team

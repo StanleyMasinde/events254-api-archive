@@ -88,9 +88,9 @@ describe('#Event registration', () => {
     // create a ticket
     await app.post('/events/2/tickets')
       .send({
-        price: 100,
+        price: faker.commerce.price(1000, 9999),
         limit: 1,
-        type: 'General Admission'
+        type: faker.random.arrayElement(['VIP', 'Regular', 'General'])
       })
   })
 

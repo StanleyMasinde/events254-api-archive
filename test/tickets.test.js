@@ -33,9 +33,9 @@ describe('#Events test with protected routes', () => {
   it('Create a ticket', async () => {
     const res = await app.post(`/events/${eventId}/tickets`)
       .send({
-        price: 100,
+        price: faker.commerce.price(1000, 9999),
         limit: 1,
-        description: 'General admission'
+        description: faker.random.arrayElement(['VIP', 'Regular', 'General'])
       })
     expect(res.status).equals(201)
     expect(res.body).to.haveOwnProperty('event_id', 4)

@@ -233,7 +233,7 @@ class EventsController extends Controller {
         currentTicket,
         date: new Date().toDateString()
       }
-      await new Mail(currentUser, 'Your oder from Events254', { template: 'resetPassword', data }).send()
+      await new Mail(currentUser, 'Your oder from Events254', { template: 'ticket', data }).send()
       return this.response('You have registered for this event')
     } catch (error) {
       return this.response(error, 422)

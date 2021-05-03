@@ -60,7 +60,7 @@ class UserController extends Controller {
       const data = {
         name: body.name
       }
-      await new Mail(body, 'Password Reset Notification', { template: 'resetPassword', data }).send()
+      await new Mail(body, 'Welcome to events254', { template: 'welcome', data }).send()
       // Determine if the request requires a token and pass it if so
       if (request.requiresToken()) {
         const token = await createToken({

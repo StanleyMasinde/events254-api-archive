@@ -11,10 +11,12 @@
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-text-field
+          v-model="searchQuery"
           outlined
           rounded
           placeholder="Find something awesome"
           append-icon="mdi-magnify"
+          @click:append="search"
         />
       </v-col>
     </v-row>
@@ -122,6 +124,7 @@
 export default {
   data () {
     return {
+      searchQuery: null,
       noMoreEvents: false,
       months: [
         'Jan',
@@ -153,6 +156,9 @@ export default {
   },
   auth: false,
   methods: {
+    search () {
+      this.$router.push(`/search?q=${this.searchQuery}`)
+    },
     async loadMore () {
       const { data } = await this.$axios.get(this.eventsObject.nextPageUrl)
       if (data.events.length === 0) {

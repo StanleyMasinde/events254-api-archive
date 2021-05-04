@@ -8,6 +8,7 @@ const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
 const authRouter = require('./routes/auth')
 const eventsRouter = require('./routes/events')
+const searchRouter = require('./routes/search')
 const auth = require('./app/auth/auth')
 
 const app = express()
@@ -37,7 +38,9 @@ app.use('/users', usersRouter)
 app.use('/groups', groupsRouter)
 app.use('/auth', authRouter)
 app.use('/events', eventsRouter)
+app.use('/search', searchRouter)
 app.use('/p', publicRouter)
+
 if (process.env.NODE_ENV === 'api') {
   const port = process.env.PORT | 3000
   app.listen(port, () => {

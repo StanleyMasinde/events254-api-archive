@@ -138,7 +138,7 @@ class TicketController extends Controller {
           'tickets.price AS ticketPrice',
           'tickets.currency AS currency'
         ])
-        // Validate the user. No one else is supposed to see the ticket
+      // Validate the user. No one else is supposed to see the ticket
       if (user.id !== ticket.userId) {
         res.status(403).json('You are not authorized to view this resource')
         return
@@ -151,16 +151,16 @@ class TicketController extends Controller {
         if (organiser) {
           organiser.type = 'user'
         }
-        return organiser
+      } else {
+        const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
+          .where({
+            id: ticket.organisableId
+          }).first('name', 'slug', 'id')
+        if (organiser) {
+          organiser.type = 'group'
+        }
+        ticket.organiser = organiser
       }
-      const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
-        .where({
-          id: ticket.organisableId
-        }).first('name', 'slug', 'id')
-      if (organiser) {
-        organiser.type = 'group'
-      }
-      ticket.organiser = organiser
       delete ticket.organisableId; delete ticket.organisableType
       res.json(ticket)
     } catch (error) {

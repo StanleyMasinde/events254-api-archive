@@ -78,7 +78,7 @@
               </v-img>
               <v-card-text class="body-2">
                 <p class="red--text">
-                  {{ $moment(e.startDate).format('MMMM Do YYYY [at] h:mm a') }}
+                  {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
                 </p>
                 <p :title="e.about">
                   {{ e.about }}

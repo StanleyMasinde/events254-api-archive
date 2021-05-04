@@ -83,9 +83,7 @@
                   </v-btn>
                 </template>
                 <template v-else>
-                  <v-btn text disabled>
-                    You are going to this event
-                  </v-btn>
+                  You are going
                   <v-btn
                     color="primary"
                     depressed
@@ -93,7 +91,7 @@
                     rounded
                     to="/home/tickets"
                   >
-                    View your ticket
+                    View your tickets
                   </v-btn>
                 </template>
               </v-card-actions>
@@ -142,7 +140,7 @@
             Order total:
             {{
               formatCurrency(
-                eventRsvp.ticket.price | (0 * eventRsvp.rsvp_count)
+                eventRsvp.ticket.price * eventRsvp.rsvp_count
               )
             }}
             <v-btn color="primary" block @click="confirmOrder">

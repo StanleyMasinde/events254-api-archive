@@ -202,7 +202,7 @@ class EventsController extends Controller {
   /**
    * -----------------------------------------------------------------
    * User registers for an event
-   * @param {Express.Request} param
+   * @param {import('express').Request} param
    * @returns response
    *
    */
@@ -231,7 +231,8 @@ class EventsController extends Controller {
         ticketId,
         ticketCount: body.rsvp_count,
         currentTicket,
-        date: new Date().toDateString()
+        date: new Date().toDateString(),
+        ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`
       }
       await new Mail(currentUser, 'Your oder from Events254', { template: 'ticket', data }).send()
       return this.response('You have registered for this event')

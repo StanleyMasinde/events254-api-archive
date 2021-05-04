@@ -1,5 +1,6 @@
 const { DB } = require('mevn-orm')
 const Validator = require('mevn-validator')
+const pluralize = require('pluralize')
 const Ticket = require('../models/ticket')
 const Controller = require('./controller')
 
@@ -106,6 +107,64 @@ class TicketController extends Controller {
       return this.response(tickets)
     } catch (error) {
       return this.response(error, 500)
+    }
+  }
+
+  /**
+   * Get a ticket with ID
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async getTicket (req, res) {
+    const ticketId = req.params.id
+    try {
+      const user = await req.user()
+      const ticket = await DB('event_rsvps')
+        .join('tickets', 'event_rsvps.ticket_id', 'tickets.id')
+        .join('events', 'tickets.event_id', 'events.id')
+        .where({
+          'event_rsvps.id': ticketId
+        })
+        .first([
+          'events.about AS eventName',
+          'events.organisable_type as organisableType',
+          'events.organisable_id as organisableId',
+          'events.startDate AS eventDate',
+          'events.location AS eventLocation',
+          'event_rsvps.id AS ticketId',
+          'event_rsvps.user_id AS userId',
+          'event_rsvps.rsvp_count AS ticketCount',
+          'tickets.type AS ticketType',
+          'tickets.price AS ticketPrice',
+          'tickets.currency AS currency'
+        ])
+        // Validate the user. No one else is supposed to see the ticket
+      if (user.id !== ticket.userId) {
+        res.status(403).json('You are not authorized to view this resource')
+        return
+      }
+      if (ticket.organisableType === 'User') {
+        const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
+          .where({
+            id: ticket.organisableId
+          }).first('name', 'id')
+        if (organiser) {
+          organiser.type = 'user'
+        }
+        return organiser
+      }
+      const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
+        .where({
+          id: ticket.organisableId
+        }).first('name', 'slug', 'id')
+      if (organiser) {
+        organiser.type = 'group'
+      }
+      ticket.organiser = organiser
+      delete ticket.organisableId; delete ticket.organisableType
+      res.json(ticket)
+    } catch (error) {
+      res.status(500).json(error)
     }
   }
 

@@ -9,6 +9,7 @@ const groupsRouter = require('./routes/groups')
 const authRouter = require('./routes/auth')
 const eventsRouter = require('./routes/events')
 const searchRouter = require('./routes/search')
+const ticketRouter = require('./routes/tickets')
 const auth = require('./app/auth/auth')
 
 const app = express()
@@ -39,6 +40,7 @@ app.use('/groups', groupsRouter)
 app.use('/auth', authRouter)
 app.use('/events', eventsRouter)
 app.use('/search', searchRouter)
+app.use('/tickets', ticketRouter)
 app.use('/p', publicRouter)
 
 if (process.env.NODE_ENV === 'api') {

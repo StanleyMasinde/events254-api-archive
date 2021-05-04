@@ -7,7 +7,7 @@
             You have not created any groups
           </p>
           <v-btn to="/groups/create" depressed rounded color="primary">
-            Create your first event
+            Create your first group
           </v-btn>
         </div>
       </v-col>

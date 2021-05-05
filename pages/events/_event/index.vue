@@ -60,14 +60,16 @@
                 <br>
                 Location: {{ currentEvent.location || "Online" }}
               </v-card-text>
-              <v-card-text v-if="currentEvent.attendees.length > 0" class="body-1">
-                <h5>Attendees</h5>
-                <div class="stacked-av">
-                  <v-avatar v-for="(a,i) in currentEvent.attendees" :key="i" :title="a.name" color="brown">
-                    <span>{{ innitials(a.name) }}</span>
-                  </v-avatar>
-                </div>
-              </v-card-text>
+              <template v-if="currentEvent.attendees">
+                <v-card-text v-if="currentEvent.attendees.length > 0" class="body-1">
+                  <h5>Attendees</h5>
+                  <div class="stacked-av">
+                    <v-avatar v-for="(a,i) in currentEvent.attendees" :key="i" :title="a.name" color="brown">
+                      <span>{{ innitials(a.name) }}</span>
+                    </v-avatar>
+                  </div>
+                </v-card-text>
+              </template>
               <v-card-actions>
                 <v-btn
                   v-if="currentEvent.can_edit"

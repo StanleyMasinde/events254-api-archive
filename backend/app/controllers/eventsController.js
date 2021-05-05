@@ -153,8 +153,8 @@ class EventsController extends Controller {
           about: 'required',
           location: 'required',
           description: 'required',
-          from_date: 'required',
-          from_time: 'required'
+          start_date: 'required',
+          start_time: 'required'
         }).validate()
         // eslint-disable-next-line camelcase
         const { start_date, start_time, end_date, end_time, location, about, description } = body

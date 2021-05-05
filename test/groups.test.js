@@ -85,8 +85,8 @@ describe('Group events', () => {
         location: faker.address.streetAddress(),
         about: 'Awesome event',
         description: faker.lorem.paragraph(10),
-        from_date: new Date().toISOString().substr(0, 10),
-        from_time: '09:30'
+        start_date: new Date().toISOString().substr(0, 10),
+        start_time: '09:30'
       })
     expect(res.status).equals(201)
   })
@@ -104,8 +104,8 @@ describe('Group events', () => {
         location: faker.address.streetAddress(true),
         about: 'Events254 launch party (Group)',
         description: faker.lorem.paragraph(10),
-        from_date: new Date().toISOString().substr(0, 10),
-        from_time: '10:45'
+        start_date: new Date().toISOString().substr(0, 10),
+        start_time: '10:45'
       })
     expect(res.status).equals(201)
   })
@@ -117,8 +117,8 @@ describe('Group events', () => {
         location: 'virtual',
         about: 'Events254 launch party',
         description: faker.lorem.paragraph(10),
-        from_date: new Date().toISOString().substr(0, 10),
-        from_time: '10:45'
+        start_date: new Date().toISOString().substr(0, 10),
+        start_time: '10:45'
       })
     expect(res.status).equals(401)
   })

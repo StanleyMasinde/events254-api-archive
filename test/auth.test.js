@@ -137,8 +137,8 @@ describe('Authentication with personal API Tokens', () => {
         location: faker.address.streetAddress(),
         about: 'Awesome event',
         description: faker.lorem.paragraph(10),
-        from_date: new Date().toISOString().substr(0, 10),
-        from_time: '09:30'
+        start_date: new Date().toISOString().substr(0, 10),
+        start_time: '09:30'
       })
     expect(res.status).equals(201)
   })

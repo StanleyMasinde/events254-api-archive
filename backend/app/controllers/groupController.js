@@ -15,7 +15,7 @@ class GroupController extends Controller {
    * By default, these results will paginated when the app grows
   * @returns {Object} A collection of users
   */
-  async index () {
+  async index() {
     try {
       return this.response(await Group.all())
     } catch (error) {
@@ -29,7 +29,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async create (request) {
+  async create(request) {
     const { body, file } = request
     try {
       const user = await request.user() // The current user
@@ -57,7 +57,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns Group
    */
-  async show (request) {
+  async show(request) {
     const { params, user } = request
     const u = await user()
     try {
@@ -82,7 +82,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async update (request) {
+  async update(request) {
     const { body, params, file } = request
 
     try {
@@ -111,7 +111,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async delete (request) {
+  async delete(request) {
     const group = await Group.where({
       slug: request.params.slug
     }).first()
@@ -128,7 +128,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async currentUser (request) {
+  async currentUser(request) {
     const { user } = request
     try {
       const u = await user()
@@ -148,7 +148,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async members (request) {
+  async members(request) {
     const slug = request.params.slug
     try {
       const group = await Group.where({
@@ -164,7 +164,7 @@ class GroupController extends Controller {
    * List all group events
    * @param {Express.Request} request
    */
-  async groupEvents (request) {
+  async groupEvents(request) {
     const filter = request.query.filter
     const { slug } = request.params
     try {
@@ -193,7 +193,7 @@ class GroupController extends Controller {
    * Create a new event
    * @param {Express.Request} request
    */
-  async createEvent (request) {
+  async createEvent(request) {
     const { body, file, params } = request
     const group = await Group.where({ slug: params.slug }).first()
 
@@ -202,8 +202,8 @@ class GroupController extends Controller {
         about: 'required',
         location: 'required',
         description: 'required',
-        from_date: 'required',
-        from_time: 'required'
+        start_date: 'required',
+        start_time: 'required'
       })
         .validate()
 
@@ -212,9 +212,9 @@ class GroupController extends Controller {
 
       // The data is valid
       // eslint-disable-next-line camelcase
-      const { from_date, from_time, location, online_link, about, description } = body
-      const startDate = formatToDateTime(from_time, from_date)
-      const endDate = null // TODO Add this field
+      const { start_date, start_time, online_link, end_date, end_time, location, about, description } = body
+      const startDate = formatToDateTime(start_time, start_date)
+      const endDate = formatToDateTime(end_time, end_date)
       // eslint-disable-next-line camelcase
       const organisable_id = group.id // The authenticated user's ID
       // eslint-disable-next-line camelcase
@@ -231,7 +231,7 @@ class GroupController extends Controller {
    * Update a given event
    * @param {Express.Request} request
    */
-  async updateEvent (request) {
+  async updateEvent(request) {
     const { body, params } = request
     const { event, slug } = params // The the event Id
     const group = await Group.where({ slug }).first() // The current user
@@ -242,13 +242,13 @@ class GroupController extends Controller {
           about: 'required',
           location: 'required',
           description: 'required',
-          from_date: 'required',
-          from_time: 'required'
+          start_date: 'required',
+          start_time: 'required'
         }).validate()
         // eslint-disable-next-line camelcase
-        const { from_date, from_time, location, about, description } = body
-        const startDate = formatToDateTime(from_time, from_date)
-        const endDate = null
+        const { start_date, start_time, end_date, end_time, location, about, description } = body
+        const startDate = formatToDateTime(start_time, start_date)
+        const endDate = formatToDateTime(end_time, end_date)
         const res = await currentEvent.update({ location, about, description, startDate, endDate }) // Payload is valid
         return this.response(res, 201) // Looks good
       } catch (error) {
@@ -262,7 +262,7 @@ class GroupController extends Controller {
    * Delete a given event
    * @param {Express.Request} request
    */
-  async deleteEvent (request) {
+  async deleteEvent(request) {
     const { params } = request
     // The the event Id
     const { event } = params
@@ -286,7 +286,7 @@ class GroupController extends Controller {
    * @param {Array} body
    * @returns Promise
    */
-  validate (body) {
+  validate(body) {
     return new Validator(body, {
       name: 'required',
       description: 'required'

@@ -43,7 +43,7 @@
             <v-img height="300" :src="currentEvent.image" />
           </v-col>
           <v-col class="sticky-top" cols="12" md="4">
-            <v-card flat>
+            <v-card outlined>
               <v-card-text class="body-1">
                 <span
                   class="red--text"
@@ -59,6 +59,14 @@
                 </router-link>
                 <br>
                 Location: {{ currentEvent.location || "Online" }}
+              </v-card-text>
+              <v-card-text v-if="currentEvent.attendees.length > 0" class="body-1">
+                <h5>Attendees</h5>
+                <div class="stacked-av">
+                  <v-avatar v-for="(a,i) in currentEvent.attendees" :key="i" :title="a.name" color="brown">
+                    <span>{{ innitials(a.name) }}</span>
+                  </v-avatar>
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -210,6 +218,13 @@ export default {
         throw new Error(error)
       }
     },
+    innitials (name) {
+      const [firstName, lastName] = name.split(' ')
+      if (!lastName) {
+        return `${firstName.split('')[0]}`
+      }
+      return `${firstName.split('')[0]}${lastName.split('')[0]}`
+    },
     formatCurrency (value = 0) {
       return Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -230,8 +245,22 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .custom-dark {
-  filter: opacity(40);
+  filter: opacity(40)!important;
+}
+.v-avatar {
+    margin-right: -25px!important;
+    border:1px solid #fafafa!important;
+
+    &:hover {
+      z-index: 5;
+    }
+  }
+div {
+  &.stacked-av {
+    display: flex!important;
+    overflow: scroll;
+  }
 }
 </style>

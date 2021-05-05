@@ -7,19 +7,16 @@
     min-width="auto"
   >
     <template #activator="{ on, attrs }">
-      <ValidationProvider v-slot="{errors}" :name="label" rules="required">
-        <v-text-field
-          v-model="time"
-          data-time-input
-          :error-messages="errors"
-          outlined
-          :label="label"
-          readonly
-          v-bind="attrs"
-          type="time"
-          v-on="on"
-        />
-      </ValidationProvider>
+      <v-text-field
+        v-model="time"
+        data-time-input
+        outlined
+        :label="label"
+        readonly
+        v-bind="attrs"
+        type="time"
+        v-on="on"
+      />
     </template>
     <v-time-picker
       ref="picker"
@@ -66,8 +63,7 @@ export default {
         return this.value
       },
       set (newVal) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.value = newVal
+        this.$emit('input', newVal)
       }
     }
   },

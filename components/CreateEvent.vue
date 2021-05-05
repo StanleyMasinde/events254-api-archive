@@ -9,6 +9,7 @@
           <!-- Step one -->
           <v-stepper-step step="1" :complete="currentStep > 1">
             Event type
+            <small>Is it physical or online?</small>
           </v-stepper-step>
 
           <v-stepper-content step="1">
@@ -39,6 +40,7 @@
           <!-- Step two -->
           <v-stepper-step step="2" :complete="currentStep > 2">
             Event name
+            <small>Eg. Introduction to online trading</small>
           </v-stepper-step>
 
           <v-stepper-content step="2">
@@ -64,6 +66,7 @@
           <!-- Step three -->
           <v-stepper-step step="3" :complete="currentStep > 3">
             Describe event
+            <small>Agenda? Charges or anything relevant</small>
           </v-stepper-step>
 
           <v-stepper-content step="3">
@@ -81,8 +84,9 @@
           <!--/ Step three -->
 
           <!-- Step Four -->
-          <v-stepper-step step="4">
+          <v-stepper-step step="4" :complete="currentStep > 4">
             Event location
+            <small>Where is the event? Share a link where necessary</small>
           </v-stepper-step>
 
           <v-stepper-content step="4">
@@ -137,28 +141,83 @@
           <!--/ Step Four -->
 
           <!-- Step five -->
-          <v-stepper-step step="5">
+          <v-stepper-step step="5" :complete="currentStep > 4">
             Event date and time
+            <small>When is the event?</small>
           </v-stepper-step>
 
           <v-stepper-content step="5">
             <v-row>
-              <v-col cols="12" md="6">
-                <DateInput
-                  v-model="event.from_date"
-                  name="from_date"
-                  label="Starting date"
-                />
+              <!-- Start date -->
+              <v-col class="my-1" cols="12" md="6">
+                <ValidationProvider
+                  rules="required"
+                >
+                  <DateInput
+                    v-model="event.start_date"
+                    name="start_date"
+                    label="Starting date"
+                  />
+                </ValidationProvider>
               </v-col>
-              <v-col cols="12" md="6">
-                <TimeInput
-                  v-model="event.from_time"
-                  label="Starting time"
-                  input-name="from_time"
-                />
+
+              <!-- Start time -->
+              <v-col cols="12" md="6" class="my-1">
+                <ValidationProvider
+                  rules="required"
+                >
+                  <TimeInput
+                    v-model="event.start_time"
+                    label="Starting time"
+                    input-name="start_time"
+                  />
+                </ValidationProvider>
+              </v-col>
+
+              <!-- End date -->
+              <v-col>
+                <ValidationProvider
+                  rules="required"
+                >
+                  <DateInput
+                    v-model="event.end_date"
+                    name="end_date"
+                    label="Starting date"
+                  />
+                </ValidationProvider>
+              </v-col>
+
+              <!-- End time -->
+              <v-col cols="12" md="6" class="my-1">
+                <ValidationProvider
+                  rules="required"
+                >
+                  <TimeInput
+                    v-model="event.end_time"
+                    label="Starting time"
+                    input-name="end_time"
+                  />
+                </ValidationProvider>
+              </v-col>
+              <v-col cols="12">
+                <v-btn
+                  :disabled="event.start_date === event.start_time"
+                  color="primary"
+                  @click="currentStep = 6"
+                >
+                  Next
+                </v-btn>
               </v-col>
             </v-row>
+          </v-stepper-content>
 
+          <!-- Step six -->
+          <v-stepper-step step="6" :complete="currentStep > 4">
+            Event poster
+            <small>Does the event have a poster/picture?</small>
+          </v-stepper-step>
+
+          <v-stepper-content step="6">
             <ValidationProvider v-slot="{ errors }" rules="required">
               <v-file-input
                 v-model="event.poster"
@@ -208,8 +267,8 @@ export default {
         online_link: null,
         about: null,
         description: null,
-        from_date: null,
-        from_time: null
+        start_date: null,
+        start_time: null
       }
     }
   },
@@ -222,8 +281,10 @@ export default {
     async createEvent () {
       const form = document.querySelector('#eventForm')
       const formData = new FormData(form)
-      formData.append('from_date', this.event.from_date)
-      formData.append('from_time', this.event.from_time)
+      formData.append('start_date', this.event.start_date)
+      formData.append('start_time', this.event.start_time)
+      formData.append('end_date', this.event.end_date)
+      formData.append('end_time', this.event.end_time)
       try {
         const { data } = await this.$axios.post(this.createUrl, formData)
         this.message.success = true

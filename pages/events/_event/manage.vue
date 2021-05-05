@@ -9,13 +9,24 @@
     </div>
     <template v-else>
       <v-row justify="center">
+        <v-col cols="12" md="8">
+          <v-btn depressed color="primary" rounded>
+            Publish your event
+          </v-btn>
+          <v-btn color="error" depressed rounded>
+            Delete event
+          </v-btn>
+          <v-btn rounded text :to="`/events/${$route.params.event}`">
+            View event
+          </v-btn>
+        </v-col>
         <v-col cols="12" lg="8">
           <v-tabs centered grow>
             <v-tab :to="`/events/${$route.params.event}/manage`">
               General information
             </v-tab>
             <v-tab :to="`/events/${$route.params.event}/manage/ticket`">
-              Ticket
+              Tickets
             </v-tab>
             <v-tab :to="`/events/${$route.params.event}/manage/rsvps`">
               RSVPs

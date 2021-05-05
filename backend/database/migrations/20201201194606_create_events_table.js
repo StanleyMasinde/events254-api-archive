@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.text('description')
     table.dateTime('startDate')
     table.dateTime('endDate')
+    table.boolean('published').defaultTo(1)
     table.bigInteger('organisable_id')
     table.string('organisable_type')
     table.timestamps(true, true)

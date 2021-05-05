@@ -7,6 +7,12 @@ const moment = require('moment-timezone')
   * @returns new Date()
   */
 const formatToDateTime = (fromTime, fromDate, timezone = 'Africa/Nairobi') => {
+  if (!fromTime) {
+    return
+  }
+  if (!fromDate) {
+    return
+  }
   /** Format the date */
   const fromTimeArray = fromTime.split(':')
   const fromDateArray = fromDate.split('-')

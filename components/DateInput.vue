@@ -8,7 +8,7 @@
     min-width="auto"
   >
     <template #activator="{ on, attrs }">
-      <ValidationProvider v-slot="{errors}" :name="label" rules="required">
+      <ValidationProvider v-slot="{ errors }" :name="label" rules="required">
         <v-text-field
           v-model="date"
           data-date-input
@@ -28,19 +28,10 @@
       :min="new Date().toISOString().substr(0, 10)"
     >
       <v-spacer />
-      <v-btn
-        text
-        color="primary"
-        @click="menu = false"
-      >
+      <v-btn text color="primary" @click="menu = false">
         Cancel
       </v-btn>
-      <v-btn
-        data-save-date
-        text
-        color="primary"
-        @click="$refs.menu.save(date)"
-      >
+      <v-btn data-save-date text color="primary" @click="$refs.menu.save(date)">
         OK
       </v-btn>
     </v-date-picker>
@@ -73,8 +64,7 @@ export default {
         return this.value
       },
       set (newVal) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.value = newVal
+        this.$emit('input', newVal)
       }
     }
   },

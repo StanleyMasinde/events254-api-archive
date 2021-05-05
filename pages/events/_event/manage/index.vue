@@ -1,26 +1,30 @@
 <template>
   <div class="mt-5">
-    <v-btn depressed color="primary" rounded>
-      Publish your event
-    </v-btn>
-    <v-btn text :to="`/events/${$route.params.event}`">
-      View event
-    </v-btn>
     <!-- Featured Image -->
     <h1 class="display-1">
       Featured image
     </h1>
-    <v-img :src="currentEvent.image" height="100" contain width="200" />
-    <ValidationProvider v-slot="{ errors }" rules="required">
-      <v-file-input
-        v-model="updatedEvent.poster"
-        :error-messages="errors"
-        name="image"
-        outlined
-        prepend-icon=""
-        label="Change featured image"
-      />
-    </ValidationProvider>
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-img :src="currentEvent.image" height="100" contain width="200" />
+      </v-col>
+      <v-col cols="12" md="6">
+        <ValidationProvider v-slot="{ errors }" rules="required">
+          <v-file-input
+            v-model="updatedEvent.poster"
+            :error-messages="errors"
+            name="image"
+            outlined
+            prepend-inner-icon="mdi-image-outline"
+            prepend-icon=""
+            label="Change featured image"
+          />
+          <v-btn rounded color="primary" depressed>
+            Update picture
+          </v-btn>
+        </ValidationProvider>
+      </v-col>
+    </v-row>
     <!-- About information -->
     <h1 class="display-1">
       About event
@@ -40,7 +44,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment-timezone'
 export default {
   data () {
     return {
@@ -55,7 +58,7 @@ export default {
   computed: {
     eventData () {
       const [date] = new Date(this.currentEvent.from).toLocaleString().split(',')
-      const m = moment(this.currentEvent.from)
+      const m = this.$moment(this.currentEvent.from)
       const fromTime = `${m.hours()}:${m.minutes()}`
       return {
         type: this.currentEvent.type,

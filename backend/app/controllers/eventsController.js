@@ -74,8 +74,8 @@ class EventsController extends Controller {
         about: 'required',
         location: 'required',
         description: 'required',
-        from_date: 'required',
-        from_time: 'required'
+        start_date: 'required',
+        start_time: 'required'
       })
         .validate()
 
@@ -84,9 +84,9 @@ class EventsController extends Controller {
 
       // The data is valid
       // eslint-disable-next-line camelcase
-      const { from_date, from_time, location, online_link, about, description } = body
-      const startDate = formatToDateTime(from_time, from_date)
-      const endDate = null // TODO Add this field
+      const { start_date, start_time, end_date, end_time, location, online_link, about, description } = body
+      const startDate = formatToDateTime(start_time, start_date)
+      const endDate = formatToDateTime(end_time, end_date) // TODO Add this field
       // eslint-disable-next-line camelcase
       const organisable_id = user.id // The authenticated user's ID
       // eslint-disable-next-line camelcase
@@ -110,14 +110,14 @@ class EventsController extends Controller {
         return this.response('Model not found', 404)
       }
       e.organiser = await this.getEventOrganiser(e)
-      delete e.organisable_id
-      delete e.organisable_type
       const u = await request.user()
       if (!u) { // No user in session
         e.can_edit = false
         return this.response(e)
       }
       e.can_edit = canEditEvent(e, u)
+      delete e.organisable_id
+      delete e.organisable_type
       e.currentUserTicket = await DB('event_rsvps')
         .join('tickets', 'event_rsvps.ticket_id', '=', 'tickets.id')
         .where({
@@ -125,6 +125,13 @@ class EventsController extends Controller {
           'event_rsvps.user_id': u.id
         })
         .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
+
+      e.attendees = await DB('event_rsvps')
+        .join('users', 'event_rsvps.user_id', '=', 'users.id')
+        .where({
+          'event_rsvps.event_id': e.id
+        })
+        .select('users.name AS name', 'users.bio AS bio')
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)
@@ -150,9 +157,9 @@ class EventsController extends Controller {
           from_time: 'required'
         }).validate()
         // eslint-disable-next-line camelcase
-        const { from_date, from_time, location, about, description } = body
-        const startDate = formatToDateTime(from_time, from_date)
-        const endDate = null
+        const { start_date, start_time, end_date, end_time, location, about, description } = body
+        const startDate = formatToDateTime(start_time, start_date)
+        const endDate = formatToDateTime(end_time, end_date)
         const res = await currentEvent.update({ location, about, description, startDate, endDate }) // Payload is valid
         return this.response(res, 201) // Looks good
       } catch (error) {

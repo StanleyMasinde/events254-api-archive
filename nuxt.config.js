@@ -135,6 +135,13 @@ module.exports = {
           required: false,
           type: false
         },
+        cookie: {
+          prefix: 'auth.',
+          options: {
+            path: '/',
+            maxAge: 365 * 24 * 60 * 60 * 1000
+          }
+        },
         endpoints: {
           login: { url: '/api/auth/login', method: 'POST' },
           logout: { url: '/api/auth/logout', method: 'post' },

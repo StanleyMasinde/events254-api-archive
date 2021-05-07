@@ -1,67 +1,67 @@
 <template>
   <div class="calendar-container">
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${today.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ today.date() }}
       </div>
       <div class="day">
         {{ days[today.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusOne.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusOne.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusOne.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusTwo.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusTwo.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusTwo.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusThree.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusThree.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusThree.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusFour.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusFour.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusFour.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusFive.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusFive.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusFive.day()] }}
       </div>
-    </div>
+    </router-link>
 
-    <div class="date-container">
+    <router-link :to="`/calendar?date=${todayPlusSix.toISOString().substr(0, 10)}`" tag="div" class="date-container">
       <div class="date">
         {{ todayPlusSix.date() }}
       </div>
       <div class="day">
         {{ days[todayPlusSix.day()] }}
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 <script>

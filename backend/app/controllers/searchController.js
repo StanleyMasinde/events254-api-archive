@@ -1,4 +1,5 @@
 const { DB } = require('mevn-orm')
+const moment = require('moment-timezone')
 const Controller = require('./controller')
 
 class SearchController extends Controller {
@@ -28,6 +29,24 @@ class SearchController extends Controller {
       })
     } catch (error) {
       response.status(500).json(error)
+    }
+  }
+
+  /**
+   * Handle the calendar filter
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async calendar (req, res) {
+    const startDate = moment(req.query.date).toISOString()
+    const endDate = moment(req.query.date).add(1, 'day').toISOString()
+    try {
+      const events = await DB('events')
+        .whereBetween('startDate', [startDate, endDate]).limit(100)
+
+      res.json(events)
+    } catch (error) {
+      res.status(500).json(new Error().message)
     }
   }
 }

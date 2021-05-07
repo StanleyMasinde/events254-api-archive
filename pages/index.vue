@@ -148,7 +148,7 @@ export default {
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get('/api/p/events?paginate=6')
+      const { data } = await this.$axios.get('/api/events?paginate=6')
       this.eventsObject = data
     } catch (error) {
       throw new Error(error)

@@ -17,9 +17,10 @@ const authenticated = require('../app/middleware/authenticated')
  * This route is used to get all events from the database
  * --------------------------------------------------------
  */
-// router.get('/', (req, res) => {
-//  res.json('All events')
-// })
+router.get('/', async (req, res) => {
+  const { message, status } = await EventsController.index(req)
+  res.status(status).json(message)
+})
 
 /**
  * -----------------------------------------------------------------------------

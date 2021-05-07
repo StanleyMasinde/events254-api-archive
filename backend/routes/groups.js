@@ -2,6 +2,7 @@ const fs = require('fs')
 const router = require('express').Router()
 const multer = require('multer')
 const GroupController = require('../app/controllers/groupController')
+const authenticated = require('../app/middleware/authenticated')
 
 /**
  * -----------------------------------------------------------------
@@ -98,6 +99,15 @@ router.delete('/:slug', async (req, res) => {
   } catch (error) {
     res.status(500).json(error)
   }
+})
+
+/**
+ * --------------------------
+ * User joins a group
+ *-----------------------------
+ */
+router.post('/:slug/join', authenticated(), (req, res) => {
+  GroupController.join(req, res)
 })
 
 /**

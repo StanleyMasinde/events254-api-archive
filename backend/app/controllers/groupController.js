@@ -69,8 +69,9 @@ class GroupController extends Controller {
         const m = await group.memberCount()
         group.organisers = await group.organisers()
         group.memberCount = m.members
-        group.organisers.map(o => delete o.password)
         group.isManager = canManageGroup(group, u)
+        group.isMember = await group.isMember(u)
+        group.organisers.map(o => delete o.password)
         return this.response(group)
       }
       return this.response('Group not found', 404)
@@ -280,6 +281,27 @@ class GroupController extends Controller {
       return this.response('Deleted')
     } catch (error) {
       return this.response(error, 500)
+    }
+  }
+
+  /**
+   * User joins a group
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async join (req, res) {
+    try {
+      const group = await DB('groups').where('slug', req.params.slug).first()
+      const user = await req.user()
+
+      await DB('group_user').insert({
+        user_id: user.id,
+        group_id: group.id
+      })
+
+      res.status(201).json('')
+    } catch (error) {
+      res.status(500).json(error)
     }
   }
 

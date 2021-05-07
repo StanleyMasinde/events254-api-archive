@@ -66,6 +66,23 @@ class Group extends Model {
       .join('users', 'group_user.user_id', '=', 'users.id')
       .count('users.id AS members').first()
   }
+
+  /**
+   * Determine if the current user is a member
+   *
+   */
+  async isMember (user) {
+    if (!user) {
+      return false
+    }
+
+    const exists = await DB('group_user').where({
+      user_id: user.id,
+      group_id: this.id
+    }).first()
+
+    return exists
+  }
 }
 
 module.exports = Group

@@ -48,134 +48,29 @@
               {{ getGroupMangersString(group.organisers) }}
             </h3>
           </v-card-text>
-          <v-card-actions v-if="group.isManager">
-            <!-- Edit group button -->
-            <v-btn data-edit-group depressed color="primary" @click="editDialog = true">
-              <v-icon>mdi-pencil-outline</v-icon>
-              Edit info
-            </v-btn>
-
-            <!-- Delete group dialog -->
+          <v-card-actions v-if="!group.isManager">
             <v-btn
+              v-if="!group.isMember"
               depressed
-              outlined
-              color="error"
-              @click="deleteDialog = true"
+              large
+              rounded
+              color="primary"
+              @click="joinGroup"
             >
-              <v-icon>mdi-delete</v-icon>
-              Delete group
+              Join this group
             </v-btn>
-
-            <!-- The modal to edit a group -->
-            <v-dialog v-model="editDialog" width="500">
-              <v-card>
-                <v-card-title>
-                  <h1 class="headline">
-                    Editing {{ group.name }}
-                  </h1>
-                </v-card-title>
-                <v-card-text>
-                  <ValidationObserver ref="formObserver" v-slot="{ invalid }">
-                    <v-form id="groupForm" @submit.prevent="updateGroup">
-                      <ValidationProvider
-                        ref="form"
-                        v-slot="{ errors }"
-                        name="picture"
-                        rules=""
-                      >
-                        <v-file-input
-                          v-model="group.picture"
-                          name="picture"
-                          :error-messages="errors"
-                          accept="image/*"
-                          label="Your group image"
-                          hint="Not required"
-                          outlined
-                        />
-                      </ValidationProvider>
-
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        name="name"
-                        rules="required"
-                      >
-                        <v-text-field
-                          v-model="group.name"
-                          name="name"
-                          :error-messages="errors"
-                          label="Name your group"
-                          outlined
-                        />
-                      </ValidationProvider>
-
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        name="description"
-                        rules="required"
-                      >
-                        <v-textarea
-                          v-model="group.description"
-                          name="description"
-                          :error-messages="errors"
-                          outlined
-                          label="What is your group about?"
-                        />
-                      </ValidationProvider>
-
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        name="country"
-                        rules="required"
-                      >
-                        <v-text-field
-                          v-model="group.country"
-                          name="country"
-                          :error-messages="errors"
-                          readonly
-                          label="Country"
-                          outlined
-                        />
-                      </ValidationProvider>
-
-                      <ValidationProvider
-                        v-slot="{ errors }"
-                        name="city"
-                        rules="required"
-                      >
-                        <v-text-field
-                          v-model="group.city"
-                          name="city"
-                          :error-messages="errors"
-                          outlined
-                          label="City"
-                        />
-                      </ValidationProvider>
-                      <v-btn type="submit" color="primary" :disabled="invalid">
-                        Update
-                      </v-btn>
-                    </v-form>
-                  </ValidationObserver>
-                </v-card-text>
-                <v-card-text />
-              </v-card>
-            </v-dialog>
-
-            <!-- The modal dialog to delete a group -->
-            <v-dialog v-model="deleteDialog" origin="bottom right" width="500">
-              <v-card>
-                <v-card-title> Delete Confirmation </v-card-title>
-                <v-card-text>
-                  <h2>Are your sure you want to delete {{ group.name }}?</h2>
-                  <h3>This action is irreversible</h3>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn color="error" depressed @click="deleteGroup">
-                    Yes delete
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <v-btn
+              v-else
+              text
+              depressed
+              large
+              rounded
+              color="primary"
+            >
+              You are a member of this group
+            </v-btn>
           </v-card-actions>
+          <EditGroupDialog v-else :current-group="group" />
         </v-card>
       </v-col>
       <v-col class="sticky-top" cols="12" md="8">
@@ -207,7 +102,9 @@
   </v-container>
 </template>
 <script>
+import EditGroupDialog from '~/components/EditGroupDialog.vue'
 export default {
+  components: { EditGroupDialog },
   auth: false,
   data () {
     return {
@@ -228,35 +125,25 @@ export default {
     }
   },
   methods: {
+    async joinGroup () {
+      if (!this.$auth.loggedIn) {
+        this.$store.state.auth.redirect = this.$router.path
+        this.$router.push('/login')
+      }
+
+      try {
+        await this.$axios.post(`/api/groups/${this.group.slug}/join`)
+        this.$router.go()
+      } catch (error) {
+        throw new Error(error)
+      }
+    },
     getGroupMangersString (organisers) {
       if (!organisers[0]) {
         return 'N/A'
       }
-
       // const remaining = organisers.pop()
       return `${organisers[0].name} and ${organisers.length - 1} others`
-    },
-    async deleteGroup () {
-      try {
-        await this.$axios.delete(`/api/groups/${this.$route.params.group}`)
-        this.$router.push('/')
-      } catch (error) {
-        throw new Error(error)
-      }
-    },
-    async updateGroup () {
-      const form = document.querySelector('#groupForm')
-      const groupData = new FormData(form)
-      try {
-        const { data } = await this.$axios.put(
-          `/api/groups/${this.$route.params.group}`,
-          groupData
-        )
-        this.$router.push(data.slug)
-        // this.$fetch()
-      } catch (error) {
-        throw new Error(error)
-      }
     }
   }
 }

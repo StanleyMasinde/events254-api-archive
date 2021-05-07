@@ -38,8 +38,8 @@ class SearchController extends Controller {
    * @param {import('express').Response} res
    */
   async calendar (req, res) {
-    const startDate = moment(req.query.date).toISOString()
-    const endDate = moment(req.query.date).add(1, 'day').toISOString()
+    const startDate = moment(req.query.date).tz('Africa/Nairobi').toISOString()
+    const endDate = moment(req.query.date).tz('Africa/Nairobi').add(1, 'day').toISOString()
     try {
       const events = await DB('events')
         .whereBetween('startDate', [startDate, endDate]).limit(100)

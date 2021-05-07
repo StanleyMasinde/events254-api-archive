@@ -55,6 +55,17 @@ class Group extends Model {
       .join('users', 'group_user.user_id', '=', 'users.id')
       .select('users.id AS userId', 'users.name', 'users.bio', 'group_user.created_at AS memberSince')
   }
+
+  /**
+   * Get the member count
+   * @returns
+   */
+  async memberCount () {
+    return await DB('group_user')
+      .where('group_id', this.id)
+      .join('users', 'group_user.user_id', '=', 'users.id')
+      .count('users.id AS members').first()
+  }
 }
 
 module.exports = Group

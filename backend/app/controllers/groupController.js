@@ -15,7 +15,7 @@ class GroupController extends Controller {
    * By default, these results will paginated when the app grows
   * @returns {Object} A collection of users
   */
-  async index() {
+  async index () {
     try {
       return this.response(await Group.all())
     } catch (error) {
@@ -29,7 +29,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async create(request) {
+  async create (request) {
     const { body, file } = request
     try {
       const user = await request.user() // The current user
@@ -57,7 +57,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns Group
    */
-  async show(request) {
+  async show (request) {
     const { params, user } = request
     const u = await user()
     try {
@@ -66,7 +66,9 @@ class GroupController extends Controller {
       }).first()
 
       if (group) {
+        const m = await group.memberCount()
         group.organisers = await group.organisers()
+        group.memberCount = m.members
         group.organisers.map(o => delete o.password)
         group.isManager = canManageGroup(group, u)
         return this.response(group)
@@ -82,7 +84,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async update(request) {
+  async update (request) {
     const { body, params, file } = request
 
     try {
@@ -111,7 +113,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async delete(request) {
+  async delete (request) {
     const group = await Group.where({
       slug: request.params.slug
     }).first()
@@ -128,7 +130,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async currentUser(request) {
+  async currentUser (request) {
     const { user } = request
     try {
       const u = await user()
@@ -148,7 +150,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async members(request) {
+  async members (request) {
     const slug = request.params.slug
     try {
       const group = await Group.where({
@@ -164,7 +166,7 @@ class GroupController extends Controller {
    * List all group events
    * @param {Express.Request} request
    */
-  async groupEvents(request) {
+  async groupEvents (request) {
     const filter = request.query.filter
     const { slug } = request.params
     try {
@@ -193,7 +195,7 @@ class GroupController extends Controller {
    * Create a new event
    * @param {Express.Request} request
    */
-  async createEvent(request) {
+  async createEvent (request) {
     const { body, file, params } = request
     const group = await Group.where({ slug: params.slug }).first()
 
@@ -231,7 +233,7 @@ class GroupController extends Controller {
    * Update a given event
    * @param {Express.Request} request
    */
-  async updateEvent(request) {
+  async updateEvent (request) {
     const { body, params } = request
     const { event, slug } = params // The the event Id
     const group = await Group.where({ slug }).first() // The current user
@@ -262,7 +264,7 @@ class GroupController extends Controller {
    * Delete a given event
    * @param {Express.Request} request
    */
-  async deleteEvent(request) {
+  async deleteEvent (request) {
     const { params } = request
     // The the event Id
     const { event } = params
@@ -286,7 +288,7 @@ class GroupController extends Controller {
    * @param {Array} body
    * @returns Promise
    */
-  validate(body) {
+  validate (body) {
     return new Validator(body, {
       name: 'required',
       description: 'required'

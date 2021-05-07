@@ -42,10 +42,10 @@
               <v-icon>mdi-map-marker</v-icon> {{ group.city }},
               {{ group.country }}
             </h3>
-            <h3><v-icon>mdi-account-group</v-icon> Members 0</h3>
+            <h3><v-icon>mdi-account-group</v-icon> Members {{ group.memberCount }}</h3>
             <h3>
               <v-icon>mdi-account</v-icon> Managed by
-              {{ group.organisers[0] ? group.organisers[0].name : 'N/A' }}
+              {{ getGroupMangersString(group.organisers) }}
             </h3>
           </v-card-text>
           <v-card-actions v-if="group.isManager">
@@ -228,6 +228,14 @@ export default {
     }
   },
   methods: {
+    getGroupMangersString (organisers) {
+      if (!organisers[0]) {
+        return 'N/A'
+      }
+
+      // const remaining = organisers.pop()
+      return `${organisers[0].name} and ${organisers.length - 1} others`
+    },
     async deleteGroup () {
       try {
         await this.$axios.delete(`/api/groups/${this.$route.params.group}`)

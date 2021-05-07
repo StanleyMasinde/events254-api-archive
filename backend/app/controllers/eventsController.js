@@ -15,7 +15,7 @@ class EventsController extends Controller {
   /**
    * GET all the events. This route is very unnecessary for normal users
    * IT will be usefull for debugging though
-   * @param {*} request
+   * @param {import('express').Request} request
    */
   async index (request) {
     // TODO add pagination

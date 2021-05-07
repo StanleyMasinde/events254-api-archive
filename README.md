@@ -61,10 +61,17 @@ SECURE=false
 |`/:event/tickets/:ticket`  | DELETE | Delete a ticket                  | *N/A*               |
 |`/:event/register`         | POST   | Register for an event            | *RSVP Body*         |
 
+> Event pagination
+
+| Path                                           | Method | Description                                                  |
+|:-----------------------------------------------|:-------|:-------------------------------------------------------------|
+|`/events/?paginate={perPage}&page={pageNumber}` | GET    | `perPage` = records per page. `pageNumber` = the page number |
+
 
 To get events without auth see below for public routes
 
-Route prefix `/p/`
+### To be removed use `/events` instead
+Route prefix `/p/` 
 | Path        | Method | Description          |
 |:------------|:-------|:--------------------:|
 |`/events`    | GET    | Get all the events   |

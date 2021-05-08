@@ -27,6 +27,11 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   name: 'events254_session',
+  cookie: {
+    maxAge: 365 * 24 * 60 * 60 * 1000,
+    sameSite: 'lax',
+    secure: 'auto'
+  },
   store: process.env.NODE_ENV === 'testing'
     ? null
     : sessionstore.createSessionStore({

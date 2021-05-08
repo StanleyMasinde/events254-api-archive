@@ -127,19 +127,14 @@ module.exports = {
      */
   auth: {
     strategies: {
-      local: {
+      cookie: {
         user: {
           property: 'user'
         },
-        token: {
-          required: false,
-          type: false
-        },
         cookie: {
-          prefix: 'auth.',
           options: {
-            path: '/',
-            maxAge: 365 * 24 * 60 * 60 * 1000
+            maxAge: 365 * 24 * 60 * 60 * 1000,
+            expires: 365 * 24 * 60 * 60 * 1000
           }
         },
         endpoints: {

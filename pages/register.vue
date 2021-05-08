@@ -68,7 +68,7 @@ export default {
     async register () {
       try {
         await this.$axios.post('/api/auth/register', this.user)
-        await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('cookie', {
           data: this.user
         })
         this.$router.push(this.$store.state.auth.redirect || '/home')

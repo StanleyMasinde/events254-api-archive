@@ -95,7 +95,7 @@ export default {
         currency: 'KES',
         country: 'KE',
         payment_options: 'card, mobilemoneykenya, ussd',
-        redirect_url: `http://localhost:3000/events/${this.$route.params.event}`,
+        redirect_url: `${process.env.APP_URL}/events/${this.$route.params.event}`,
         meta: {
           eventId: this.$route.params.event,
           ticketId: this.eventRsvp.ticket.id,

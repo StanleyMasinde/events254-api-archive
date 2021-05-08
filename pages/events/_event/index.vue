@@ -82,15 +82,7 @@
                   <v-icon>mdi-share</v-icon>
                 </v-btn>
                 <template v-if="!currentEvent.currentUserTicket">
-                  <v-btn
-                    v-if="!currentEvent.can_edit"
-                    rounded
-                    depressed
-                    color="primary"
-                    @click="showRegistrationDialog"
-                  >
-                    Register for this event
-                  </v-btn>
+                  <BuyTicket v-if="!currentEvent.can_edit" />
                 </template>
                 <template v-else>
                   You are going
@@ -117,54 +109,10 @@
       </v-col>
     </v-row>
     <!-- End of event body -->
-
-    <v-dialog
-      v-if="!currentEvent.currentUserTicket"
-      v-model="registerDialog"
-      width="400"
-    >
-      <v-card>
-        <v-card-title>Register for event</v-card-title>
-        <v-card-text>
-          <v-form>
-            <v-select
-              v-model="eventRsvp.ticket"
-              label="Select ticket"
-              outlined
-              :items="ticks"
-            />
-            <v-text-field
-              v-model="eventRsvp.rsvp_count"
-              readonly
-              append-outer-icon="mdi-plus"
-              prepend-icon="mdi-minus"
-              type="number"
-              min="0"
-              label="How many tickets?"
-              outlined
-              @click:append-outer="eventRsvp.rsvp_count++"
-              @click:prepend="
-                eventRsvp.rsvp_count > 1 ? eventRsvp.rsvp_count-- : ''
-              "
-            />
-            Order total:
-            {{
-              formatCurrency(
-                eventRsvp.ticket.price * eventRsvp.rsvp_count
-              )
-            }}
-            <v-btn color="primary" block @click="confirmOrder">
-              Confirm order
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 <script>
 export default {
-  auth: false,
   data () {
     return {
       availableTickets: [],
@@ -186,6 +134,12 @@ export default {
       throw new Error(error)
     }
   },
+  head () {
+    return {
+      title: this.currentEvent.about || 'Events254',
+      script: [{ src: 'https://checkout.flutterwave.com/v3.js' }]
+    }
+  },
   computed: {
     organiserLink () {
       const organiser = this.currentEvent.organiser
@@ -193,29 +147,27 @@ export default {
         return `/u/${organiser.id}`
       }
       return `/${organiser.slug}`
-    },
-    ticks () {
-      return this.availableTickets.map((t) => {
-        return {
-          text: `${t.type} - ${this.formatCurrency(t.price)}`,
-          value: t
-        }
-      })
     }
   },
+  mounted () {
+    if (this.$route.query.status) {
+      const transactionId = this.$route.query.transaction_id
+      this.verifyTransaction(transactionId)
+    }
+  },
+  auth: false,
   methods: {
-    async confirmOrder () {
+    async verifyTransaction (transactionID) {
       try {
+        const { data } = await this.$axios.get(`/api/payments/verify/${transactionID}`)
         await this.$axios.post(
           `/api/events/${this.$route.params.event}/register`,
           {
-            ticket_id: this.eventRsvp.ticket.id,
-            rsvp_count: this.eventRsvp.rsvp_count
+            ticket_id: data.data.meta.ticketId,
+            rsvp_count: data.data.meta.ticketCount
           }
         )
         this.$router.push('/home/tickets')
-        // TODO I honestly don't know what to do here
-        // I will just close the Modal for now
       } catch (error) {
         throw new Error(error)
       }
@@ -226,23 +178,6 @@ export default {
         return `${firstName.split('')[0]}`
       }
       return `${firstName.split('')[0]}${lastName.split('')[0]}`
-    },
-    formatCurrency (value = 0) {
-      return Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'kes'
-      }).format(value)
-    },
-    async showRegistrationDialog () {
-      if (!this.$auth.loggedIn) {
-        this.$store.state.auth.redirect = this.$router.path
-        this.$router.push('/login')
-      }
-      this.registerDialog = true
-      const { data } = await this.$axios.get(
-        `/api/events/${this.$route.params.event}/tickets`
-      )
-      this.availableTickets = data
     }
   }
 }

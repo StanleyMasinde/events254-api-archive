@@ -1,6 +1,6 @@
 {
   "name": "events254",
-  "version": "0.1.11",
+  "version": "0.1.14",
   "private": true,
   "description": "An application for event organisers in Kenya.",
   "main": "app.js",

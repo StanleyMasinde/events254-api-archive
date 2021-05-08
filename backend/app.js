@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
@@ -10,6 +11,7 @@ const authRouter = require('./routes/auth')
 const eventsRouter = require('./routes/events')
 const searchRouter = require('./routes/search')
 const ticketRouter = require('./routes/tickets')
+const paymentsRouter = require('./routes/payments')
 const auth = require('./app/auth/auth')
 
 const app = express()
@@ -46,6 +48,7 @@ app.use('/auth', authRouter)
 app.use('/events', eventsRouter)
 app.use('/search', searchRouter)
 app.use('/tickets', ticketRouter)
+app.use('/payments', paymentsRouter)
 app.use('/p', publicRouter)
 
 if (process.env.NODE_ENV === 'api') {

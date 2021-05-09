@@ -90,7 +90,9 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Auth
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    // Site maps module
+    '@nuxtjs/sitemap'
   ],
   // Vuetify config
   vuetify: {
@@ -151,6 +153,13 @@ module.exports = {
         }
       ]
     }
+  },
+  /**
+   * Sitemap
+   * https://sitemap.nuxtjs.org/guide/configuration
+   */
+  sitemap: {
+    // options
   },
   /*
      ** Axios module configuration

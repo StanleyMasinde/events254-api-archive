@@ -11,6 +11,8 @@ module.exports = {
   // disable ssr
   // ssr: false,
 
+  target: 'static',
+
   // Vue router
   router: {
     middleware: ['auth']
@@ -113,6 +115,24 @@ module.exports = {
         family: 'Poppins'
       },
       icons: 'mdi'
+    }
+  },
+
+  /**
+   * PWA options
+   *
+   */
+  pwa: {
+    meta: {
+      name: 'Events254',
+      theme_color: '#49c5b6',
+      ogDescription: 'Events254 is an application for event organisers and anyone who is looking for something to do',
+      ogHost: 'events.opensource254.co.ke',
+      twitterCard: 'summary',
+      twitterSite: '@stanleymasinde_'
+    },
+    manifest: {
+      name: 'Events254'
     }
   },
   /*

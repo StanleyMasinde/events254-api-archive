@@ -137,7 +137,14 @@ export default {
   head () {
     return {
       title: this.currentEvent.about || 'Events254',
-      script: [{ src: 'https://checkout.flutterwave.com/v3.js' }]
+      script: [{ src: 'https://checkout.flutterwave.com/v3.js' }],
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.event.description || 'Loading group'
+        }
+      ]
     }
   },
   computed: {

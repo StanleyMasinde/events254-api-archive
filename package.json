@@ -1,8 +1,8 @@
 {
   "name": "events254",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "private": true,
-  "description": "An application for event organisers in Kenya.",
+  "description": "Events254 is an application for event organisers and anyone who is looking for something to do",
   "main": "app.js",
   "keywords": [
     "Events",
@@ -50,7 +50,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.6.0",
     "nodemailer-pug-engine": "^2.0.1",
-    "nuxt": "^2.15.4",
+    "nuxt": "^2.15.5",
     "pdfkit": "^0.11.0",
     "redis": "^3.1.2",
     "sessionstore": "^0.4.8",

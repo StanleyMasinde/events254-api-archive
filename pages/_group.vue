@@ -121,7 +121,14 @@ export default {
   },
   head () {
     return {
-      title: this.group.name
+      title: this.group.name,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.group.description || 'Loading group'
+        }
+      ]
     }
   },
   methods: {

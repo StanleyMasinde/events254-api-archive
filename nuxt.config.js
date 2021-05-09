@@ -133,6 +133,23 @@ module.exports = {
     },
     manifest: {
       name: 'Events254'
+    },
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: '/api/events/.*',
+          strategyOptions: {
+            cacheName: 'events-cache'
+          },
+          strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+        }
+      ]
     }
   },
   /*

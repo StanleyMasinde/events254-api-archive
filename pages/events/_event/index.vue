@@ -142,7 +142,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.event.description || 'Loading group'
+          content: this.currentEvent.description || 'Loading group'
         }
       ]
     }

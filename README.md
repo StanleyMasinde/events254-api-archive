@@ -6,9 +6,6 @@
 2. npm install
 3. npm run dev --spa
 
-## E2E testing
-This project uses [Cypress](https://cypress.io) for testing. You can see more on their [docs](https://docs.cypress.io)
-
 ## API only develoment
 If by any chance you might need to only run the api server alone you can do that by running the following
 `yarn dev:api` or `npm run dev:api`.

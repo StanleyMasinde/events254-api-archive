@@ -27,6 +27,11 @@ module.exports = {
     '/api': '~/backend/app.js'
   },
 
+  /**
+   * modern property
+   */
+  modern: 'server',
+
   /** Page transition */
   pageTransition: 'page',
 

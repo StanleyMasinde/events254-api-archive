@@ -19,6 +19,15 @@ module.exports = {
   },
 
   /**
+   * The loading indicator
+   */
+  loadingIndicator: {
+    name: 'rectangle-bounce',
+    color: '#3B8070',
+    background: 'white'
+  },
+
+  /**
    * server middleware
    * This is where the backend routes go
    *

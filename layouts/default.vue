@@ -106,7 +106,7 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
-      <nuxt />
+      <nuxt keep-alive />
     </v-main>
   </v-app>
 </template>

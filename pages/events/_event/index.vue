@@ -61,10 +61,18 @@
                 Location: {{ currentEvent.location || "Online" }}
               </v-card-text>
               <template v-if="currentEvent.attendees">
-                <v-card-text v-if="currentEvent.attendees.length > 0" class="body-1">
+                <v-card-text
+                  v-if="currentEvent.attendees.length > 0"
+                  class="body-1"
+                >
                   <h5>Attendees</h5>
                   <div class="stacked-av">
-                    <v-avatar v-for="(a,i) in currentEvent.attendees" :key="i" :title="a.name" color="brown">
+                    <v-avatar
+                      v-for="(a, i) in currentEvent.attendees"
+                      :key="i"
+                      :title="a.name"
+                      color="brown"
+                    >
                       <span>{{ innitials(a.name) }}</span>
                     </v-avatar>
                   </div>
@@ -120,7 +128,10 @@ export default {
         ticket: {},
         rsvp_count: 1
       },
-      currentEvent: {},
+      currentEvent: {
+        about: null,
+        organiser: { name: null }
+      },
       registerDialog: false
     }
   },
@@ -137,7 +148,56 @@ export default {
   head () {
     return {
       title: this.currentEvent.about || 'Events254',
-      script: [{ src: 'https://checkout.flutterwave.com/v3.js' }],
+      script: [
+        { src: 'https://checkout.flutterwave.com/v3.js' },
+        {
+          type: 'application/ld+json',
+          json: {
+            '@context': 'https://schema.org',
+            '@type': 'Event',
+            name: this.currentEvent.about,
+            startDate: this.currentEvent.startDate,
+            endDate: this.currentEvent.endDate,
+            eventStatus: 'https://schema.org/EventScheduled',
+            eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+            location: {
+              '@type': 'Place',
+              name: this.currentEvent.location,
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: '37 Westlands road',
+                addressLocality: 'Nairobi',
+                postalCode: '30100',
+                addressRegion: 'KE',
+                addressCountry: 'KE'
+              }
+            },
+            // location: {
+            //   '@type': 'VirtualLocation',
+            //   url: 'https://operaonline.stream5.com/'
+            // },
+            image: [`${this.currentEvent.image}`],
+            description: this.currentEvent.description,
+            offers: {
+              '@type': 'Offer',
+              url: `https://www.example.com/${this.currentEvent.id}`,
+              price: '300',
+              priceCurrency: 'KES',
+              availability: 'https://schema.org/InStock',
+              validFrom: '2024-05-21T12:00'
+            },
+            performer: {
+              '@type': 'PerformingGroup',
+              name: 'Kira and Morrison'
+            },
+            organizer: {
+              '@type': 'Organization',
+              name: this.currentEvent.organiser.name,
+              url: `${this.organiserLink}`
+            }
+          }
+        }
+      ],
       meta: [
         {
           hid: 'description',
@@ -166,7 +226,9 @@ export default {
   methods: {
     async verifyTransaction (transactionID) {
       try {
-        const { data } = await this.$axios.get(`/api/payments/verify/${transactionID}`)
+        const { data } = await this.$axios.get(
+          `/api/payments/verify/${transactionID}`
+        )
         await this.$axios.post(
           `/api/events/${this.$route.params.event}/register`,
           {
@@ -191,19 +253,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .custom-dark {
-  filter: opacity(40)!important;
+  filter: opacity(40) !important;
 }
 .v-avatar {
-    margin-right: -25px!important;
-    border:1px solid #fafafa!important;
+  margin-right: -25px !important;
+  border: 1px solid #fafafa !important;
 
-    &:hover {
-      z-index: 5;
-    }
+  &:hover {
+    z-index: 5;
   }
+}
 div {
   &.stacked-av {
-    display: flex!important;
+    display: flex !important;
     overflow: scroll;
   }
 }

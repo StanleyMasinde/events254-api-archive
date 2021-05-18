@@ -52,7 +52,7 @@
                   eventRsvp.ticket.price * eventRsvp.rsvp_count
                 )
               }}
-              <v-btn :disabled="invalid" color="primary" block @click="makePayment">
+              <v-btn :disabled="invalid" color="primary" block @click="confirmOrder">
                 Confirm order
               </v-btn>
             </v-form>
@@ -86,41 +86,6 @@ export default {
     }
   },
   methods: {
-    makePayment () {
-      const rand = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-      window.FlutterwaveCheckout({
-        public_key: process.env.FLUTTERWAVE_PUBLIC_KEY,
-        tx_ref: `event-${this.$route.params.event}-user-${this.$auth.user.id}${rand}`,
-        amount: 1,
-        currency: 'KES',
-        country: 'KE',
-        payment_options: 'card, mobilemoneykenya, ussd',
-        redirect_url: `${process.env.APP_URL}/events/${this.$route.params.event}`,
-        meta: {
-          eventId: this.$route.params.event,
-          ticketId: this.eventRsvp.ticket.id,
-          ticketCount: this.eventRsvp.rsvp_count
-        },
-        customer: {
-          email: this.$auth.user.email,
-          phone_number: null,
-          name: this.$auth.user.name
-        },
-        onclose () {
-          // window.pay
-        },
-        callback (data) {
-          if (data.status === 'successful') {
-            this.confirmOrder()
-          }
-        },
-        customizations: {
-          title: 'Ticket purchase',
-          description: 'Ticket purchase from events254',
-          logo: 'https://events.opensource254.co.ke/icon.png'
-        }
-      })
-    },
     async confirmOrder () {
       try {
         await this.$axios.post(

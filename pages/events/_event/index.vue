@@ -149,7 +149,6 @@ export default {
     return {
       title: this.currentEvent.about || 'Events254',
       script: [
-        { src: 'https://checkout.flutterwave.com/v3.js' },
         {
           type: 'application/ld+json',
           json: {

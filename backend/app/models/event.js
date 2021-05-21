@@ -20,8 +20,8 @@ class Event extends Model {
     const lastPage = parseInt(records[0]['count(*)'] / paginate)
     const events = await DB(this.tableName())
       .where('startDate', '>', new Date())
+      .where('id', '>', offset)
       .limit(paginate)
-      .offset(offset)
       .select()
     return {
       events, lastPage

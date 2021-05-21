@@ -9,6 +9,7 @@ class SearchController extends Controller {
    * @param {import('express').Response} response
    */
   async index (request, response) {
+    // TODO midularize this search
     const query = request.query.q
     const eventsTable = DB('events')
     const groupsTable = DB('groups')
@@ -16,13 +17,14 @@ class SearchController extends Controller {
     try {
       const events = await eventsTable.where('about', 'like', `%${query}%`)
         .orWhere('description', 'like', `%${query}%`)
-        .select('id', 'about', 'startDate', 'image').limit(10)
+        .orWhere('location', 'like', `%${query}%`)
+        .select('id', 'about', 'startDate', 'image').limit(30)
 
       const groups = await groupsTable.where('name', 'like', `%${query}%`)
         .orWhere('description', 'like', `%${query}%`)
-        .limit(10)
+        .limit(30)
 
-      const users = await usersTable.where('name', 'like', `%${query}%`).limit(10)
+      const users = await usersTable.where('name', 'like', `%${query}%`).limit(30)
 
       response.json({
         events, groups, users
@@ -38,8 +40,9 @@ class SearchController extends Controller {
    * @param {import('express').Response} res
    */
   async calendar (req, res) {
-    const startDate = moment(req.query.date).tz('Africa/Nairobi').toISOString()
-    const endDate = moment(req.query.date).tz('Africa/Nairobi').add(1, 'day').toISOString()
+    // TODO add timezone
+    const startDate = moment(req.query.date).toISOString()
+    const endDate = moment(req.query.date).add(1, 'day').toISOString()
     try {
       const events = await DB('events')
         .whereBetween('startDate', [startDate, endDate]).limit(100)

@@ -18,7 +18,7 @@ class SearchController extends Controller {
       const events = await eventsTable.where('about', 'like', `%${query}%`)
         .orWhere('description', 'like', `%${query}%`)
         .orWhere('location', 'like', `%${query}%`)
-        .select('id', 'about', 'startDate', 'image').limit(30)
+        .select('id', 'about', 'startDate', 'image', 'location').limit(50)
 
       const groups = await groupsTable.where('name', 'like', `%${query}%`)
         .orWhere('description', 'like', `%${query}%`)

@@ -14,17 +14,18 @@ class Event extends Model {
    * @param {Number} paginate
    * @param {Number} offset
    */
-  static async landingPage (paginate = 15, page = 0) {
-    const offset = paginate * page
-    const records = await DB(this.tableName()).count()
-    const lastPage = parseInt(records[0]['count(*)'] / paginate)
+  static async landingPage (paginate = 15, page = 1) {
+    const offset = (paginate - 1) * page
+    const records = await DB(this.tableName()).where('startDate', '>', new Date()).count('id as recordCount')
+    const remaining = parseInt(records[0].recordCount / paginate) - (page * (paginate))
+    const lastPage = parseInt(records[0].recordCount / paginate)
     const events = await DB(this.tableName())
       .where('startDate', '>', new Date())
       .limit(paginate)
       .offset(offset)
       .select()
     return {
-      events, lastPage
+      events, lastPage, remaining
     }
   }
 }

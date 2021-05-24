@@ -93,7 +93,7 @@
     <v-row justify="center">
       <v-col cols="12" md="4">
         <v-btn
-          v-if="!noMoreEvents"
+          v-if="eventsObject.nextPageUrl === 'null'"
           large
           color="primary"
           block

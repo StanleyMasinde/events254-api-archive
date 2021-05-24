@@ -1,5 +1,4 @@
 const Validator = require('mevn-validator')
-const moment = require('moment-timezone')
 const { DB } = require('mevn-orm')
 const pluralize = require('pluralize')
 const Event = require('../models/event')
@@ -23,39 +22,33 @@ class EventsController extends Controller {
       let events = []
       if (request.query.paginate) {
         const eventsObject = await Event.landingPage(request.query.paginate, request.query.page)
+        const currentPage = request.query.page || 1
         events = eventsObject.events
-        // eslint-disable-next-line no-var
-        var lastPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
-      } else {
-        events = await Event.all() // TODO deprecate this
-      }
-      const mapped = events.map((e) => {
-        return {
-          id: e.id,
-          image: e.image,
-          about: e.about,
-          location: e.location,
-          online_link: e.online_link,
-          description: e.description,
-          startDate: e.startDate,
-          endDate: e.endDate,
-          start: moment(e.startDate).tz('Africa/Nairobi').toLocaleString(),
-          end: moment(e.endDate).tz('Africa/Nairobi').toLocaleString(),
-          created_at: e.created_at,
-          updated_at: e.updated_at
+        let lastPageUrl
+        let nextPageUrl
+        if (eventsObject.lastPage === 0) {
+          lastPageUrl = null
+        } else {
+          lastPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
         }
-      })
-      if (request.query.paginate) {
-        const currentPage = request.query.page || 0
-        const nextPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
+
+        if (eventsObject.remaining <= 0) {
+          nextPageUrl = null
+        } else {
+          nextPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
+        }
+
         return this.response({
           currentPage,
           nextPageUrl,
           lastPageUrl,
-          events: mapped
+          remaining: eventsObject.remaining, // TODO for debugging only
+          events
         })
+      } else {
+        events = await Event.all() // TODO deprecate this
       }
-      return this.response(mapped)
+      return this.response(events)
     } catch (error) {
       return this.response(error, 500)
     }

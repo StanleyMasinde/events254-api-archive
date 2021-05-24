@@ -75,7 +75,7 @@ const auth = () => {
             try {
               const tk = await DB.table('personal_access_tokens')
                 .where({ token, tokenable_type: guard }).first()
-              const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'username', 'email', 'bio', 'created_at', 'updated_at'])
+              const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'name', 'username', 'email', 'bio', 'created_at', 'updated_at'])
               return u
             } catch (e) {
               return e // TODO handle this error properly

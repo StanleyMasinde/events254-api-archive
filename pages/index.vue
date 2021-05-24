@@ -93,7 +93,7 @@
     <v-row justify="center">
       <v-col cols="12" md="4">
         <v-btn
-          v-if="eventsObject.nextPageUrl === 'null'"
+          v-if="eventsObject.nextPageUrl != null"
           large
           color="primary"
           block
@@ -148,7 +148,7 @@ export default {
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get('/api/events?paginate=6')
+      const { data } = await this.$axios.get('/api/events?paginate=50')
       this.eventsObject = data
     } catch (error) {
       throw new Error(error)

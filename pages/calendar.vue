@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <NavigatorBar />
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-row>

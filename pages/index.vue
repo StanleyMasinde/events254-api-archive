@@ -50,7 +50,10 @@
       </v-col>
     </v-row>
 
-    <v-row justify="center">
+    <FetchLoading v-if="$fetchState.pending" landing-page />
+    <FetchError v-else-if="$fetchState.error" />
+
+    <v-row v-else justify="center">
       <v-col cols="12" md="8">
         <v-row>
           <v-col cols="12">

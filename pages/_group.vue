@@ -1,29 +1,7 @@
 <template>
   <v-container>
-    <!-- Still loading the group information -->
-    <v-row v-if="$fetchState.pending" justify="center">
-      <h1>Loading</h1>
-    </v-row>
-
-    <!-- Something went wrong! 😭 -->
-    <v-row v-else-if="$fetchState.error">
-      <div class="full-height">
-        <v-img height="300" contain src="/not_found.svg">
-          <v-container>
-            <v-row justify="center">
-              <v-col cols="12" md="8">
-                <h1 class="display-1 gray--text">
-                  Sorry 😢 There's nothing here
-                </h1>
-                <v-btn text x-large color="primary" to="/">
-                  Go home
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-img>
-      </div>
-    </v-row>
+    <FetchLoading v-if="$fetchState.pending" event-page />
+    <FetchError v-else-if="$fetchState.error" />
 
     <!-- We found the group 😎 -->
     <v-row v-else>

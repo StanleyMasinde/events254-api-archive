@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "nuxt start --spa",
+    "start": "nuxt start",
     "dev": "DEBUG=express:* nuxt",
     "dev:api": "DEBUG=express:* NODE_ENV=api nodemon api/app.js",
     "pretest": "NODE_ENV=production knex migrate:latest",

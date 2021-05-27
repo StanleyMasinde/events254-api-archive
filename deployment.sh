@@ -15,4 +15,4 @@ echo "Building for production"
 npm run build -- -q
 
 echo "Restarting the process"
-pm2 restart ecosystem.config.js
+#pm2 restart all

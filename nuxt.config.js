@@ -39,7 +39,7 @@ module.exports = {
   /**
    * modern property
    */
-  modern: 'server',
+  modern: false,
 
   /** Page transition */
   pageTransition: 'page',

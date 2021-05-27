@@ -8,98 +8,100 @@
       </v-toolbar-items>
       <v-spacer />
       <v-toolbar-items>
-        <v-menu
-          v-if="$auth.loggedIn"
-          bottom
-          nudge-top
-          min-width="200px"
-          rounded
-          offset-y
-        >
-          <template #activator="{ on }">
-            <v-btn
-              data-profile-menu
-              icon
-              x-large
-              v-on="on"
-            >
-              <v-avatar
-                color="brown"
-                size="48"
+        <client-only>
+          <v-menu
+            v-if="$auth.loggedIn"
+            bottom
+            nudge-top
+            min-width="200px"
+            rounded
+            offset-y
+          >
+            <template #activator="{ on }">
+              <v-btn
+                data-profile-menu
+                icon
+                x-large
+                v-on="on"
               >
-                <span class="white--text headline">{{ innitials }}</span>
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-list-item-content class="justify-center">
-              <div class="mx-auto text-center">
                 <v-avatar
                   color="brown"
+                  size="48"
                 >
                   <span class="white--text headline">{{ innitials }}</span>
                 </v-avatar>
-                <h3>{{ $auth.user.name }}</h3>
-                <p class="caption mt-1">
-                  {{ $auth.user.email }}
-                </p>
-                <v-divider class="my-3" />
-                <v-btn
-                  to="/"
-                  depressed
-                  rounded
-                  text
-                >
-                  Home
-                </v-btn>
-                <v-divider class="my-3" />
-                <v-btn
-                  to="/home"
-                  depressed
-                  rounded
-                  text
-                >
-                  My account
-                </v-btn>
-                <v-divider class="my-3" />
-                <v-btn
-                  data-start-your-group
-                  to="/groups/create"
-                  depressed
-                  rounded
-                  text
-                >
-                  Start your group
-                </v-btn>
-                <v-divider class="my-3" />
+              </v-btn>
+            </template>
+            <v-card>
+              <v-list-item-content class="justify-center">
+                <div class="mx-auto text-center">
+                  <v-avatar
+                    color="brown"
+                  >
+                    <span class="white--text headline">{{ innitials }}</span>
+                  </v-avatar>
+                  <h3>{{ $auth.user.name }}</h3>
+                  <p class="caption mt-1">
+                    {{ $auth.user.email }}
+                  </p>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    to="/"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Home
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    to="/home"
+                    depressed
+                    rounded
+                    text
+                  >
+                    My account
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    data-start-your-group
+                    to="/groups/create"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Start your group
+                  </v-btn>
+                  <v-divider class="my-3" />
 
-                <v-btn
-                  to="/events/create"
-                  depressed
-                  rounded
-                  text
-                >
-                  Create event
-                </v-btn>
-                <v-divider class="my-3" />
-                <v-btn
-                  color="error"
-                  depressed
-                  rounded
-                  text
-                  @click="$auth.logout()"
-                >
-                  Logout
-                </v-btn>
-              </div>
-            </v-list-item-content>
-          </v-card>
-        </v-menu>
-        <template v-else>
-          <v-btn text link to="/login">
-            Login
-          </v-btn>
-        </template>
+                  <v-btn
+                    to="/events/create"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Create event
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    color="error"
+                    depressed
+                    rounded
+                    text
+                    @click="$auth.logout()"
+                  >
+                    Logout
+                  </v-btn>
+                </div>
+              </v-list-item-content>
+            </v-card>
+          </v-menu>
+          <template v-else>
+            <v-btn text link to="/login">
+              Login
+            </v-btn>
+          </template>
+        </client-only>
       </v-toolbar-items>
     </v-app-bar>
     <v-main>

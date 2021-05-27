@@ -175,7 +175,7 @@ module.exports = {
    * https://sitemap.nuxtjs.org/guide/configuration
    */
   sitemap: {
-    // options
+    hostname: 'https://events254.co.ke'
   },
   /*
      ** Axios module configuration

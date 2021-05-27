@@ -103,7 +103,9 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-main>
-      <nuxt />
+      <client-only>
+        <nuxt />
+      </client-only>
     </v-main>
   </v-app>
 </template>

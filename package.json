@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "nuxt start --spa",
+    "start": "nuxt start",
     "dev": "cross-env DEBUG=express:* nuxt",
     "dev:api": "cross-env DEBUG=express:* NODE_ENV=api nodemon backend/app.js",
     "pretest": "knex migrate:latest --env production",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.13.1",
+    "@nuxt/http": "^0.6.4",
     "@nuxtjs/auth-next": "^5.0.0-1613647907.37b1156",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/dotenv": "^1.4.1",

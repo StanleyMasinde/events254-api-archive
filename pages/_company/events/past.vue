@@ -62,10 +62,10 @@ export default {
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get(
+      const res = await this.$http.get(
         `/api/groups/${this.$route.params.company}/events?filter=past`
       )
-      this.eventsObject = data
+      this.eventsObject = await res.json()
     } catch (error) {
       throw new Error(error)
     }

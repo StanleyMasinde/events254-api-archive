@@ -151,8 +151,8 @@ export default {
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get('/api/events?paginate=50')
-      this.eventsObject = data
+      const data = await this.$http.get('/api/events?paginate=6')
+      this.eventsObject = await data.json()
     } catch (error) {
       throw new Error(error)
     }

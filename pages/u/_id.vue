@@ -46,7 +46,6 @@
 </template>
 <script>
 export default {
-  auth: false,
   data () {
     return {
       user: {}
@@ -54,12 +53,18 @@ export default {
   },
   async fetch () {
     try {
-      const { data } = await this.$axios.get(`/api/users/${this.$route.params.id}`)
-      this.user = data
+      const res = await this.$http.get(`/api/users/${this.$route.params.id}`)
+      this.user = await res.json()
     } catch (error) {
       throw new Error(error)
     }
   },
+  head () {
+    return {
+      title: this.user.name || 'Events254'
+    }
+  },
+  auth: false,
   computed: {
     innitials () {
       if (!this.user.name) {

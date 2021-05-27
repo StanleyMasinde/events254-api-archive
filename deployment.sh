@@ -12,7 +12,7 @@ echo "Running the latest migrations"
 npx knex migrate:latest --env production
 
 echo "Building for production"
-npm run build -- -q --spa --no-generate
+npm run build -- -q
 
 echo "Please remember to restart your PM2"
 # pm2 restart ecosystem.config.js

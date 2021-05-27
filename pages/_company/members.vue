@@ -76,14 +76,14 @@ export default {
     }
   },
   async fetch () {
-    const { data } = await this.$axios.get(
+    const company = await this.$http.get(
       `/api/groups/${this.$route.params.company}`
     )
-    const members = await this.$axios.get(
+    const members = await this.$http.get(
       `/api/groups/${this.$route.params.company}/members`
     )
-    this.members = members.data
-    this.group = data
+    this.members = await members.json()
+    this.group = await company.json()
   },
   head () {
     return {

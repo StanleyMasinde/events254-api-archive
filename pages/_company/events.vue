@@ -41,10 +41,10 @@ export default {
     }
   },
   async fetch () {
-    const { data } = await this.$axios.get(
+    const res = await this.$http.get(
       `/api/groups/${this.$route.params.company}`
     )
-    this.group = data
+    this.group = await res.json()
   },
   head () {
     return {

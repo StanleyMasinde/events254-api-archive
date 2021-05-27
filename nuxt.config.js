@@ -106,7 +106,9 @@ module.exports = {
     // Auth
     '@nuxtjs/auth-next',
     // Site maps module
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    // HTTP module
+    '@nuxt/http'
   ],
   // Vuetify config
   vuetify: {

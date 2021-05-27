@@ -99,9 +99,6 @@
           <v-btn text link to="/login">
             Login
           </v-btn>
-          <v-btn text link to="/register">
-            Register
-          </v-btn>
         </template>
       </v-toolbar-items>
     </v-app-bar>

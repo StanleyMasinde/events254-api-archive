@@ -100,6 +100,26 @@
 </template>
 <script>
 export default {
-  auth: false
+  auth: false,
+  head () {
+    return {
+      title: 'Terms and conditions',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Terms and conditions for events254'
+        },
+        {
+          property: 'og:title',
+          content: 'Terms and conditions'
+        },
+        {
+          property: 'og:description',
+          content: 'Terms and conditions for events254'
+        }
+      ]
+    }
+  }
 }
 </script>

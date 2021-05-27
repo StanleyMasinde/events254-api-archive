@@ -118,6 +118,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     try {
       const data = await this.$http.get(
         `/api/events/${this.$route.params.event}`
@@ -129,7 +132,7 @@ export default {
   },
   head () {
     return {
-      title: this.currentEvent.about || 'Events254',
+      title: this.currentEvent.about,
       script: [
         {
           type: 'application/ld+json',
@@ -181,9 +184,21 @@ export default {
       ],
       meta: [
         {
-          hid: 'description',
           name: 'description',
           content: this.currentEvent.description || 'Loading group'
+        },
+        {
+          property: 'og:title',
+          content: this.currentEvent.about
+        },
+        {
+          property: 'og:description',
+          content: this.currentEvent.description
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: this.currentEvent.image
         }
       ]
     }

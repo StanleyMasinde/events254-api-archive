@@ -61,6 +61,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     try {
       const res = await this.$http.get(
         `/api/groups/${this.$route.params.company}/events?filter=upcoming`

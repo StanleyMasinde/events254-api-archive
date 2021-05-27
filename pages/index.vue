@@ -150,6 +150,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     try {
       const data = await this.$http.get('/api/events?paginate=6')
       this.eventsObject = await data.json()

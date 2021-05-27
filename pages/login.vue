@@ -44,7 +44,19 @@ export default {
   head: {
     title: 'Sign in',
     meta: [
-      { hid: 'description', name: 'description', content: 'Login into your account' }
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Login into your Events254 account'
+      },
+      {
+        property: 'og:title',
+        content: 'Sign in'
+      },
+      {
+        property: 'og:description',
+        content: 'Login into your Events254 account'
+      }
     ]
   },
   methods: {

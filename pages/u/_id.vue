@@ -52,6 +52,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     try {
       const res = await this.$http.get(`/api/users/${this.$route.params.id}`)
       this.user = await res.json()
@@ -61,7 +64,17 @@ export default {
   },
   head () {
     return {
-      title: this.user.name || 'Events254'
+      title: this.user.name || 'Events254',
+      meta: [
+        {
+          property: 'og:title',
+          content: this.user.name
+        },
+        {
+          property: 'og:description',
+          content: this.user.bio || this.user.name
+        }
+      ]
     }
   },
   auth: false,

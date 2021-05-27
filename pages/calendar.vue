@@ -61,8 +61,11 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     try {
-      const { data } = await this.$axios.get(
+      const { data } = await this.$http.get(
         `/api/search/calendar?date=${this.$route.query.date}`
       )
       this.events = data

@@ -46,6 +46,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     const { data } = await this.$axios.get(
       `/api/events/${this.$route.params.event}`
     )

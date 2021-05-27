@@ -52,8 +52,11 @@ export default {
     }
   },
   async fetch () {
-    const { data } = await this.$axios.get(`/api/events/${this.$route.params.event}`)
-    this.currentEvent = data
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
+    const data = await this.$http.get(`/api/events/${this.$route.params.event}`)
+    this.currentEvent = await data.json()
   },
   computed: {
     eventData () {

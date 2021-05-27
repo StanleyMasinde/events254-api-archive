@@ -92,6 +92,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     const res = await this.$http.get(
       `/api/groups/${this.$route.params.group}`
     )
@@ -105,6 +108,23 @@ export default {
           hid: 'description',
           name: 'description',
           content: this.group.description || 'Loading group'
+        },
+        {
+          name: 'description',
+          content: this.group.description || 'Loading group'
+        },
+        {
+          property: 'og:title',
+          content: this.group.name
+        },
+        {
+          property: 'og:description',
+          content: this.group.description
+        },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: this.group.pictureUrl
         }
       ]
     }

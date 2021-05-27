@@ -60,9 +60,9 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || ''
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://res.cloudinary.com/streetcoder/image/upload/v1622115318/events254/icon_v52vzr.png'
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]

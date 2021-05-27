@@ -206,6 +206,26 @@
 </template>
 <script>
 export default {
-  auth: false
+  auth: false,
+  head () {
+    return {
+      title: 'Privacy Policy',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Privacy policy for events254'
+        },
+        {
+          property: 'og:title',
+          content: 'Privacy policy'
+        },
+        {
+          property: 'og:description',
+          content: 'Privacy policy for events254'
+        }
+      ]
+    }
+  }
 }
 </script>

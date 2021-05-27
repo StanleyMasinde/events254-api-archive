@@ -76,6 +76,9 @@ export default {
     }
   },
   async fetch () {
+    if (process.client) {
+      this.$http.setBaseURL(process.env.APP_URL)
+    }
     const company = await this.$http.get(
       `/api/groups/${this.$route.params.company}`
     )

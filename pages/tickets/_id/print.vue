@@ -28,17 +28,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-div {
-  &.page {
-    width: 21cm;
-    min-height: 29.7cm;
-    padding: 2cm;
-    margin: 1cm auto;
-    border: 1px #d3d3d3 solid;
-    border-radius: 5px;
-    background: white;
-    box-shadow: 0 0 5px #0000001a;
-  }
-}
-</style>

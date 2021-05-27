@@ -61,8 +61,21 @@ export default {
   head: {
     title: 'Sign up',
     meta: [
-      { hid: 'description', name: 'description', content: 'Create a new account' }
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Create your free Events254 account today'
+      },
+      {
+        property: 'og:title',
+        content: 'Sign up'
+      },
+      {
+        property: 'og:description',
+        content: 'Create your free Events254 account today'
+      }
     ]
+
   },
   methods: {
     async register () {

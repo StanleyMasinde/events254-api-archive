@@ -1,82 +1,84 @@
 <template>
   <v-container>
-    <FetchLoading v-if="$fetchState.pending" event-page />
-    <FetchError v-else-if="$fetchState.error" />
+    <client-only>
+      <FetchLoading v-if="$fetchState.pending" event-page />
+      <FetchError v-else-if="$fetchState.error" />
 
-    <!-- We found the group 😎 -->
-    <v-row v-else>
-      <v-col cols="12" md="8">
-        <v-img height="300" :src="group.pictureUrl" />
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card outlined>
-          <v-card-title>
-            <h1 class="display-1">
-              {{ group.name }}
-            </h1>
-          </v-card-title>
-          <v-card-text>
-            <h3>
-              <v-icon>mdi-map-marker</v-icon> {{ group.city }},
-              {{ group.country }}
-            </h3>
-            <h3><v-icon>mdi-account-group</v-icon> Members {{ group.memberCount }}</h3>
-            <h3>
-              <v-icon>mdi-account</v-icon> Managed by
-              {{ getGroupMangersString(group.organisers) }}
-            </h3>
-          </v-card-text>
-          <v-card-actions v-if="!group.isManager">
-            <v-btn
-              v-if="!group.isMember"
-              depressed
-              large
-              rounded
-              color="primary"
-              @click="joinGroup"
-            >
-              Join this group
-            </v-btn>
-            <v-btn
-              v-else
-              text
-              depressed
-              large
-              rounded
-              color="primary"
-            >
-              You are a member of this group
-            </v-btn>
-          </v-card-actions>
-          <EditGroupDialog v-else :current-group="group" />
-        </v-card>
-      </v-col>
-      <v-col class="sticky-top" cols="12" md="8">
-        <v-tabs>
-          <v-tab>About</v-tab>
-          <v-tab :to="`/${$route.params.group}/events/all`">
-            Events
-          </v-tab>
-          <v-tab :to="`/${$route.params.group}/members`">
-            Members
-          </v-tab>
+      <!-- We found the group 😎 -->
+      <v-row v-else>
+        <v-col cols="12" md="8">
+          <v-img height="300" :src="group.pictureUrl" />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-card outlined>
+            <v-card-title>
+              <h1 class="display-1">
+                {{ group.name }}
+              </h1>
+            </v-card-title>
+            <v-card-text>
+              <h3>
+                <v-icon>mdi-map-marker</v-icon> {{ group.city }},
+                {{ group.country }}
+              </h3>
+              <h3><v-icon>mdi-account-group</v-icon> Members {{ group.memberCount }}</h3>
+              <h3>
+                <v-icon>mdi-account</v-icon> Managed by
+                {{ getGroupMangersString(group.organisers) }}
+              </h3>
+            </v-card-text>
+            <v-card-actions v-if="!group.isManager">
+              <v-btn
+                v-if="!group.isMember"
+                depressed
+                large
+                rounded
+                color="primary"
+                @click="joinGroup"
+              >
+                Join this group
+              </v-btn>
+              <v-btn
+                v-else
+                text
+                depressed
+                large
+                rounded
+                color="primary"
+              >
+                You are a member of this group
+              </v-btn>
+            </v-card-actions>
+            <EditGroupDialog v-else :current-group="group" />
+          </v-card>
+        </v-col>
+        <v-col class="sticky-top" cols="12" md="8">
+          <v-tabs>
+            <v-tab>About</v-tab>
+            <v-tab :to="`/${$route.params.group}/events/all`">
+              Events
+            </v-tab>
+            <v-tab :to="`/${$route.params.group}/members`">
+              Members
+            </v-tab>
 
-          <v-tab-item>
-            <v-card flat>
-              <v-card-text class="body-1">
-                <h1 class="headline">
-                  About {{ group.name }}
-                </h1>
-                <p>
-                  {{ group.description }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs>
-        <nuxt-child />
-      </v-col>
-    </v-row>
+            <v-tab-item>
+              <v-card flat>
+                <v-card-text class="body-1">
+                  <h1 class="headline">
+                    About {{ group.name }}
+                  </h1>
+                  <p>
+                    {{ group.description }}
+                  </p>
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+          <nuxt-child />
+        </v-col>
+      </v-row>
+    </client-only>
   </v-container>
 </template>
 <script>

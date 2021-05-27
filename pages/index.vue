@@ -50,48 +50,50 @@
       </v-col>
     </v-row>
 
-    <FetchLoading v-if="$fetchState.pending" landing-page />
-    <FetchError v-else-if="$fetchState.error" />
+    <client-only>
+      <FetchLoading v-if="$fetchState.pending" landing-page />
+      <FetchError v-else-if="$fetchState.error" />
 
-    <v-row v-else justify="center">
-      <v-col cols="12" md="8">
-        <v-row>
-          <v-col cols="12">
-            <h3>Events near Nairobi</h3>
-          </v-col>
+      <v-row v-else justify="center">
+        <v-col cols="12" md="8">
+          <v-row>
+            <v-col cols="12">
+              <h3>Events near Nairobi</h3>
+            </v-col>
 
-          <v-col
-            v-for="(e, i) in eventsObject.events"
-            :key="i"
-            cols="12"
-            md="4"
-          >
-            <v-card
-              height="300"
-              outlined
-              :to="`/events/${e.id}`"
-              class="ma-2 no-overflow"
-              rounded
+            <v-col
+              v-for="(e, i) in eventsObject.events"
+              :key="i"
+              cols="12"
+              md="4"
             >
-              <v-img height="150" class="pa-3" :src="e.image">
-                <h1 class="white--text custom-shadow display-2">
-                  {{ new Date(e.startDate).getDate() }}
-                  {{ months[$moment(e.startDate).month()] }}
-                </h1>
-              </v-img>
-              <v-card-text class="body-2">
-                <p class="red--text">
-                  {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
-                </p>
-                <p :title="e.about">
-                  {{ e.about }}
-                </p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+              <v-card
+                height="300"
+                outlined
+                :to="`/events/${e.id}`"
+                class="ma-2 no-overflow"
+                rounded
+              >
+                <v-img height="150" class="pa-3" :src="e.image">
+                  <h1 class="white--text custom-shadow display-2">
+                    {{ new Date(e.startDate).getDate() }}
+                    {{ months[$moment(e.startDate).month()] }}
+                  </h1>
+                </v-img>
+                <v-card-text class="body-2">
+                  <p class="red--text">
+                    {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
+                  </p>
+                  <p :title="e.about">
+                    {{ e.about }}
+                  </p>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </client-only>
 
     <v-row justify="center">
       <v-col cols="12" md="4">

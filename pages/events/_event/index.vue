@@ -1,104 +1,106 @@
 <template>
   <v-container fluid>
-    <!-- Still loading the group information -->
-    <FetchLoading v-if="$fetchState.pending" event-page />
+    <client-only>
+      <!-- Still loading the group information -->
+      <FetchLoading v-if="$fetchState.pending" event-page />
 
-    <!-- Something went wrong! 😭 -->
-    <FetchError v-else-if="$fetchState.error" />
+      <!-- Something went wrong! 😭 -->
+      <FetchError v-else-if="$fetchState.error" />
 
-    <!-- Event body -->
-    <v-row v-else justify="center">
-      <v-col cols="12" md="10">
-        <p>
-          <span class="text--secondary">{{
-            $moment(currentEvent.startDate).format("MMMM Do YYYY [at] h:mm a")
-          }}</span>
-          <br>
-          <span class="text-h4 font-weight-bold">
-            {{ currentEvent.about }}
-          </span>
-        </p>
-      </v-col>
-      <v-col cols="12" md="10">
-        <v-row>
-          <v-col cols="12" md="8">
-            <v-img height="300" :src="currentEvent.image" />
-          </v-col>
-          <v-col class="sticky-top" cols="12" md="4">
-            <v-card outlined>
-              <v-card-text class="body-1">
-                <span
-                  class="red--text"
-                >From {{ $moment(currentEvent.startDate).format("LT") }} to
-                  {{ $moment(currentEvent.endDate).format("LT") }}
-                </span>
-                <br>
-                Event by:
-                <router-link :to="organiserLink">
-                  {{
-                    currentEvent.organiser ? currentEvent.organiser.name : "N/A"
-                  }}
-                </router-link>
-                <br>
-                Location: {{ currentEvent.location || "Online" }}
-              </v-card-text>
-              <template v-if="currentEvent.attendees">
-                <v-card-text
-                  v-if="currentEvent.attendees.length > 0"
-                  class="body-1"
-                >
-                  <h5>Attendees</h5>
-                  <div class="stacked-av">
-                    <v-avatar
-                      v-for="(a, i) in currentEvent.attendees"
-                      :key="i"
-                      :title="a.name"
-                      color="brown"
-                    >
-                      <span>{{ innitials(a.name) }}</span>
-                    </v-avatar>
-                  </div>
+      <!-- Event body -->
+      <v-row v-else justify="center">
+        <v-col cols="12" md="10">
+          <p>
+            <span class="text--secondary">{{
+              $moment(currentEvent.startDate).format("MMMM Do YYYY [at] h:mm a")
+            }}</span>
+            <br>
+            <span class="text-h4 font-weight-bold">
+              {{ currentEvent.about }}
+            </span>
+          </p>
+        </v-col>
+        <v-col cols="12" md="10">
+          <v-row>
+            <v-col cols="12" md="8">
+              <v-img height="300" :src="currentEvent.image" />
+            </v-col>
+            <v-col class="sticky-top" cols="12" md="4">
+              <v-card outlined>
+                <v-card-text class="body-1">
+                  <span
+                    class="red--text"
+                  >From {{ $moment(currentEvent.startDate).format("LT") }} to
+                    {{ $moment(currentEvent.endDate).format("LT") }}
+                  </span>
+                  <br>
+                  Event by:
+                  <router-link :to="organiserLink">
+                    {{
+                      currentEvent.organiser ? currentEvent.organiser.name : "N/A"
+                    }}
+                  </router-link>
+                  <br>
+                  Location: {{ currentEvent.location || "Online" }}
                 </v-card-text>
-              </template>
-              <v-card-actions>
-                <v-btn
-                  v-if="currentEvent.can_edit"
-                  text
-                  :to="`/events/${currentEvent.id}/manage`"
-                >
-                  Manage event
-                </v-btn>
-                <v-btn icon color="primary">
-                  <v-icon>mdi-share</v-icon>
-                </v-btn>
-                <template v-if="!currentEvent.currentUserTicket">
-                  <BuyTicket v-if="!currentEvent.can_edit" />
-                </template>
-                <template v-else>
-                  You are going
-                  <v-btn
-                    color="primary"
-                    depressed
-                    large
-                    rounded
-                    to="/home/tickets"
+                <template v-if="currentEvent.attendees">
+                  <v-card-text
+                    v-if="currentEvent.attendees.length > 0"
+                    class="body-1"
                   >
-                    View your tickets
-                  </v-btn>
+                    <h5>Attendees</h5>
+                    <div class="stacked-av">
+                      <v-avatar
+                        v-for="(a, i) in currentEvent.attendees"
+                        :key="i"
+                        :title="a.name"
+                        color="brown"
+                      >
+                        <span>{{ innitials(a.name) }}</span>
+                      </v-avatar>
+                    </div>
+                  </v-card-text>
                 </template>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="8">
-            <v-card flat>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <v-card-text class="body-1" v-html="currentEvent.description" />
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+                <v-card-actions>
+                  <v-btn
+                    v-if="currentEvent.can_edit"
+                    text
+                    :to="`/events/${currentEvent.id}/manage`"
+                  >
+                    Manage event
+                  </v-btn>
+                  <v-btn icon color="primary">
+                    <v-icon>mdi-share</v-icon>
+                  </v-btn>
+                  <template v-if="!currentEvent.currentUserTicket">
+                    <BuyTicket v-if="!currentEvent.can_edit" />
+                  </template>
+                  <template v-else>
+                    You are going
+                    <v-btn
+                      color="primary"
+                      depressed
+                      large
+                      rounded
+                      to="/home/tickets"
+                    >
+                      View your tickets
+                    </v-btn>
+                  </template>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="8">
+              <v-card flat>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <v-card-text class="body-1" v-html="currentEvent.description" />
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     <!-- End of event body -->
+    </client-only>
   </v-container>
 </template>
 <script>

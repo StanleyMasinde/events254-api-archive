@@ -9,12 +9,12 @@
     <template #activator="{ on, attrs }">
       <v-text-field
         v-model="time"
+        filled
+        rounded
         data-time-input
-        outlined
-        :label="label"
+        :placeholder="label"
         readonly
         v-bind="attrs"
-        type="time"
         v-on="on"
       />
     </template>

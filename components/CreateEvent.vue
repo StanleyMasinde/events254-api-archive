@@ -5,11 +5,26 @@
     </v-alert>
     <ValidationObserver ref="observer" v-slot="{ invalid }">
       <v-form id="eventForm" ref="form" @submit.prevent="createEvent">
-        <v-card flat hover outlined class="mb-2">
+        <v-card flat hover outlined style="width:100vw;" class="mb-2">
           <v-card-text>
             <v-text-field v-model="event.about" style="font-weight:700;" filled rounded placeholder="Title" />
-            <DateInput v-model="event.startDate" name="startDate" label="Start" value="" />
-            <DateInput v-model="event.endDate" name="endDate" label="End" value="" />
+            <v-row>
+              <v-col>
+                <DateInput v-model="event.startDate" name="startDate" label="Start" value="" />
+              </v-col>
+              <v-col>
+                <TimeInput v-model="event.startTime" name="startTime" />
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col>
+                <DateInput v-model="event.endDate" name="endDate" label="End" value="" />
+              </v-col>
+              <v-col>
+                <TimeInput v-model="event.startTime" name="endTime" />
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions class="text-right">
             <v-chip>All day</v-chip>

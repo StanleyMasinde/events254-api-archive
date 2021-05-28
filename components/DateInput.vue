@@ -1,76 +1,41 @@
 <template>
-  <v-menu
-    ref="menu"
-    v-model="menu"
-    :close-on-content-click="false"
-    transition="scale-transition"
-    offset-y
-    min-width="auto"
-  >
+  <v-menu v-model="isActive" :close-on-content-click="false" max-width="290">
     <template #activator="{ on, attrs }">
-      <ValidationProvider v-slot="{ errors }" :name="label" rules="required">
-        <v-text-field
-          v-model="date"
-          data-date-input
-          :error-messages="errors"
-          outlined
-          :label="label"
-          readonly
-          v-bind="attrs"
-          type="date"
-          v-on="on"
-        />
-      </ValidationProvider>
+      <v-text-field
+        filled
+        rounded
+        :value="computedDateFormattedMomentjs"
+        clearable
+        :placeholder="label"
+        readonly
+        v-bind="attrs"
+        v-on="on"
+        @click:clear="date = null"
+      />
     </template>
-    <v-date-picker
-      ref="picker"
-      v-model="date"
-      :min="new Date().toISOString().substr(0, 10)"
-    >
-      <v-spacer />
-      <v-btn text color="primary" @click="menu = false">
-        Cancel
-      </v-btn>
-      <v-btn data-save-date text color="primary" @click="$refs.menu.save(date)">
-        OK
-      </v-btn>
-    </v-date-picker>
+    <v-date-picker v-model="date" @change="isActive = false" />
   </v-menu>
 </template>
 <script>
 export default {
   props: {
-    name: {
-      type: String,
-      default: 'Date'
-    },
     label: {
       type: String,
       default: 'Date'
-    },
-    value: {
-      type: String,
-      default: ''
     }
   },
   data () {
     return {
-      menu: false
+      isActive: false,
+      date: ''
     }
   },
+
   computed: {
-    date: {
-      get () {
-        return this.value
-      },
-      set (newVal) {
-        this.$emit('input', newVal)
-      }
-    }
-  },
-  watch: {
-    date (newDate) {
-      this.$emit('input', newDate)
+    computedDateFormattedMomentjs () {
+      return this.date
+        ? this.$moment(this.date).format('dddd, MMMM Do YYYY')
+        : ''
     }
   }
 }

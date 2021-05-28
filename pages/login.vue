@@ -59,10 +59,18 @@ export default {
       }
     ]
   },
+  beforeCreate () {
+    if (this.$auth.loggedIn) {
+      const lastPath = this.$auth.$storage.getCookie('redirect')
+      this.$router.push(lastPath)
+    }
+  },
+  auth: 'guest',
   methods: {
     async login () {
       try {
         await this.$auth.loginWith('cookie', { data: this.cred })
+        this.$router.push()
       } catch (error) {
         if (error.response.status === 500) {
           throw new Error(error)

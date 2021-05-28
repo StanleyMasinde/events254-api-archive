@@ -1,204 +1,69 @@
 <template>
   <div>
-    <span class="subtitle text--secondary">
-      Describe your event
-    </span>
-    <div class="editor">
-      <editor-content auto-focus="true" class="editor__content" :editor="editor" />
-      <editor-menu-bar v-slot="{ commands, isActive }" :editor="editor">
-        <div class="menubar">
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.bold() }"
-            @click.prevent="commands.bold"
-          >
-            <v-icon>mdi-format-bold</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.italic() }"
-            @click.prevent="commands.italic"
-          >
-            <v-icon>mdi-format-italic</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.strike() }"
-            @click.prevent="commands.strike"
-          >
-            <v-icon>mdi-format-strikethrough</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.underline() }"
-            @click.prevent="commands.underline"
-          >
-            <v-icon>mdi-format-underline</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.code() }"
-            @click.prevent="commands.code"
-          >
-            <v-icon>mdi-code-tags</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.paragraph() }"
-            @click.prevent="commands.paragraph"
-          >
-            <v-icon>mdi-format-paragraph</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            @click.prevent="commands.heading({ level: 1 })"
-          >
-            <v-icon>mdi-format-header-1</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            @click.prevent="commands.heading({ level: 2 })"
-          >
-            <v-icon>mdi-format-header-2</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            @click.prevent="commands.heading({ level: 3 })"
-          >
-            <v-icon>mdi-format-header-3</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.bullet_list() }"
-            @click.prevent="commands.bullet_list"
-          >
-            <v-icon>mdi-format-list-bulleted</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.ordered_list() }"
-            @click.prevent="commands.ordered_list"
-          >
-            <v-icon>mdi-format-list-numbered</v-icon>
-          </button>
-
-          <button
-            class="menubar__button"
-            :class="{ 'is-active': isActive.blockquote() }"
-            @click.prevent="commands.blockquote"
-          >
-            <v-icon>mdi-format-quote-close-outline</v-icon>
-          </button>
-        </div>
-      </editor-menu-bar>
-      <textarea v-model="currentInput" hidden :name="name" />
-    </div>
+    <v-toolbar
+      v-if="editor"
+      outlined
+      rounded="15"
+      dense
+      elevation="0"
+    >
+      <v-toolbar-items>
+        <v-btn small icon :color="editor.isActive('bold')? 'primary' : ''" @click.prevent="editor.chain().focus().toggleBold().run()">
+          <v-icon>mdi-format-bold</v-icon>
+        </v-btn>
+        <v-btn small icon :color="editor.isActive('italic')? 'primary' : '' " @click.prevent="editor.chain().focus().toggleItalic().run()">
+          <v-icon>mdi-format-italic</v-icon>
+        </v-btn>
+        <v-btn small icon :color="editor.isActive('heading', { level: 2 }) ? 'primary' : ''" @click.prevent="editor.chain().focus().toggleHeading({ level: 2 }).run()">
+          <v-icon>mdi-format-header-2</v-icon>
+        </v-btn>
+        <v-btn small icon :color="editor.isActive('heading', { level: 3 }) ? 'primary' : ''" @click.prevent="editor.chain().focus().toggleHeading({ level: 3 }).run()">
+          <v-icon>mdi-format-header-3</v-icon>
+        </v-btn>
+        <v-btn icon small :color="editor.isActive('paragraph') ? 'primary' : ''" @click.prevent="editor.chain().focus().setParagraph().run()">
+          <v-icon>mdi-format-paragraph</v-icon>
+        </v-btn>
+        <v-btn icon small :color="editor.isActive('bulletList') ? 'primary' : ''" @click.prevent="editor.chain().focus().toggleBulletList().run()">
+          <v-icon>mdi-format-list-bulleted</v-icon>
+        </v-btn>
+        <v-btn icon small :color="editor.isActive('orderedList') ? 'primary' : ''" @click.prevent="editor.chain().focus().toggleOrderedList().run()">
+          <v-icon>mdi-format-list-numbered</v-icon>
+        </v-btn>
+        <v-btn icon small :color="editor.isActive('blockquote') ? 'primary' : ''" @click.prevent="editor.chain().focus().toggleBlockquote().run()">
+          <v-icon>mdi-format-quote-close</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <editor-content :editor="editor" />
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-import {
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  TodoList,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline,
-  History
-} from 'tiptap-extensions'
+import { Editor, EditorContent } from '@tiptap/vue-2'
+import StarterKit from '@tiptap/starter-kit'
 
 export default {
   components: {
-    EditorContent,
-    EditorMenuBar
+    EditorContent
   },
 
-  props: {
-    name: {
-      type: String,
-      default: 'description'
-    },
-    value: {
-      type: String,
-      default: 'Hahaha'
-    }
-  },
   data () {
     return {
-      currentInput: null,
-      editor: new Editor({
-        onUpdate: ({ getHTML }) => {
-          // get new content on update
-          this.currentInput = getHTML()
-          this.$emit('input', getHTML())
-        },
-        extensions: [
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading({ levels: [1, 2, 3] }),
-          new HorizontalRule(),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History()
-        ],
-        content: null
-      })
+      editor: null
     }
   },
+
+  mounted () {
+    this.editor = new Editor({
+      content: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      extensions: [
+        StarterKit
+      ]
+    })
+  },
+
   beforeDestroy () {
     this.editor.destroy()
   }
 }
 </script>
-<style lang="scss" scoped>
-div {
-  button{
-    &.is-active {
-      background-color: #49c5b6;
-      color: white!important;
-    }
-  }
-    .editor {
-        border: 1px solid #919191;
-        border-radius: 5px;
-        padding: 5px;
-    }
-    .menubar {
-        border-top: 1px solid #919191;
-    }
-}
-</style>

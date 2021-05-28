@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editordiv">
     <bubble-menu v-if="editor" :editor="editor">
       <v-toolbar outlined rounded="15" dense elevation="0">
         <v-toolbar-items>
@@ -145,8 +145,17 @@
 
 <script>
 import { Editor, EditorContent, BubbleMenu } from '@tiptap/vue-2'
-import StarterKit from '@tiptap/starter-kit'
-
+import Bold from '@tiptap/extension-bold'
+import Italics from '@tiptap/extension-italic'
+import Heading from '@tiptap/extension-heading'
+import Paragraph from '@tiptap/extension-paragraph'
+import OrderedList from '@tiptap/extension-ordered-list'
+import UnorderedList from '@tiptap/extension-bullet-list'
+import Quote from '@tiptap/extension-blockquote'
+import Strikethrough from '@tiptap/extension-strike'
+import Document from '@tiptap/extension-document'
+import Text from '@tiptap/extension-text'
+import ListItem from '@tiptap/extension-list-item'
 export default {
   components: {
     EditorContent,
@@ -158,11 +167,32 @@ export default {
       editor: null
     }
   },
-
   mounted () {
     this.editor = new Editor({
-      content: '<p>I’m running tiptap with Vue.js. 🎉</p>',
-      extensions: [StarterKit]
+      onUpdate: (d) => {
+        this.$emit('input', d.editor.getHTML())
+      },
+      autofocus: true,
+      content: '',
+      extensions: [
+        Bold,
+        Italics,
+        Heading.configure({
+          levels: [2, 3]
+        }),
+        Paragraph,
+        OrderedList,
+        UnorderedList,
+        Quote,
+        Strikethrough,
+        Document,
+        Text,
+        ListItem
+      ],
+      injectCSS: true,
+      parseOptions: {
+        preserveWhitespace: 'full'
+      }
     })
   },
 
@@ -181,5 +211,29 @@ ul {
 }
 .editor {
   margin-bottom: 13px;
+  padding-left: 13px;
+  padding-right: 13px;
+  caret-color: #49c5b6;
+}
+.editor::before {
+  content: "Description";
+  font-weight: 800;
+}
+.editor::placeholder {
+  content: "What is your event about?";
+}
+.editordiv {
+  background-color: rgba(0, 0, 0, 0.06);
+  background-position-x: 0%;
+  background-position-y: 0%;
+  background-repeat: repeat;
+  background-attachment: scroll;
+  background-image: none;
+  background-size: auto;
+  background-origin: padding-box;
+  background-clip: border-box;
+  border-radius: 15px;
+  padding-bottom: 2px;
+  margin-bottom: 5px;
 }
 </style>

@@ -5,12 +5,10 @@
         filled
         rounded
         :value="computedDateFormattedMomentjs"
-        clearable
         :placeholder="label"
         readonly
         v-bind="attrs"
         v-on="on"
-        @click:clear="date = null"
       />
     </template>
     <v-date-picker v-model="date" @change="isActive = false" />
@@ -30,12 +28,16 @@ export default {
       date: ''
     }
   },
-
   computed: {
     computedDateFormattedMomentjs () {
       return this.date
         ? this.$moment(this.date).format('dddd, MMMM Do YYYY')
         : ''
+    }
+  },
+  watch: {
+    date (newDate) {
+      this.$emit('input', newDate)
     }
   }
 }

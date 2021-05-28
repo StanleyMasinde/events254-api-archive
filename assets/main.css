@@ -14,6 +14,10 @@
   opacity: 0;
 }
 
+body {
+  line-height: inherit;
+}
+
 .ProseMirror [contenteditable="false"] {
   white-space: normal;
 }
@@ -23,7 +27,7 @@
 }
 
 [contenteditable] {
-  outline: 0px solid transparent;
+  outline: 2px solid transparent;
 }
 
 .custom-shadow {

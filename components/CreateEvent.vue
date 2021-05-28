@@ -7,9 +7,9 @@
       <v-form id="eventForm" ref="form" @submit.prevent="createEvent">
         <v-card flat hover outlined class="mb-2">
           <v-card-text>
-            <v-text-field filled rounded placeholder="Title" />
-            <DateInput name="startDate" label="Start" value="" />
-            <DateInput name="endDate" label="End" value="" />
+            <v-text-field v-model="event.about" style="font-weight:700;" filled rounded placeholder="Title" />
+            <DateInput v-model="event.startDate" name="startDate" label="Start" value="" />
+            <DateInput v-model="event.endDate" name="endDate" label="End" value="" />
           </v-card-text>
           <v-card-actions class="text-right">
             <v-chip>All day</v-chip>
@@ -18,19 +18,17 @@
         </v-card>
         <input autocomplete="address-level1">
 
-        <v-text-field autocomplete="address-level1" placeholder="Location" rounded filled prepend-inner-icon="mdi-map-marker" />
-        <client-only>
-          <RichEditor />
-        </client-only>
-        <!-- <v-textarea
-          rows="1"
-          auto-grow
+        <v-text-field
+          v-model="event.location"
           autocomplete="address-level1"
-          placeholder="Event description"
+          placeholder="Location"
           rounded
           filled
-          prepend-inner-icon="mdi-text-box-outline"
-        /> -->
+          prepend-inner-icon="mdi-map-marker"
+        />
+        <client-only>
+          <RichEditor v-model="event.description" />
+        </client-only>
         <v-btn large depressed rounded color="primary" :disabled="invalid">
           Next
         </v-btn>
@@ -59,8 +57,8 @@ export default {
         online_link: null,
         about: null,
         description: null,
-        start_date: null,
-        start_time: null
+        startDate: null,
+        startTime: null
       }
     }
   },
@@ -73,10 +71,10 @@ export default {
     async createEvent () {
       const form = document.querySelector('#eventForm')
       const formData = new FormData(form)
-      formData.append('start_date', this.event.start_date)
-      formData.append('start_time', this.event.start_time)
-      formData.append('end_date', this.event.end_date)
-      formData.append('end_time', this.event.end_time)
+      formData.append('startDate', this.event.start_date)
+      formData.append('startTime', this.event.start_time)
+      formData.append('endDate', this.event.end_date)
+      formData.append('endTime', this.event.end_time)
       try {
         const { data } = await this.$axios.post(this.createUrl, formData)
         this.message.success = true

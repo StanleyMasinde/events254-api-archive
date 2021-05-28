@@ -1,12 +1,16 @@
 <template>
-  <v-menu
+  <v-dialog
     ref="menu"
     :close-on-content-click="false"
     transition="scale-transition"
     offset-y
     min-width="auto"
+    max-width="290"
   >
     <template #activator="{ on, attrs }">
+      <div v-if="$vuetify.breakpoint.mobile">
+        <h6>{{ value || `Select ${label}` }}</h6>
+      </div>
       <v-text-field
         v-model="time"
         filled
@@ -39,7 +43,7 @@
         OK
       </v-btn>
     </v-time-picker>
-  </v-menu>
+  </v-dialog>
 </template>
 <script>
 export default {

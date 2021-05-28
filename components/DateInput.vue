@@ -1,6 +1,9 @@
 <template>
-  <v-menu v-model="isActive" :close-on-content-click="false" max-width="290">
+  <v-dialog v-model="isActive" :close-on-content-click="false" max-width="290">
     <template #activator="{ on, attrs }">
+      <div v-if="$vuetify.breakpoint.mobile">
+        <h6>{{ computedDateFormattedMomentjs || `Select ${label}` }}</h6>
+      </div>
       <v-text-field
         filled
         rounded
@@ -12,7 +15,7 @@
       />
     </template>
     <v-date-picker v-model="date" @change="isActive = false" />
-  </v-menu>
+  </v-dialog>
 </template>
 <script>
 export default {

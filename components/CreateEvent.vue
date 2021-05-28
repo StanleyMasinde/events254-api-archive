@@ -5,42 +5,57 @@
     </v-alert>
     <ValidationObserver ref="observer" v-slot="{ invalid }">
       <v-form id="eventForm" ref="form" @submit.prevent="createEvent">
-        <v-card flat hover outlined style="width:100vw;" class="mb-2">
+        <v-card flat outlined style="width:100vw;" class="mb-2">
           <v-card-text>
             <v-text-field v-model="event.about" style="font-weight:700;" filled rounded placeholder="Title" />
             <v-row>
               <v-col>
                 <DateInput v-model="event.startDate" name="startDate" label="Start" value="" />
               </v-col>
-              <v-col>
+              <v-col v-if="!isAllDay">
                 <TimeInput v-model="event.startTime" name="startTime" />
               </v-col>
             </v-row>
 
-            <v-row>
+            <v-row v-if="hasEndDate">
               <v-col>
                 <DateInput v-model="event.endDate" name="endDate" label="End" value="" />
               </v-col>
-              <v-col>
+              <v-col v-if="!isAllDay">
                 <TimeInput v-model="event.startTime" name="endTime" />
               </v-col>
             </v-row>
           </v-card-text>
           <v-card-actions class="text-right">
-            <v-chip>All day</v-chip>
-            <v-chip>End time</v-chip>
+            <v-checkbox v-model="hasEndDate" hint="If the event has no end time" label="Add end date" />
+            <v-checkbox v-model="isAllDay" hint="If the event has no end time" label="All day" />
           </v-card-actions>
         </v-card>
-        <input autocomplete="address-level1">
 
         <v-text-field
+          v-if="!isVirtual"
           v-model="event.location"
+          class="ma-0"
           autocomplete="address-level1"
           placeholder="Location"
           rounded
           filled
           prepend-inner-icon="mdi-map-marker"
         />
+        <v-text-field
+          v-else
+          v-model="event.online_link"
+          class="ma-0"
+          autocomplete="url"
+          placeholder="Meeting link"
+          rounded
+          filled
+          type="url"
+          hint="You can add this later"
+          prepend-inner-icon="mdi-link"
+        />
+        <v-checkbox v-model="isVirtual" class="ma-0" hint="If the event is online" label="It is a virtual event" />
+
         <client-only>
           <RichEditor v-model="event.description" />
         </client-only>
@@ -61,7 +76,9 @@ export default {
   },
   data () {
     return {
-      currentStep: 1,
+      isAllDay: false,
+      hasEndDate: false,
+      isVirtual: false,
       message: {
         success: null,
         err: null

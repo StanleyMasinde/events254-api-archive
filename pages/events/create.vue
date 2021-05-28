@@ -7,11 +7,7 @@
         </h1>
       </v-col>
       <v-col cols="12" md="6">
-        <v-card flat rounded>
-          <v-card-text>
-            <CreateEvent />
-          </v-card-text>
-        </v-card>
+        <CreateEvent />
       </v-col>
     </v-row>
   </v-container>

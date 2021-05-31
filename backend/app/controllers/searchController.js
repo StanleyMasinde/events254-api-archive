@@ -41,15 +41,12 @@ class SearchController extends Controller {
    */
   async calendar (req, res) {
     // TODO add timezone
-    const startDate = moment(req.query.date).tz('Africa/Nairobi').utc().toISOString()
-    const endDate = moment(req.query.date).tz('Africa/Nairobi').utc().add(1, 'day').toISOString()
+    const date = req.query.date
     try {
-      const events = await DB('events')
-        .whereBetween('startDate', [startDate, endDate]).limit(100)
-
-      res.json(events)
+      const events = await DB.raw('SELECT * FROM events WHERE DATE(startDate) = ? LIMIT 100', [date])
+      res.json(events[0])
     } catch (error) {
-      res.status(500).json(new Error().message)
+      res.status(500).json(new Error(error).message)
     }
   }
 }

@@ -1,5 +1,4 @@
 const { Model, DB } = require('mevn-orm')
-const moment = require('moment-timezone')
 class Event extends Model {
   /**
      * -------------------------------------------
@@ -16,19 +15,15 @@ class Event extends Model {
    * @param {Number} offset
    */
   static async landingPage (paginate = 15, page = 1) {
-    const today = moment.tz('Africa/Nairobi').utc().toISOString()
-    const offset = paginate * (page - 1)
-    const records = await DB(this.tableName()).where('startDate', '>', new Date()).count('id as recordCount')
+    const offset = paginate * page
+    const today = new Date().toISOString().substr(0, 10)
+    const records = await DB.raw('SELECT COUNT(id) as count FROM events WHERE DATE(startDate) >= ?', [today])
     const totalShown = paginate * page
-    const remaining = parseInt(records[0].recordCount) - totalShown
-    const lastPage = parseInt(records[0].recordCount / paginate)
-    const events = await DB(this.tableName())
-      .where('startDate', '>', today)
-      .limit(paginate)
-      .offset(offset)
-      .select()
+    const remaining = parseInt(records[0][0].count) - totalShown
+    const lastPage = parseInt(records[0][0].count / paginate)
+    const events = await DB.raw('(SELECT * FROM events WHERE DATE(startDate) >= ? LIMIT ? OFFSET ?) ORDER BY `startDate` ASC', [today, parseInt(paginate), parseInt(offset)])
     return {
-      events, lastPage, remaining
+      events: events[0], lastPage, remaining
     }
   }
 }

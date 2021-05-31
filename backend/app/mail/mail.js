@@ -40,7 +40,8 @@ class Mail {
         to: this.recipient.email,
         subject: this.subject,
         template: this.template,
-        ctx: this.data
+        ctx: this.data,
+        icalEvent: this.data.icalString
       })
     } catch (error) {
       error.status = 500

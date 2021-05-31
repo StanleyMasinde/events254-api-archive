@@ -1,4 +1,8 @@
-// const knexx = require('knex')(0
+/**
+ * Run the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.up = function (knex) {
   return knex.schema.createTable('groups', (table) => {
     table.bigIncrements('id')
@@ -18,6 +22,11 @@ exports.up = function (knex) {
   })
 }
 
+/**
+ * Drop the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.down = function (knex) {
   return knex.schema.dropTableIfExists('groups')
 }

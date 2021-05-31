@@ -1,4 +1,8 @@
-
+/**
+ * Run the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.up = function (knex) {
   return knex.schema.createTable('tickets', (table) => {
     table.bigIncrements('id')
@@ -12,6 +16,11 @@ exports.up = function (knex) {
   })
 }
 
+/**
+ * Drop the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.down = function (knex) {
   return knex.schema.dropTableIfExists('tickets')
 }

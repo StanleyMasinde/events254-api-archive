@@ -1,6 +1,7 @@
 const Validator = require('mevn-validator')
 const { DB } = require('mevn-orm')
 const pluralize = require('pluralize')
+const ical = require('ical-generator').default
 const Event = require('../models/event')
 const User = require('../models/user')
 const upload = require('../filesystem/s3')
@@ -225,6 +226,19 @@ class EventsController extends Controller {
       })
       // Send and email to user
       // TODO add attachments and refactor
+      const icsData = ical({
+        name: currentEvent.about,
+        events: [
+          {
+            start: currentEvent.startDate,
+            end: currentEvent.endDate,
+            summary: currentEvent.about,
+            location: currentEvent.location,
+            url: currentEvent.online_link
+          }
+        ]
+      })
+      const icalString = icsData.toString()
       const data = {
         eventName: currentEvent.about,
         name: currentUser.name,
@@ -232,7 +246,8 @@ class EventsController extends Controller {
         ticketCount: body.rsvp_count,
         currentTicket,
         date: new Date().toDateString(),
-        ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`
+        ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`,
+        icalString
       }
       await new Mail(currentUser, 'Your oder from Events254', { template: 'ticket', data }).send()
       return this.response('You have registered for this event')
@@ -243,7 +258,7 @@ class EventsController extends Controller {
 
   /**
    * Get the event organisers
-   * @param {Event} event
+   * @param {import('../models/event')} event
    * @returns Object || null
    */
   async getEventOrganiser (event = {}) {

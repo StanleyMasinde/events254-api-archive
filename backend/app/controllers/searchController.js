@@ -42,7 +42,7 @@ class SearchController extends Controller {
     // TODO add timezone
     const date = req.query.date
     try {
-      const events = await DB.raw('(SELECT * FROM events WHERE DATE(startDate) = ? LIMIT 100) ORDER BY `startDate` ASC', [date])
+      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE DATE(startDate) = ? LIMIT 100) ORDER BY `startDate` ASC', [date])
       res.json(events[0])
     } catch (error) {
       res.status(500).json(new Error(error).message)

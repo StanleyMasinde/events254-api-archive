@@ -1,5 +1,9 @@
 /* eslint-disable no-unused-vars */
-// const knexx = require('knex')()
+/**
+ * Run the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.up = function (knex) {
   return knex.schema.createTable('users', (table) => {
     table.bigIncrements('id')
@@ -12,6 +16,11 @@ exports.up = function (knex) {
   })
 }
 
+/**
+ * Rollback the migrations
+ * @param {import('knex')} knex
+ * @returns Promise
+ */
 exports.down = function (knex) {
   return knex.schema.dropTableIfExists('users')
 }

@@ -26,6 +26,7 @@ class Event extends Model {
       .where('startDate', '>', today)
       .limit(paginate)
       .offset(offset)
+      .orderBy('startDate', 'desc')
       .select()
     return {
       events, lastPage, remaining

@@ -27,7 +27,6 @@ class Event extends Model {
       .limit(paginate)
       .offset(offset)
       .orderBy('startDate', 'asc')
-      .groupBy('startDate')
       .select()
     return {
       events, lastPage, remaining

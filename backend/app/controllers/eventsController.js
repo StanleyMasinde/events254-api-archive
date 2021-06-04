@@ -117,6 +117,22 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
+      // TODO this is a temp fix
+      if (!e.endDate) {
+        e.endDate = e.startDate
+      }
+      if (!e.location) {
+        e.location = 'N/A'
+      }
+      if (!e.online_link) {
+        e.online_link = 'N/A'
+      }
+      e.attendees = await DB('event_rsvps')
+        .join('users', 'event_rsvps.user_id', '=', 'users.id')
+        .where({
+          'event_rsvps.event_id': e.id
+        })
+        .select('users.name AS name', 'users.bio AS bio')
       e.organiser = await this.getEventOrganiser(e)
       const u = await request.user()
       if (!u) { // No user in session
@@ -133,23 +149,6 @@ class EventsController extends Controller {
           'event_rsvps.user_id': u.id
         })
         .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
-
-      e.attendees = await DB('event_rsvps')
-        .join('users', 'event_rsvps.user_id', '=', 'users.id')
-        .where({
-          'event_rsvps.event_id': e.id
-        })
-        .select('users.name AS name', 'users.bio AS bio')
-        // TODO this is a temp fix
-      if (!e.endDate) {
-        e.endDate = e.startDate
-      }
-      if (!e.location) {
-        e.location = 'N/A'
-      }
-      if (!e.online_link) {
-        e.online_link = 'N/A'
-      }
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)

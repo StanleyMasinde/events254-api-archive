@@ -196,6 +196,8 @@ export default {
       formData.append('startTime', this.event.startTime)
       formData.append('endDate', this.event.endDate || this.startDate)
       formData.append('endTime', this.event.endTime || '00:00')
+      formData.append('location', this.event.location || 'N/A')
+      formData.append('online_link', this.event.online_link || 'N/A')
       try {
         const { data } = await this.$axios.post(this.createUrl, formData)
         this.message.success = true

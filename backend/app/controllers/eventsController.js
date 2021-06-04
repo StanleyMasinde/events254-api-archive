@@ -144,6 +144,9 @@ class EventsController extends Controller {
       if (!e.endDate) {
         e.endDate = e.startDate
       }
+      if (!e.location) {
+        e.location = 'N/A'
+      }
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)

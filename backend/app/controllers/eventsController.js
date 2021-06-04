@@ -140,6 +140,10 @@ class EventsController extends Controller {
           'event_rsvps.event_id': e.id
         })
         .select('users.name AS name', 'users.bio AS bio')
+        // TODO this is a temp fix
+      if (!e.endDate) {
+        e.endDate = e.startDate
+      }
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)

@@ -6,5 +6,8 @@
  * @returns Boolean
  */
 module.exports = function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
+  if (!user) {
+    return false
+  }
   return event.organisable_id === user.id && event.organisable_type === organisableType
 }

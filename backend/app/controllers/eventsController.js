@@ -114,10 +114,30 @@ class EventsController extends Controller {
   async show (request) {
     try {
       const e = await Event.find(request.params.event)
+      const u = await request.user()
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
       // TODO this is a temp fix
+      e.attendees = await DB('event_rsvps')
+        .join('users', 'event_rsvps.user_id', '=', 'users.id')
+        .where({
+          'event_rsvps.event_id': e.id
+        })
+        .select('users.name AS name', 'users.bio AS bio')
+      e.organiser = await this.getEventOrganiser(e)
+      e.can_edit = canEditEvent(e, u)
+      if (u) {
+        e.currentUserTicket = await DB('event_rsvps')
+          .join('tickets', 'event_rsvps.ticket_id', '=', 'tickets.id')
+          .where({
+            'event_rsvps.event_id': e.id,
+            'event_rsvps.user_id': u.id
+          })
+          .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
+      }
+      delete e.organisable_id
+      delete e.organisable_type
       if (!e.endDate) {
         e.endDate = e.startDate
       }
@@ -127,28 +147,6 @@ class EventsController extends Controller {
       if (!e.online_link) {
         e.online_link = 'N/A'
       }
-      e.attendees = await DB('event_rsvps')
-        .join('users', 'event_rsvps.user_id', '=', 'users.id')
-        .where({
-          'event_rsvps.event_id': e.id
-        })
-        .select('users.name AS name', 'users.bio AS bio')
-      e.organiser = await this.getEventOrganiser(e)
-      const u = await request.user()
-      if (!u) { // No user in session
-        e.can_edit = false
-        return this.response(e)
-      }
-      e.can_edit = canEditEvent(e, u)
-      delete e.organisable_id
-      delete e.organisable_type
-      e.currentUserTicket = await DB('event_rsvps')
-        .join('tickets', 'event_rsvps.ticket_id', '=', 'tickets.id')
-        .where({
-          'event_rsvps.event_id': e.id,
-          'event_rsvps.user_id': u.id
-        })
-        .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)

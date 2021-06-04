@@ -32,7 +32,11 @@ router.get('/', async (req, res) => {
 router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res) => {
   try {
     const { message, status } = await EventsController.store(req)
-    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
+
+    if (req.file) {
+      fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
+    }
+
     res.status(status).json(message)
   } catch (error) {
     res.status(500).json(error)

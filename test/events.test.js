@@ -27,8 +27,8 @@ describe('#Events test with protected routes', () => {
         location: faker.address.streetAddress(),
         about: 'Awesome event',
         description: faker.lorem.paragraph(10),
-        start_date: new Date().toISOString().substr(0, 10),
-        start_time: '09:30'
+        startDate: new Date().toISOString().substr(0, 10),
+        startTime: '09:30'
       })
     expect(res.status).equals(201)
   })
@@ -46,8 +46,8 @@ describe('#Events test with protected routes', () => {
         location: faker.address.streetAddress(true),
         about: 'Events254 launch party',
         description: faker.lorem.paragraph(10),
-        start_date: new Date().toISOString().substr(0, 10),
-        start_time: '10:45'
+        startDate: new Date().toISOString().substr(0, 10),
+        startTime: '10:45'
       })
     expect(res.status).equals(201)
   })
@@ -59,8 +59,8 @@ describe('#Events test with protected routes', () => {
         location: 'virtual',
         about: 'Events254 launch party',
         description: faker.lorem.paragraph(10),
-        start_date: new Date().toISOString().substr(0, 10),
-        start_time: '10:45'
+        startDate: new Date().toISOString().substr(0, 10),
+        startTime: '10:45'
       })
     expect(res.status).equals(401)
   })

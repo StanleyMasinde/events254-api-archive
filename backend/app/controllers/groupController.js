@@ -205,8 +205,8 @@ class GroupController extends Controller {
         about: 'required',
         location: 'required',
         description: 'required',
-        start_date: 'required',
-        start_time: 'required'
+        startDate: 'required',
+        startTime: 'required'
       })
         .validate()
 
@@ -215,14 +215,14 @@ class GroupController extends Controller {
 
       // The data is valid
       // eslint-disable-next-line camelcase
-      const { start_date, start_time, online_link, end_date, end_time, location, about, description } = body
-      const startDate = formatToDateTime(start_time, start_date)
-      const endDate = formatToDateTime(end_time, end_date)
+      const { startDate, startTime, online_link, endDate, endTime, location, about, description } = body
+      const startDateTime = formatToDateTime(startTime, startDate)
+      const endDatetime = formatToDateTime(endTime, endDate)
       // eslint-disable-next-line camelcase
       const organisable_id = group.id // The authenticated user's ID
       // eslint-disable-next-line camelcase
       const organisable_type = 'Group' // The organiser's Model can be group or user
-      const e = await Event.create({ image, location, online_link, about, description, startDate, endDate, organisable_id, organisable_type })
+      const e = await Event.create({ image, location, online_link, about, description, startDate: startDateTime, endDate: endDatetime, organisable_id, organisable_type })
       // Add the organiser
       return this.response(e, 201)
     } catch (error) {
@@ -245,14 +245,14 @@ class GroupController extends Controller {
           about: 'required',
           location: 'required',
           description: 'required',
-          start_date: 'required',
-          start_time: 'required'
+          startDate: 'required',
+          startTime: 'required'
         }).validate()
         // eslint-disable-next-line camelcase
-        const { start_date, start_time, end_date, end_time, location, about, description } = body
-        const startDate = formatToDateTime(start_time, start_date)
-        const endDate = formatToDateTime(end_time, end_date)
-        const res = await currentEvent.update({ location, about, description, startDate, endDate }) // Payload is valid
+        const { startDate, startTime, endDate, endTime, location, about, description } = body
+        const startDateTime = formatToDateTime(startTime, startDate)
+        const endDateTime = formatToDateTime(endTime, endDate)
+        const res = await currentEvent.update({ location, about, description, startDate: startDateTime, endDate: endDateTime }) // Payload is valid
         return this.response(res, 201) // Looks good
       } catch (error) {
         return this.response(error, error.status || 422)

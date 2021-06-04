@@ -20,6 +20,10 @@
 <script>
 export default {
   props: {
+    errors: {
+      type: Object,
+      default: () => {}
+    },
     label: {
       type: String,
       default: 'Date'

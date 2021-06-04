@@ -12,6 +12,9 @@ const bucketName = 'events254'
 const s3 = new S3Client({ region: REGION })
 
 const upload = async (file, folder = '/') => {
+  if (!file) {
+    return 'https://placeimg.com/640/500/null?30219'
+  }
   // Destructure to get original name and path
   const { originalname, filename, path, mimetype } = file
 
@@ -24,7 +27,10 @@ const upload = async (file, folder = '/') => {
   })
 
   const uploadFolder = `${folder}/${filename}${originalname}`
-
+  // Do not upload to S3 in test environmets
+  if (process.env.NODE_ENV === 'testing') {
+    return 'https://fakeurl.com'
+  }
   // Object params for the upload
   const objectParams = {
     ContentType: mimetype,
@@ -32,10 +38,6 @@ const upload = async (file, folder = '/') => {
     Bucket: bucketName,
     Key: uploadFolder,
     Body: fileStream
-  }
-  // Do not upload to S3 in test environmets
-  if (process.env.NODE_ENV === 'testing') {
-    return 'https://fakeurl.com'
   }
   try {
     await s3.send(new PutObjectCommand(objectParams))

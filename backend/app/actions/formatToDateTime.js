@@ -1,29 +1,29 @@
 const moment = require('moment-timezone')
 /**
   * Format the date and time into a datetime field
-  * @param {String} fromTime
-  * @param {String} fromDate
+  * @param {String} time
+  * @param {String} date
   * @param {String} timezone
   * @returns new Date()
   */
-const formatToDateTime = (fromTime, fromDate, timezone = 'Africa/Nairobi') => {
-  if (!fromTime) {
-    return
+const formatToDateTime = (time, date, timezone = 'Africa/Nairobi') => {
+  if (!time) {
+    time = '00:00'
   }
-  if (!fromDate) {
+  if (!date) {
     return
   }
   /** Format the date */
-  const fromTimeArray = fromTime.split(':')
-  const fromDateArray = fromDate.split('-')
-  const fromDateTime = new Date() // New date instance
-  fromDateTime.setHours(fromTimeArray[0]) // Set the hours from the input
-  fromDateTime.setMinutes(fromTimeArray[1]) // set the minutes from the input
-  fromDateTime.setSeconds(0) // Seconds should always be zero
-  fromDateTime.setFullYear(fromDateArray[0]) // set the year
-  fromDateTime.setMonth(fromDateArray[1] - 1) // the month -1
-  fromDateTime.setDate(fromDateArray[2]) // The day of the month
-  const t = moment(fromDateTime, true).tz(timezone, true).toDate()
+  const timeArray = time.split(':')
+  const dateArray = date.split('-')
+  const dateTime = new Date() // New date instance
+  dateTime.setHours(timeArray[0]) // Set the hours from the input
+  dateTime.setMinutes(timeArray[1]) // set the minutes from the input
+  dateTime.setSeconds(0) // Seconds should always be zero
+  dateTime.setFullYear(dateArray[0]) // set the year
+  dateTime.setMonth(dateArray[1] - 1) // the month -1
+  dateTime.setDate(dateArray[2]) // The day of the month
+  const t = moment(dateTime, true).tz(timezone, true).toDate()
   return t
 }
 

@@ -3,6 +3,12 @@ const { DB } = require('mevn-orm')
 const createToken = require('./createToken')
 
 const auth = () => {
+  /**
+   * Auth middleware
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   */
   return function (req, res, next) {
     /**
        * Attempt to login a user with the given credentials
@@ -13,16 +19,16 @@ const auth = () => {
       DB.table(guard)
         .where({ email })
         .first()
-        .then((u) => {
+        .then((user) => {
           // The email is correct
-          if (u) {
-            if (compareSync(password, u.password)) {
+          if (user) {
+            if (compareSync(password, user.password)) {
               if (req.requiresToken()) {
                 return createToken({
-                  tokenable_id: u.id,
+                  tokenable_id: user.id,
                   tokenable_type: 'users'
                 }).then((token) => {
-                  return res.json({ token })
+                  return res.json({ token, user })
                 })
                   .catch((e) => {
                     return res.status(500).json(e)
@@ -30,10 +36,10 @@ const auth = () => {
               }
               // The login was sucessful and session is required
               req.session.auth = {
-                userId: u.id,
+                userId: user.id,
                 guard
               }
-              return res.json(u)
+              return res.json(user)
             }
             return res.status(401).json({ message: 'These credentials do not match our records' }) // The password did not match
           }

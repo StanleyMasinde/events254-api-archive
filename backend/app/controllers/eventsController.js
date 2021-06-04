@@ -147,6 +147,9 @@ class EventsController extends Controller {
       if (!e.location) {
         e.location = 'N/A'
       }
+      if (!e.online_link) {
+        e.online_link = 'N/A'
+      }
       return this.response(e)
     } catch (error) {
       return this.response(error, 500)

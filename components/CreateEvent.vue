@@ -194,8 +194,8 @@ export default {
       formData.append('description', this.event.description || this.event.about)
       formData.append('startDate', this.event.startDate)
       formData.append('startTime', this.event.startTime)
-      formData.append('endDate', this.event.endDate)
-      formData.append('endTime', this.event.endTime)
+      formData.append('endDate', this.event.endDate || this.startDate)
+      formData.append('endTime', this.event.endTime || '00:00')
       try {
         const { data } = await this.$axios.post(this.createUrl, formData)
         this.message.success = true

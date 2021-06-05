@@ -29,8 +29,7 @@ class Event extends Model {
       .orderBy('startDate', 'asc')
       .select()
 
-    events.forEach(async (event) => {
-      event.tickets = await DB('tickets').where('event_id', event.id).select('currency', 'price', 'currency')
+    events.forEach((event) => {
       if (!event.location) {
         event.isOnline = true
       } else {

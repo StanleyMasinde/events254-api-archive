@@ -95,7 +95,8 @@ describe('Authentication with personal API Tokens', () => {
         password: '12345678'
       })
     expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('token')
+    expect(res.body).to.haveOwnProperty('user')
+    expect(res.body.user).to.haveOwnProperty('token')
   })
 
   it('Should return a personal API token on login', async () => {
@@ -107,8 +108,9 @@ describe('Authentication with personal API Tokens', () => {
         password: '12345678'
       })
     expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('token')
-    token = res.body.token
+    expect(res.body).to.haveOwnProperty('user')
+    expect(res.body.user).to.haveOwnProperty('token')
+    token = res.body.user.token
   })
 
   it('Should get the current user using the API token', async () => {

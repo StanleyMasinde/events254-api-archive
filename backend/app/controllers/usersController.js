@@ -56,7 +56,7 @@ class UserController extends Controller {
         return this.response({ errors: { email: 'This email is already registerd' } }, 422)
       }
 
-      const u = await User.register(body) // TODO This now returns a Model
+      const user = await User.register(body) // TODO This now returns a Model
       const data = {
         name: body.name
       }
@@ -64,12 +64,13 @@ class UserController extends Controller {
       // Determine if the request requires a token and pass it if so
       if (request.requiresToken()) {
         const token = await createToken({
-          tokenable_id: u.id,
+          tokenable_id: user.id,
           tokenable_type: 'users'
         })
-        return this.response({ token })
+        user.token = token
+        return this.response({ user })
       }
-      return this.response(u)
+      return this.response(user)
     } catch (error) {
       // If error is 422
       return this.response(error, error.status || 422)

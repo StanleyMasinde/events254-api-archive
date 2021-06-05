@@ -24,13 +24,13 @@ class Event extends Model {
     const lastPage = parseInt(records[0].recordCount / paginate)
     const events = await DB(this.tableName())
       .where('startDate', '>', today)
-      .join('tickets', 'tickets.event_id', '=', 'events.id')
       .limit(paginate)
       .offset(offset)
       .orderBy('startDate', 'asc')
       .select()
 
-    events.forEach((event) => {
+    events.forEach(async (event) => {
+      event.tickets = await DB('tickets').where('event_id', event.id).select('currency', 'price', 'currency')
       if (!event.location) {
         event.isOnline = true
       } else {

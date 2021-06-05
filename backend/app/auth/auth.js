@@ -28,7 +28,8 @@ const auth = () => {
                   tokenable_id: user.id,
                   tokenable_type: 'users'
                 }).then((token) => {
-                  return res.json({ token, user })
+                  user.token = token
+                  return res.json({ user })
                 })
                   .catch((e) => {
                     return res.status(500).json(e)

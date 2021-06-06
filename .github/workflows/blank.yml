@@ -8,11 +8,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    strategy:
+        matrix:
+        node-version: [10.x, 12.x, 14.x, 15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Install MySql
-        run: |
-               echo Hello, world!
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+     
+    - name: Install MySql
+      run: |
+             echo Hello, world!
                - wget https://repo.mysql.com//mysql-apt-config_0.8.10-1_all.deb
                - sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
                - sudo apt-get update -q
@@ -22,8 +33,8 @@ jobs:
                - mysql --version 
                - mysql -e 'DROP DATABASE IF EXISTS events254_test;'
                - mysql -e 'CREATE DATABASE events254_test;'
-      - name: Run a multi-line script
-        run: |
+    - name: Run a multi-line script
+      run: |
           - npm i knex
           - cp .env.example .env
           - npm test

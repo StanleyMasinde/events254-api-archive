@@ -23,13 +23,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: |
-       - sudo systemctl start mysql.service
-       - sudo systemctl restart mysql
-       - sudo mysql_upgrade
-       - mysql --version 
-       - mysql -e 'DROP DATABASE IF EXISTS events254_test;'
-       - mysql -e 'CREATE DATABASE events254_test;'
+    - run: sudo systemctl start mysql.service
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test

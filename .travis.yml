@@ -17,4 +17,3 @@ script:
   - npm i knex
   - cp .env.example .env
   - npm test
-  - npm run test

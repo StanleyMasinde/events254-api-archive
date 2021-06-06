@@ -26,5 +26,6 @@ jobs:
     - run: sudo systemctl start mysql.service
     - run: sudo mysql -e 'DROP DATABASE IF EXISTS events254_test;' -proot
     - run: sudo mysql -e 'CREATE DATABASE events254_test;' -proot
+    - run: cp .env.example .env
     - run: npm ci
     - run: npm test

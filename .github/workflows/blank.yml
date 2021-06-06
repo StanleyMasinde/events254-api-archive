@@ -1,40 +1,38 @@
-name: CI
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
+
 jobs:
   build:
-    runs-on: ubuntu-latest
-    
-    strategy:
-        matrix:
-         node-version: [10.x, 12.x, 14.x, 15.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x, 15.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-     
-    - name: Install MySql
-      run: |
-             echo Hello, world!
-               - wget https://repo.mysql.com//mysql-apt-config_0.8.10-1_all.deb
-               - sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
-               - sudo apt-get update -q
-               - sudo apt-get install -q -y --allow-unauthenticated -o Dpkg::Options::=--force-confnew mysql-server
-               - sudo systemctl restart mysql
-               - sudo mysql_upgrade
-               - mysql --version 
-               - mysql -e 'DROP DATABASE IF EXISTS events254_test;'
-               - mysql -e 'CREATE DATABASE events254_test;'
-    - name: Run a multi-line script
-      run: |
-          - npm i knex
-          - cp .env.example .env
-          - npm test
+    - run: |
+       - wget https://repo.mysql.com//mysql-apt-config_0.8.10-1_all.deb
+       - sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
+       - sudo apt-get update -q
+       - sudo apt-get install -q -y --allow-unauthenticated -o Dpkg::Options::=--force-confnew mysql-server
+       - sudo systemctl restart mysql
+       - sudo mysql_upgrade
+       - mysql --version 
+       - mysql -e 'DROP DATABASE IF EXISTS events254_test;'
+       - mysql -e 'CREATE DATABASE events254_test;'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test

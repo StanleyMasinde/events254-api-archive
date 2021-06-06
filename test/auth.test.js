@@ -125,6 +125,7 @@ describe('Authentication with personal API Tokens', () => {
     const res = await app
       .get('/auth/user')
       .set('X-requested-with', 'mobile')
+    console.log(res.body)
     expect(res.status).equals(401)
   })
 

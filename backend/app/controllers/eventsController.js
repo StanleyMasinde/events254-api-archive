@@ -77,7 +77,7 @@ class EventsController extends Controller {
         image = await upload(file, 'event-posters')
       } else {
         const { data } = await axios.get(`https://api.unsplash.com/search/photos?page=1&query=${body.about}&client_id=pOTyoPLsz5ef-yfgY549ovpcsN4Lv622n_MYA4H9Tj8&per_page=1&orientation=landscape`)
-        image = data.results[0].urls.regular || 'https://placeimg.com/640/500/null?30219'
+        image = data.results[0].urls.regular ? data.results[0].urls.regular : 'https://placeimg.com/640/500/null?30219'
       }
 
       // The data is valid
@@ -270,7 +270,7 @@ class EventsController extends Controller {
         ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`,
         icalString
       }
-      await new Mail(currentUser, 'Your oder from Events254', { template: 'ticket', data }).send()
+      await new Mail(currentUser, 'Your order from Events254', { template: 'ticket', data }).send()
       return this.response('You have registered for this event')
     } catch (error) {
       return this.response(error, 422)

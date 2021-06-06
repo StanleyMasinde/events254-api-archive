@@ -10,7 +10,7 @@ const { DB } = require('mevn-orm')
  * --------------------------------------------------------------
  */
 const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users', name: 'My mobile Device' }) => {
-  const token = randomBytes(64).toString('base64')
+  const token = randomBytes(99).toString('base64')
   // eslint-disable-next-line camelcase
   const { tokenable_id, tokenable_type, name } = options
   const now = new Date()
@@ -20,7 +20,7 @@ const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users',
     name,
     token,
     abilities: '*',
-    last_used_at: now,
+    last_used_at: now, // TODO add a middleware to update this on every request
     created_at: now,
     updated_at: now
   })

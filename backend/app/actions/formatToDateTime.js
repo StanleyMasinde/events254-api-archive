@@ -4,7 +4,7 @@ const moment = require('moment-timezone')
   * @param {String} time
   * @param {String} date
   * @param {String} timezone
-  * @returns new Date()
+  * @returns {Date} date
   */
 const formatToDateTime = (time, date, timezone = 'Africa/Nairobi') => {
   if (!time) {

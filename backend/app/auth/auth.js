@@ -53,7 +53,7 @@ const auth = () => {
 
     /**
        * Login a user using the database ID
-       * @param {*} id
+       * @param {number} id
        */
     req.logIn = (id) => {
       DB.table(this.guard())
@@ -63,10 +63,10 @@ const auth = () => {
 
     /**
      * Get the current user
-     * @param {*} guard the guard to use default is users
-     * @returns
+     * @param {String} guard the guard to use default is users
+     * @returns {Array}
      */
-    req.user = (guard = 'users') => {
+    req.user = async (guard = 'users') => {
       /**
        * -------------------------------------------------------
        * The request requires a token hence no session is set
@@ -82,8 +82,8 @@ const auth = () => {
             try {
               const tk = await DB.table('personal_access_tokens')
                 .where({ token, tokenable_type: guard }).first()
-              const u = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'name', 'username', 'email', 'bio', 'created_at', 'updated_at'])
-              return u
+              const user = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'name', 'username', 'email', 'bio', 'created_at', 'updated_at'])
+              return user
             } catch (e) {
               return e // TODO handle this error properly
             }
@@ -104,16 +104,14 @@ const auth = () => {
         if (!userId) {
           return null
         }
-        return DB.table(guard)
-          .where({ id: userId })
-          .first()
-          .then((u) => {
-            return u
-          })
-          .catch((e) => {
-            // TODO handle this properly for now we just return blank
-            return e
-          })
+        try {
+          const user = await DB.table(guard)
+            .where({ id: userId })
+            .first()
+          return user
+        } catch (e) {
+          return e
+        }
       }
       return null
     }
@@ -125,12 +123,18 @@ const auth = () => {
       req.session.auth = {}
     }
 
-    req.isAuthenticated = (guard = 'users') => {
-      return !!req.user(guard)
+    /**
+     * Check if request is authenticated
+     * @param {String} guard
+     * @returns {Boolean}
+     */
+    req.isAuthenticated = async (guard = 'users') => {
+      return await req.user(guard)
     }
 
     /**
      * Determine weather the current request requires toke
+     * @returns {Boolean}
      */
     req.requiresToken = () => {
       const header = req.header('X-requested-with')

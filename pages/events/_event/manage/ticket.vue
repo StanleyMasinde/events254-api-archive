@@ -1,6 +1,6 @@
 <template>
   <v-row class="mt-5" justify="center">
-    <v-col cols="8">
+    <v-col cols="12" md="8">
       <!-- Show a success alert -->
       <!-- <v-alert v-if="success" type="success">
         {{ success }}

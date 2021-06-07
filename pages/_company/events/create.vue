@@ -1,5 +1,5 @@
 <template>
-  <CreateEvent :create-url="`/api/groups/${$route.params.company.slug}/events`" />
+  <CreateEvent :create-url="`/api/groups/${$route.params.company}/events`" />
 </template>
 <script>
 export default {

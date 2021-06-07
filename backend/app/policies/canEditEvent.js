@@ -6,8 +6,13 @@
  * @returns Boolean
  */
 module.exports = function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
+  console.log()
   if (!user) {
     return false
   }
-  return event.organisable_id === user.id && event.organisable_type === organisableType
+  if (event.organiser.type === 'user') {
+    return event.organisable_id === user.id && event.organisable_type === organisableType
+  }
+  const ids = event.organiser.adminIds.map(r => r.user_id)
+  return ids.includes(user.id)
 }

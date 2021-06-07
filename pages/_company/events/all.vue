@@ -29,14 +29,14 @@
         <v-card
           height="300"
           outlined
-          :to="`/events/${e.id}`"
+          :to="`/${$route.params.company}/events/${e.id}`"
           class="ma-2 no-overflow"
           rounded
         >
           <v-img height="150" class="pa-3" :src="e.image" />
           <v-card-text class="body-2">
             <p class="red--text">
-              {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
+              {{ $moment(e.startDate).format("dddd Do MMMM YYYY [at] h:mm a") }}
             </p>
             <p :title="e.about">
               {{ e.about }} <br>

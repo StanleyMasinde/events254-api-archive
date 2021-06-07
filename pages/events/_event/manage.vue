@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid>
     <div v-if="!currentEvent.can_edit" class="error-page">
       <v-img src="/403.svg" height="100%">
         <h1 class="display-1">
@@ -36,7 +36,7 @@
         </v-col>
       </v-row>
     </template>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {

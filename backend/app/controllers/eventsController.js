@@ -300,6 +300,7 @@ class EventsController extends Controller {
       }).first('name', 'slug', 'id')
     if (organiser) {
       organiser.type = 'group'
+      organiser.adminIds = await DB('group_organisers').where('group_id', '=', organiser.id)
     }
     return organiser
   }

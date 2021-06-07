@@ -137,6 +137,12 @@
         >
           <v-icon>mdi-format-quote-close</v-icon>
         </v-btn>
+        <v-btn icon :color="editor.isActive('link') ? 'primary' : ''" @click="setLink">
+          <v-icon>mdi-link</v-icon>
+        </v-btn>
+        <v-btn v-if="editor.isActive('link')" icon @click="editor.chain().focus().unsetLink().run()">
+          <v-icon>mdi-link-off</v-icon>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <editor-content class="editor" :editor="editor" />
@@ -156,6 +162,7 @@ import Strikethrough from '@tiptap/extension-strike'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import ListItem from '@tiptap/extension-list-item'
+import Link from '@tiptap/extension-link'
 export default {
   components: {
     EditorContent,
@@ -187,7 +194,8 @@ export default {
         Strikethrough,
         Document,
         Text,
-        ListItem
+        ListItem,
+        Link
       ],
       injectCSS: true,
       parseOptions: {
@@ -198,16 +206,18 @@ export default {
 
   beforeDestroy () {
     this.editor.destroy()
+  },
+  methods: {
+    setLink () {
+      const url = window.prompt('URL')
+      this.editor.chain().focus().setLink({ href: url }).run()
+    }
   }
 }
 </script>
 <style>
 p {
   margin: 1em 0;
-}
-ul {
-  list-style: square;
-  line-height: 5px;
 }
 .editor {
   margin-bottom: 13px;

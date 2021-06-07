@@ -56,7 +56,10 @@
 
       <v-row v-else justify="center">
         <v-col cols="12" md="8">
-          <v-row>
+          <div v-if="eventsObject.events.length === 0" class="text-center">
+            <h3>Nothing here</h3>
+          </div>
+          <v-row v-else>
             <v-col cols="12">
               <h3>Events near Nairobi</h3>
             </v-col>

@@ -1,6 +1,7 @@
 const { DB } = require('mevn-orm')
 const Validator = require('mevn-validator')
 const formatToDateTime = require('../actions/formatToDateTime')
+const getEventOrganiser = require('../actions/getEventOrganiser')
 const slugify = require('../actions/slugify')
 const upload = require('../filesystem/s3')
 const Event = require('../models/event')
@@ -235,11 +236,12 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    */
   async updateEvent (request) {
+    const user = await request.user()
     const { body, params } = request
-    const { event, slug } = params // The the event Id
-    const group = await Group.where({ slug }).first() // The current user
+    const { event } = params // The the event Id
     const currentEvent = await Event.find(event) // Load the current event
-    if (canEditEvent(currentEvent, group, 'Group')) {
+    currentEvent.organiser = await getEventOrganiser(currentEvent)
+    if (canEditEvent(currentEvent, user)) {
       try {
         await new Validator(body, { // Validate to input
           about: 'required',

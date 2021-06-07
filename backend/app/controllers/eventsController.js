@@ -1,6 +1,5 @@
 const Validator = require('mevn-validator')
 const { DB } = require('mevn-orm')
-const pluralize = require('pluralize')
 const ical = require('ical-generator').default
 const axios = require('axios').default
 const Event = require('../models/event')
@@ -10,6 +9,7 @@ const canEditEvent = require('../policies/canEditEvent')
 const Mail = require('../mail/mail')
 const Ticket = require('../models/ticket')
 const formatToDateTime = require('../actions/formatToDateTime')
+const getEventOrganiser = require('../actions/getEventOrganiser')
 const Controller = require('./controller')
 
 class EventsController extends Controller {
@@ -125,7 +125,7 @@ class EventsController extends Controller {
           'event_rsvps.event_id': e.id
         })
         .select('users.name AS name', 'users.bio AS bio')
-      e.organiser = await this.getEventOrganiser(e)
+      e.organiser = await getEventOrganiser(e)
       e.can_edit = canEditEvent(e, u)
       if (u) {
         e.currentUserTicket = await DB('event_rsvps')
@@ -275,34 +275,6 @@ class EventsController extends Controller {
     } catch (error) {
       return this.response(error, 422)
     }
-  }
-
-  /**
-   * Get the event organisers
-   * @param {import('../models/event')} event
-   * @returns Object || null
-   */
-  async getEventOrganiser (event = {}) {
-    const organisableType = event.organisable_type
-    if (organisableType === 'User') {
-      const organiser = await DB(pluralize(organisableType.toLowerCase()))
-        .where({
-          id: event.organisable_id
-        }).first('name', 'id')
-      if (organiser) {
-        organiser.type = 'user'
-      }
-      return organiser
-    }
-    const organiser = await DB(pluralize(organisableType.toLowerCase()))
-      .where({
-        id: event.organisable_id
-      }).first('name', 'slug', 'id')
-    if (organiser) {
-      organiser.type = 'group'
-      organiser.adminIds = await DB('group_organisers').where('group_id', '=', organiser.id)
-    }
-    return organiser
   }
 }
 

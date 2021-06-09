@@ -29,7 +29,7 @@
         <v-card
           height="300"
           outlined
-          :to="`/${$route.params.company}/events/${e.id}`"
+          :to="`/events/${e.id}`"
           class="ma-2 no-overflow"
           rounded
         >

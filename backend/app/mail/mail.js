@@ -41,7 +41,8 @@ class Mail {
         subject: this.subject,
         template: this.template,
         ctx: this.data,
-        icalEvent: this.data.icalString
+        icalEvent: this.data.icalString,
+        attachments: []
       })
     } catch (error) {
       error.status = 500

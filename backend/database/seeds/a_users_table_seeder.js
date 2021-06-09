@@ -5,7 +5,7 @@ for (let index = 0; index < 500; index++) {
   const bio = faker.company.catchPhrase()
   rows.push({
     name: faker.name.findName(),
-    email: faker.internet.exampleEmail(),
+    email: faker.internet.email(),
     password: faker.internet.password(8),
     bio
   })

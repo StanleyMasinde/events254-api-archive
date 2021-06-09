@@ -273,6 +273,7 @@ class EventsController extends Controller {
       await new Mail(currentUser, 'Your order from Events254', { template: 'ticket', data }).send()
       return this.response('You have registered for this event')
     } catch (error) {
+      console.log(error)
       return this.response(error, 422)
     }
   }

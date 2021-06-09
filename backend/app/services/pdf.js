@@ -18,6 +18,7 @@ class PDF {
    * It is good when you want to attach to email
    */
   createTicket () {
+    doc.pipe(fs.createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
     // doc.text(this.data)
     doc.font('Courier')
     doc.lineCap('round')
@@ -68,9 +69,10 @@ class PDF {
       .text(this.data.currentTicket.price === 0 ? 'Free' : Intl.NumberFormat('en-US', { style: 'currency', currency: 'kes' }).format(this.data.currentTicket.price))
       .moveDown()
       .save()
-    doc.pipe(fs.createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
+    const stream = doc.pipe(fs.createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
     doc.end()
-    return doc
+    stream.end()
+    return stream
   }
 }
 

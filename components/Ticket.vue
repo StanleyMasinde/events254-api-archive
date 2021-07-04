@@ -1,13 +1,15 @@
 <template>
   <!-- Ticket with QRCode, event organiser, date, time, price, location, and description -->
   <div class="ticket">
-    <!-- <div class="ticket-image">
-      <img
-        :src="ticket.image"
-        alt="Ticket Image"
-      >
-    </div> -->
-    <div class="ticket-info">
+    <!-- Sample QRCode -->
+    <div class="qrcode">
+      <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://events.opensource254.co.ke/tickets/${ticket.id}`" alt="QR Code">
+    </div>
+
+    <div
+      class="
+        ticket-info"
+    >
       <div class="ticket-title">
         <h3>{{ ticket.ticketType }}</h3>
       </div>

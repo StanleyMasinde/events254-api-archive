@@ -29,17 +29,18 @@
         <h3>Location:</h3>
         <h4>{{ ticket.eventLocation }}</h4>
       </div>
-      <div class="ticket-organiser">
+      <div v-if="ticket.organiser" class="ticket-organiser">
         <h3>Organiser:</h3>
+        <!-- if the event has an organiser -->
         <h4>{{ ticket.organiser.name }}</h4>
       </div>
       <div class="ticket-date">
         <h3>Date:</h3>
-        <h4>12/12/2016</h4>
+        <h4>{{ $moment(ticket.eventDate).format("dddd Do MMMM YYYY") }}</h4>
       </div>
       <div class="ticket-time">
         <h3>Time:</h3>
-        <h4>12:00 PM</h4>
+        <h4>{{ $moment(ticket.eventDate).format("h:mm a") }}</h4>
       </div>
     </div>
   </div>

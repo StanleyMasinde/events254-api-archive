@@ -126,6 +126,7 @@ class TicketController extends Controller {
           'event_rsvps.id': ticketId
         })
         .first([
+          'events.image AS image',
           'events.about AS eventName',
           'events.organisable_type as organisableType',
           'events.organisable_id as organisableId',

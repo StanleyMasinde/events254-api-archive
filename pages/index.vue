@@ -10,7 +10,8 @@
           Events254
         </h3>
         <p class="body-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus minus consequatur ipsum vitae, voluptatum eaque, perferendis excepturi alias harum nemo dolorum rem quasi magni ut totam sequi repellendus dicta doloremque!
+          Find activities, meetups, and more in your city. Sell your tickets, or buy them for free. Find a local event, or create a new one. Find people, or create a new event.
+          The possibilities are endless.
         </p>
       </v-col>
     </v-row>
@@ -29,13 +30,13 @@
         </v-row>
 
         <v-row>
-          <v-col v-for="i in 6" :key="i" sm="6" md="4" cols="12">
+          <v-col v-for="(e,i) in eventCategories" :key="i" sm="6" md="4" cols="12">
             <v-card flat>
               <v-img gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)" height="80" src="https://source.unsplash.com/random">
                 <v-row no-gutters justify="center" align="center" style="height: 100%;">
                   <v-col class="text-center white--text">
                     <h1 class="title">
-                      Category {{ i }}
+                      {{ e.name }}
                     </h1>
                   </v-col>
                 </v-row>
@@ -159,6 +160,38 @@ export default {
     return {
       searchQuery: null,
       noMoreEvents: false,
+      eventCategories: [
+        {
+          id: 1,
+          name: 'General',
+          image: 'https://source.unsplash.com/100x100/?Events,calendar'
+        },
+        {
+          id: 2,
+          name: 'Music',
+          image: 'https://source.unsplash.com/100x100/?Music,calendar'
+        },
+        {
+          id: 3,
+          name: 'Dance',
+          image: 'https://source.unsplash.com/100x100/?Dance,calendar'
+        },
+        {
+          id: 4,
+          name: 'Art',
+          image: 'https://source.unsplash.com/100x100/?Art,calendar'
+        },
+        {
+          id: 5,
+          name: 'Crafts',
+          image: 'https://source.unsplash.com/100x100/?Crafts,calendar'
+        },
+        {
+          id: 6,
+          name: 'Literature',
+          image: 'https://source.unsplash.com/100x100/?Literature,calendar'
+        }
+      ],
       months: [
         'Jan',
         'Feb',

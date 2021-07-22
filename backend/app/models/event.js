@@ -6,7 +6,7 @@ class Event extends Model {
      * Get all the tickets for the current model
      * -------------------------------------------
      */
-  tickets() {
+  tickets () {
     return this.hasMany('Ticket')
   }
 
@@ -15,7 +15,7 @@ class Event extends Model {
    * @param {Number} paginate
    * @param {Number} offset
    */
-  static async landingPage(paginate = 15, page = 1) {
+  static async landingPage (paginate = 15, page = 1) {
     try {
       const today = moment.tz('Africa/Nairobi').utc().toISOString()
       const offset = paginate * (page - 1)

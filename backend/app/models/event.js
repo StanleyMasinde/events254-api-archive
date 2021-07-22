@@ -6,7 +6,7 @@ class Event extends Model {
      * Get all the tickets for the current model
      * -------------------------------------------
      */
-  tickets () {
+  tickets() {
     return this.hasMany('Ticket')
   }
 
@@ -15,7 +15,7 @@ class Event extends Model {
    * @param {Number} paginate
    * @param {Number} offset
    */
-  static async landingPage (paginate = 15, page = 1) {
+  static async landingPage(paginate = 15, page = 1) {
     try {
       const today = moment.tz('Africa/Nairobi').utc().toISOString()
       const offset = paginate * (page - 1)
@@ -34,24 +34,30 @@ class Event extends Model {
       const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
 
       events.forEach((event) => {
-      // Get the tickets for each event
+        // Get the tickets for each event
         const ticketsForEvent = tickets.filter(ticket => ticket.event_id === event.id)
-        // Get the lowest price for each event
-        event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
-          if (prev.price > current.price) {
-            return current
-          }
-          return prev
-        }).price
-        // Get the highest price for each event
-        event.highestPrice = ticketsForEvent.reduce((prev, current) => {
-          if (prev.price < current.price) {
-            return current
-          }
-          return prev
-        }).price
         // Boolean to determine if the event is sold out
         event.soldOut = ticketsForEvent.length === 0
+        // Get the lowest price for each event
+
+        if (event.soldOut) {
+          event.lowestPrice = 0
+          event.highestPrice = 0
+        } else {
+          event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+            if (prev.price > current.price) {
+              return current
+            }
+            return prev
+          }).price
+          // Get the highest price for each event
+          event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+            if (prev.price < current.price) {
+              return current
+            }
+            return prev
+          }).price
+        }
         // Boolean to determine if event is free
         event.isFree = event.lowestPrice === 0
         if (!event.location) {

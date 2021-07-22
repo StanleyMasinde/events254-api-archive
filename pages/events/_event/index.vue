@@ -76,7 +76,7 @@
                     <BuyTicket v-if="!currentEvent.can_edit" :past="currentEvent.past" :tickets="currentEvent.tickets" />
                   </template>
                   <template v-else>
-                    You are going
+                    {{ currentEvent.past ? 'You went' : 'You are going' }}
                     <v-btn
                       color="primary"
                       depressed
@@ -208,7 +208,7 @@ export default {
   },
   computed: {
     organiserLink () {
-      const organiser = this.currentEvent
+      const organiser = this.currentEvent.organiser
       if (organiser.type === 'user') {
         return `/u/${organiser.id}`
       }

@@ -162,7 +162,6 @@ class EventsController extends Controller {
       }
       return this.response(e)
     } catch (error) {
-      console.log(error)
       return this.response(error, 500)
     }
   }

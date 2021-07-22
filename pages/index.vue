@@ -1,52 +1,35 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col cols="12" md="8">
-        <h1 class="display-2">
-          Discover upcoming events
-        </h1>
+      <v-col cols="12" sm="6" md="4">
+        <v-img contain src="https://res.cloudinary.com/streetcoder/image/upload/v1626949280/events254/undraw_events_2p66_sx7tl4.svg" />
+      </v-col>
+
+      <v-col cols="12" sm="6" md="4">
+        <h3>Events254</h3>
+        <p class="body-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus minus consequatur ipsum vitae, voluptatum eaque, perferendis excepturi alias harum nemo dolorum rem quasi magni ut totam sequi repellendus dicta doloremque!
+        </p>
       </v-col>
     </v-row>
 
     <v-row justify="center">
-      <v-col cols="12" md="8">
-        <v-text-field
-          v-model="searchQuery"
-          outlined
-          rounded
-          placeholder="Find something awesome"
-          append-icon="mdi-magnify"
-          @click:append="search"
-        />
-      </v-col>
-    </v-row>
-
-    <v-row justify="center">
-      <v-col cols="12" md="8">
-        <HomePageCalendar />
-      </v-col>
-    </v-row>
-
-    <v-row justify="center">
-      <v-col cols="12" md="8">
-        <h3 class="title">
-          Browse by category
-        </h3>
-      </v-col>
-      <v-col cols="12" md="8">
-        <v-chip-group v-model="filter.category" color="primary" multiple>
-          <v-chip>Technology</v-chip>
-          <v-chip>Sports</v-chip>
-          <v-chip>Religious</v-chip>
-          <v-chip>AI</v-chip>
-          <v-chip>Cars</v-chip>
-          <v-chip>Better living</v-chip>
-          <v-chip>Webinars</v-chip>
-          <v-chip>Hackathons</v-chip>
-          <v-chip>Birthdays</v-chip>
-          <v-chip>Hiking</v-chip>
-          <v-chip>Camping</v-chip>
-        </v-chip-group>
+      <v-col cols="12" md="10">
+        <v-row>
+          <v-col v-for="i in 6" :key="i" sm="6" md="4" cols="12">
+            <v-card flat>
+              <v-img gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)" height="80" src="https://source.unsplash.com/random">
+                <v-row no-gutters justify="center" align="center" style="height: 100%;">
+                  <v-col class="text-center white--text">
+                    <h1 class="title">
+                      Category {{ i }}
+                    </h1>
+                  </v-col>
+                </v-row>
+              </v-img>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 

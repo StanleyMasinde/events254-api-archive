@@ -38,7 +38,7 @@ class SearchController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async calendar (req, res) {
+  async calendar (req, res, next) {
     // TODO add timezone
     const date = req.query.date
     try {

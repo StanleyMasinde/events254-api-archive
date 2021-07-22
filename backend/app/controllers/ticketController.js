@@ -115,7 +115,7 @@ class TicketController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async getTicket (req, res) {
+  async getTicket (req, res, next) {
     const ticketId = req.params.id
     try {
       const user = await req.user()
@@ -165,7 +165,7 @@ class TicketController extends Controller {
       delete ticket.organisableId; delete ticket.organisableType
       res.json(ticket)
     } catch (error) {
-      res.status(500).json(error)
+      next(error)
     }
   }
 

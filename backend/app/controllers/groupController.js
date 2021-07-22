@@ -291,7 +291,7 @@ class GroupController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async join (req, res) {
+  async join (req, res, next) {
     try {
       const group = await DB('groups').where('slug', req.params.slug).first()
       const user = await req.user()
@@ -303,7 +303,7 @@ class GroupController extends Controller {
 
       res.status(201).json('')
     } catch (error) {
-      res.status(500).json(error)
+      next(error)
     }
   }
 

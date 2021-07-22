@@ -8,7 +8,7 @@ const EventsController = require('../app/controllers/eventsController')
  * -------------------------------------------------------------------------------
  */
 
-router.get('/events', async (req, res) => {
+router.get('/events', async (req, res, next) => {
   const { message, status } = await EventsController.index(req)
   res.status(status).json(message)
 })
@@ -20,12 +20,12 @@ router.get('/events', async (req, res) => {
  * the event
  * ----------------------------------------------------------------------------------------------------------
  */
-router.get('/events/:event', async (req, res) => {
+router.get('/events/:event', async (req, res, next) => {
   try {
     const { message, status } = await EventsController.show(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 

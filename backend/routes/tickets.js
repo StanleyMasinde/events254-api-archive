@@ -5,8 +5,8 @@ const ticketController = require('../app/controllers/ticketController')
  * Get a ticket using ID
  *
  */
-router.get('/:id', (req, res) => {
-  ticketController.getTicket(req, res)
+router.get('/:id', (req, res, next) => {
+  ticketController.getTicket(req, res, next)
 })
 
 module.exports = router

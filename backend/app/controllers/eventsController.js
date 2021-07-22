@@ -118,6 +118,20 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
+      // Get the event tickets
+      e.tickets = await DB('tickets')
+        .where('event_id', e.id) || []
+
+      // Boolean to check if event is free
+      e.isFree = e.tickets[0] == null
+      // Boolean to show that event is all day
+      e.allDay = new Date(e.startDate).getHours() === 0 && new Date(e.endDate).getHours() === 0
+      // Bolean to show that event is in progress
+      e.inProgress = new Date(e.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()
+      // Boolean to show that event is in the past
+      e.past = new Date(e.startDate).getTime() < new Date().getTime()
+      // Boolean an event has end time if the startDate is not equal to the endDate
+      e.hasEndTime = e.startDate !== e.endDate
       // TODO this is a temp fix
       e.attendees = await DB('event_rsvps')
         .join('users', 'event_rsvps.user_id', '=', 'users.id')
@@ -136,8 +150,7 @@ class EventsController extends Controller {
           })
           .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
       }
-      delete e.organisable_id
-      delete e.organisable_type
+      delete e.organisable_id; delete e.organisable_type
       if (!e.endDate) {
         e.endDate = e.startDate
       }
@@ -149,6 +162,7 @@ class EventsController extends Controller {
       }
       return this.response(e)
     } catch (error) {
+      console.log(error)
       return this.response(error, 500)
     }
   }

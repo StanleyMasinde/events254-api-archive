@@ -17,7 +17,7 @@ const authenticated = require('../app/middleware/authenticated')
  * This route is used to get all events from the database
  * --------------------------------------------------------
  */
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   const { message, status } = await EventsController.index(req)
   res.status(status).json(message)
 })
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res) => {
+router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
   try {
     const { message, status } = await EventsController.store(req)
 
@@ -39,7 +39,7 @@ router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'),
 
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
@@ -49,12 +49,12 @@ router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'),
  * The user can be fecthed via session or access token
  * -----------------------------------------------------------------
  */
-router.get('/currentUser', authenticated(), async (req, res) => {
+router.get('/currentUser', authenticated(), async (req, res, next) => {
   try {
     const { message, status } = await EventsController.currentUserEvents(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
@@ -64,12 +64,12 @@ router.get('/currentUser', authenticated(), async (req, res) => {
  * The same rules a the event creation route above
  * ---------------------------------------------------------------------
  */
-router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res) => {
+router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
   try {
     const { message, status } = await EventsController.update(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
@@ -81,12 +81,12 @@ router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('ima
  * the event
  * ----------------------------------------------------------------------------------------------------------
  */
-router.get('/:event', async (req, res) => {
+router.get('/:event', async (req, res, next) => {
   try {
     const { message, status } = await EventsController.show(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
@@ -96,12 +96,12 @@ router.get('/:event', async (req, res) => {
  * on success
  * -------------------------------------------------------------------------
  */
-router.delete('/:event', authenticated(), async (req, res) => {
+router.delete('/:event', authenticated(), async (req, res, next) => {
   try {
     const { message, status } = await EventsController.delete(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 
@@ -110,7 +110,7 @@ router.delete('/:event', authenticated(), async (req, res) => {
  * This route returns the tickets associated with a given event
  * ----------------------------------------------------------------------
  */
-router.get('/:event/tickets', async (req, res) => {
+router.get('/:event/tickets', async (req, res, next) => {
   const { status, message } = await ticketController.allEventTickets(req)
   res.status(status).json(message)
 })
@@ -120,7 +120,7 @@ router.get('/:event/tickets', async (req, res) => {
  * Add a ticket to an event. An event can have multiple tickets e.g VIP, Regular
  * -----------------------------------------------------------------------------
  */
-router.post('/:event/tickets', authenticated(), async (req, res) => {
+router.post('/:event/tickets', authenticated(), async (req, res, next) => {
   const { message, status } = await ticketController.createEventTicket(req)
   res.status(status).json(message)
 })
@@ -130,7 +130,7 @@ router.post('/:event/tickets', authenticated(), async (req, res) => {
  * Get a ticket associated with a given event by it's database ID
  * ----------------------------------------------------------------------------
  */
-router.get('/:event/tickets/:ticket', async (req, res) => {
+router.get('/:event/tickets/:ticket', async (req, res, next) => {
   const { message, status } = await ticketController.showEventTicket(req)
   res.status(status).json(message)
 })
@@ -140,7 +140,7 @@ router.get('/:event/tickets/:ticket', async (req, res) => {
  * Modifiy a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.put('/:events/tickets/:ticket', authenticated(), async (req, res) => {
+router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
   const { message, status } = await ticketController.upDateEventTicket(req)
   res.status(status).json(message)
 })
@@ -150,7 +150,7 @@ router.put('/:events/tickets/:ticket', authenticated(), async (req, res) => {
  * Delete a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.delete('/:event/tickets/:ticket', async (req, res) => {
+router.delete('/:event/tickets/:ticket', async (req, res, next) => {
   const { status, message } = await ticketController.deleteEventTicket(req)
   res.status(status).json(message)
 })
@@ -160,7 +160,7 @@ router.delete('/:event/tickets/:ticket', async (req, res) => {
  * Register for an event
  * ------------------------------------------------------------------
  */
-router.post('/:event/register', authenticated(), async (req, res) => {
+router.post('/:event/register', authenticated(), async (req, res, next) => {
   const { message, status } = await EventsController.registerForEvent(req)
   res.status(status).json(message)
 })

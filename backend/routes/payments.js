@@ -5,7 +5,7 @@ const axios = require('axios').default
  * Verify a transaction from flutterwave
  *
  */
-router.get('/verify/:transactionId', async (req, res) => {
+router.get('/verify/:transactionId', async (req, res, next) => {
   try {
     axios.defaults.headers['Content-Type'] = 'application/json'
     axios.defaults.headers.Authorization = `Bearer ${process.env.FLUTTERWAVE_SECRECT}`

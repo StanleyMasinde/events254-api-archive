@@ -14,12 +14,12 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const { status, message } = await UserController.show(req)
     res.status(status).json(message)
   } catch (error) {
-    res.status(500).json(error)
+    next(error)
   }
 })
 

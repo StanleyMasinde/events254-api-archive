@@ -1,6 +1,10 @@
 <template>
   <div>
+    <v-btn v-if="past" disabled rounded color="error">
+      Past event
+    </v-btn>
     <v-btn
+      v-else
       rounded
       depressed
       color="primary"
@@ -16,7 +20,7 @@
       <v-card>
         <v-card-title>Register for event</v-card-title>
         <v-card-text>
-          <ValidationObserver v-slot="{invalid}">
+          <ValidationObserver v-if="tickets.length !== 0" v-slot="{ invalid }">
             <v-form>
               <ValidationProvider v-slot="{ errors }" rules="required">
                 <v-select
@@ -48,15 +52,27 @@
 
               Order total:
               {{
-                formatCurrency(
-                  eventRsvp.ticket.price * eventRsvp.rsvp_count
-                )
+                eventRsvp.ticket.price
+                  ? formatCurrency(
+                    eventRsvp.ticket.price * eventRsvp.rsvp_count
+                  )
+                  : 0
               }}
-              <v-btn :disabled="invalid" color="primary" block @click="confirmOrder">
+              <v-btn
+                :disabled="invalid"
+                color="primary"
+                block
+                @click="confirmOrder"
+              >
                 Confirm order
               </v-btn>
             </v-form>
           </ValidationObserver>
+
+          <p v-else class="body-1">
+            This is event has no tickets please follow the instructions on the
+            event description on how to register
+          </p>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -64,9 +80,18 @@
 </template>
 <script>
 export default {
+  props: {
+    past: {
+      type: Boolean,
+      default: false
+    },
+    tickets: {
+      type: Array,
+      required: true
+    }
+  },
   data () {
     return {
-      availableTickets: [],
       eventRsvp: {
         ticket: {},
         rsvp_count: 1
@@ -77,7 +102,7 @@ export default {
   },
   computed: {
     ticks () {
-      return this.availableTickets.map((t) => {
+      return this.tickets.map((t) => {
         return {
           text: `${t.type} - ${this.formatCurrency(t.price)}`,
           value: t

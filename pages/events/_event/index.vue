@@ -73,7 +73,7 @@
                     <v-icon>mdi-share</v-icon>
                   </v-btn>
                   <template v-if="!currentEvent.currentUserTicket">
-                    <BuyTicket v-if="!currentEvent.can_edit" />
+                    <BuyTicket v-if="!currentEvent.can_edit" :past="currentEvent.past" :tickets="currentEvent.tickets" />
                   </template>
                   <template v-else>
                     You are going
@@ -114,7 +114,8 @@ export default {
       },
       currentEvent: {
         about: null,
-        organiser: { name: null }
+        organiser: { name: null },
+        tickets: []
       },
       registerDialog: false
     }
@@ -134,21 +135,21 @@ export default {
   },
   head () {
     return {
-      title: this.currentEvent.about,
+      title: this.currentEvent ? this.currentEvent.about : 'Event',
       script: [
         {
           type: 'application/ld+json',
           json: {
             '@context': 'https://schema.org',
             '@type': 'Event',
-            name: this.currentEvent.about,
-            startDate: this.currentEvent.startDate,
-            endDate: this.currentEvent.endDate,
+            name: this.currentEvent ? this.currentEvent.about : 'Event',
+            startDate: this.currentEvent ? this.currentEvent.startDate : null,
+            endDate: this.currentEvent ? this.currentEvent.endDate : null,
             eventStatus: 'https://schema.org/EventScheduled',
             eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
             location: {
               '@type': 'Place',
-              name: this.currentEvent.location,
+              name: this.currentEvent ? this.currentEvent.location : 'Online',
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: '37 Westlands road',
@@ -162,23 +163,23 @@ export default {
             //   '@type': 'VirtualLocation',
             //   url: 'https://operaonline.stream5.com/'
             // },
-            image: [`${this.currentEvent.image}`],
-            description: this.currentEvent.description,
+            image: [`${this.currentEvent ? this.currentEvent.image : ''}`],
+            description: this.currentEvent ? this.currentEvent.description : '',
             offers: {
               '@type': 'Offer',
-              url: `https://www.example.com/${this.currentEvent.id}`,
-              price: '300',
+              url: `https://www.example.com/${this.currentEvent ? this.currentEvent.id : ''}`,
+              price: this.currentEvent.tickets[0] ? this.currentEvent.tickets[0].price : 0,
               priceCurrency: 'KES',
               availability: 'https://schema.org/InStock',
-              validFrom: '2024-05-21T12:00'
+              validFrom: `${this.currentEvent ? this.currentEvent.created_at : ''}`
             },
-            performer: {
-              '@type': 'PerformingGroup',
-              name: 'Kira and Morrison'
-            },
+            // performer: {
+            //   '@type': 'PerformingGroup',
+            //   name: 'Kira and Morrison'
+            // },
             organizer: {
               '@type': 'Organization',
-              name: this.currentEvent.organiser.name,
+              name: this.currentEvent ? this.currentEvent.organiser.name : '',
               url: `${this.organiserLink}`
             }
           }
@@ -207,7 +208,7 @@ export default {
   },
   computed: {
     organiserLink () {
-      const organiser = this.currentEvent.organiser
+      const organiser = this.currentEvent
       if (organiser.type === 'user') {
         return `/u/${organiser.id}`
       }

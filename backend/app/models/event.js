@@ -29,13 +29,37 @@ class Event extends Model {
       .orderBy('startDate', 'asc')
       .select()
 
+    // Select from tickets where event_id = each event id
+    const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
+
     events.forEach((event) => {
+      // Get the tickets for each event
+      const ticketsForEvent = tickets.filter(ticket => ticket.event_id === event.id)
+      // Get the lowest price for each event
+      event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+        if (prev.price > current.price) {
+          return current
+        }
+        return prev
+      }).price
+      // Get the highest price for each event
+      event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+        if (prev.price < current.price) {
+          return current
+        }
+        return prev
+      }).price
+      // Boolean to determine if the event is sold out
+      event.soldOut = ticketsForEvent.length === 0
+      // Boolean to determine if event is free
+      event.isFree = event.lowestPrice === 0
       if (!event.location) {
         event.isOnline = true
       } else {
         event.isOnline = false
       }
       if (!event.endDate) {
+        event.isAllDay = true
         event.endDate = event.startDate
       }
       for (const key in event) {

@@ -16,62 +16,66 @@ class Event extends Model {
    * @param {Number} offset
    */
   static async landingPage (paginate = 15, page = 1) {
-    const today = moment.tz('Africa/Nairobi').utc().toISOString()
-    const offset = paginate * (page - 1)
-    const records = await DB(this.tableName()).where('startDate', '>', new Date()).count('id as recordCount')
-    const totalShown = paginate * page
-    const remaining = parseInt(records[0].recordCount) - totalShown
-    const lastPage = parseInt(records[0].recordCount / paginate)
-    const events = await DB(this.tableName())
-      .where('startDate', '>', today)
-      .limit(paginate)
-      .offset(offset)
-      .orderBy('startDate', 'asc')
-      .select()
+    try {
+      const today = moment.tz('Africa/Nairobi').utc().toISOString()
+      const offset = paginate * (page - 1)
+      const records = await DB(this.tableName()).where('startDate', '>', new Date()).count('id as recordCount')
+      const totalShown = paginate * page
+      const remaining = parseInt(records[0].recordCount) - totalShown
+      const lastPage = parseInt(records[0].recordCount / paginate)
+      const events = await DB(this.tableName())
+        .where('startDate', '>', today)
+        .limit(paginate)
+        .offset(offset)
+        .orderBy('startDate', 'asc')
+        .select()
 
-    // Select from tickets where event_id = each event id
-    const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
+      // Select from tickets where event_id = each event id
+      const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
 
-    events.forEach((event) => {
+      events.forEach((event) => {
       // Get the tickets for each event
-      const ticketsForEvent = tickets.filter(ticket => ticket.event_id === event.id)
-      // Get the lowest price for each event
-      event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
-        if (prev.price > current.price) {
-          return current
+        const ticketsForEvent = tickets.filter(ticket => ticket.event_id === event.id)
+        // Get the lowest price for each event
+        event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+          if (prev.price > current.price) {
+            return current
+          }
+          return prev
+        }).price
+        // Get the highest price for each event
+        event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+          if (prev.price < current.price) {
+            return current
+          }
+          return prev
+        }).price
+        // Boolean to determine if the event is sold out
+        event.soldOut = ticketsForEvent.length === 0
+        // Boolean to determine if event is free
+        event.isFree = event.lowestPrice === 0
+        if (!event.location) {
+          event.isOnline = true
+        } else {
+          event.isOnline = false
         }
-        return prev
-      }).price
-      // Get the highest price for each event
-      event.highestPrice = ticketsForEvent.reduce((prev, current) => {
-        if (prev.price < current.price) {
-          return current
+        if (!event.endDate) {
+          event.isAllDay = true
+          event.endDate = event.startDate
         }
-        return prev
-      }).price
-      // Boolean to determine if the event is sold out
-      event.soldOut = ticketsForEvent.length === 0
-      // Boolean to determine if event is free
-      event.isFree = event.lowestPrice === 0
-      if (!event.location) {
-        event.isOnline = true
-      } else {
-        event.isOnline = false
-      }
-      if (!event.endDate) {
-        event.isAllDay = true
-        event.endDate = event.startDate
-      }
-      for (const key in event) {
-        if (Object.hasOwnProperty.call(event, key)) {
-          if (event[key] == null) {
-            event[key] = 'N/A'
+        for (const key in event) {
+          if (Object.hasOwnProperty.call(event, key)) {
+            if (event[key] == null) {
+              event[key] = 'N/A'
+            }
           }
         }
+      })
+      return {
+        events, lastPage, remaining
       }
-    })
-    return {
-      events, lastPage, remaining
+    } catch (error) {
+      console.log(error) // TODO: handle error
     }
   }
 }

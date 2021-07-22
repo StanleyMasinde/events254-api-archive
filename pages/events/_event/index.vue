@@ -23,7 +23,9 @@
         <v-col cols="12" md="10">
           <v-row>
             <v-col cols="12" md="8">
-              <v-img height="300" :src="currentEvent.image" />
+              <v-card flat>
+                <v-img height="300" :src="currentEvent.image" />
+              </v-card>
             </v-col>
             <v-col class="sticky-top" cols="12" md="4">
               <v-card outlined>
@@ -37,7 +39,9 @@
                   Event by:
                   <router-link :to="organiserLink">
                     {{
-                      currentEvent.organiser ? currentEvent.organiser.name : "N/A"
+                      currentEvent.organiser
+                        ? currentEvent.organiser.name
+                        : "N/A"
                     }}
                   </router-link>
                   <br>
@@ -73,10 +77,14 @@
                     <v-icon>mdi-share</v-icon>
                   </v-btn>
                   <template v-if="!currentEvent.currentUserTicket">
-                    <BuyTicket v-if="!currentEvent.can_edit" :past="currentEvent.past" :tickets="currentEvent.tickets" />
+                    <BuyTicket
+                      v-if="!currentEvent.can_edit"
+                      :past="currentEvent.past"
+                      :tickets="currentEvent.tickets"
+                    />
                   </template>
                   <template v-else>
-                    {{ currentEvent.past ? 'You went' : 'You are going' }}
+                    {{ currentEvent.past ? "You went" : "You are going" }}
                     <v-btn
                       color="primary"
                       depressed
@@ -99,7 +107,7 @@
           </v-row>
         </v-col>
       </v-row>
-    <!-- End of event body -->
+      <!-- End of event body -->
     </client-only>
   </v-container>
 </template>
@@ -146,7 +154,8 @@ export default {
             startDate: this.currentEvent ? this.currentEvent.startDate : null,
             endDate: this.currentEvent ? this.currentEvent.endDate : null,
             eventStatus: 'https://schema.org/EventScheduled',
-            eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+            eventAttendanceMode:
+              'https://schema.org/OfflineEventAttendanceMode',
             location: {
               '@type': 'Place',
               name: this.currentEvent ? this.currentEvent.location : 'Online',
@@ -167,11 +176,17 @@ export default {
             description: this.currentEvent ? this.currentEvent.description : '',
             offers: {
               '@type': 'Offer',
-              url: `https://www.example.com/${this.currentEvent ? this.currentEvent.id : ''}`,
-              price: this.currentEvent.tickets[0] ? this.currentEvent.tickets[0].price : 0,
+              url: `https://www.example.com/${
+                this.currentEvent ? this.currentEvent.id : ''
+              }`,
+              price: this.currentEvent.tickets[0]
+                ? this.currentEvent.tickets[0].price
+                : 0,
               priceCurrency: 'KES',
               availability: 'https://schema.org/InStock',
-              validFrom: `${this.currentEvent ? this.currentEvent.created_at : ''}`
+              validFrom: `${
+                this.currentEvent ? this.currentEvent.created_at : ''
+              }`
             },
             // performer: {
             //   '@type': 'PerformingGroup',

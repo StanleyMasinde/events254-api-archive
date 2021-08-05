@@ -11,11 +11,14 @@
       <v-row v-else justify="center">
         <v-col cols="12" md="10">
           <p>
-            <span class="text--secondary">{{
+            <span v-if="currentEvent.allDay" class="text--secondary">
+              All-Day event
+            </span>
+            <span v-else class="text--secondary">{{
               $moment(currentEvent.startDate).format("MMMM Do YYYY [at] h:mm a")
             }}</span>
             <br>
-            <span class="text-h4 font-weight-bold">
+            <span class="text-h5 font-weight-bold">
               {{ currentEvent.about }}
             </span>
           </p>
@@ -30,7 +33,11 @@
             <v-col class="sticky-top" cols="12" md="4">
               <v-card outlined>
                 <v-card-text class="body-1">
+                  <span v-if="currentEvent.allDay" class="red--text">
+                    All-Day Event
+                  </span>
                   <span
+                    v-else
                     class="red--text"
                   >From {{ $moment(currentEvent.startDate).format("LT") }} to
                     {{ $moment(currentEvent.endDate).format("LT") }}

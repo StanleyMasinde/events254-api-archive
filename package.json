@@ -1,6 +1,6 @@
 {
   "name": "events254",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "private": true,
   "description": "Events254 is an application for event organisers and anyone who is looking for something to do",
   "main": "app.js",

@@ -92,9 +92,7 @@
                     >
                       Manage event
                     </v-btn>
-                    <v-btn icon color="primary" @click="shareEvent">
-                      <v-icon>mdi-share</v-icon>
-                    </v-btn>
+                    <social-share :url="`/events/${currentEvent.id}`" :title="currentEvent.about" :description="currentEvent.description" />
                     <template v-if="!currentEvent.currentUserTicket">
                       <BuyTicket
                         v-if="!currentEvent.can_edit"
@@ -135,7 +133,9 @@
   </div>
 </template>
 <script>
+import SocialShare from '~/components/SocialShare.vue'
 export default {
+  components: { SocialShare },
   data () {
     return {
       availableTickets: [],
@@ -261,19 +261,6 @@ export default {
   },
   auth: false,
   methods: {
-    async shareEvent () {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: this.currentEvent.about,
-            text: this.currentEvent.description,
-            url: `${process.env.APP_URL}/events/${this.currentEvent.id}`
-          })
-        } catch (error) {
-          throw new Error(error)
-        }
-      }
-    },
     async verifyTransaction (transactionID) {
       try {
         const { data } = await this.$axios.get(

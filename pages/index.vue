@@ -1,143 +1,248 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-col cols="12" sm="6" md="4">
-        <v-img
-          contain
-          src="https://res.cloudinary.com/streetcoder/image/upload/v1626949280/events254/undraw_events_2p66_sx7tl4.svg"
-        />
-      </v-col>
-
-      <v-col cols="12" sm="6" md="4" class="pt-5">
-        <h3 class="display-1">
-          Events254
-        </h3>
-        <p class="body-1">
-          Find activities, meetups, and more in your city. Sell your tickets, or
-          buy them for free. Find a local event, or create a new one. Find
-          people, or create a new event. The possibilities are endless.
-        </p>
-      </v-col>
-    </v-row>
-
-    <v-row justify="center">
-      <v-col cols="12" md="10">
-        <v-row cols="12">
-          <v-col>
-            <h3>Browse by category</h3>
-          </v-col>
-          <v-col class="text-right">
-            <v-btn text rounded color="primary" to="/categories">
-              See more
-            </v-btn>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col
-            v-for="(e, i) in eventCategories"
-            :key="i"
-            sm="6"
-            md="4"
-            cols="12"
+  <div>
+    <v-app-bar rounded="0" flat app hide-on-scroll>
+      <v-toolbar-items>
+        <nuxt-link to="/">
+          <v-img height="70" width="70" src="/icon.png" />
+        </nuxt-link>
+      </v-toolbar-items>
+      <v-spacer />
+      <v-toolbar-items>
+        <client-only>
+          <v-menu
+            v-if="$auth.loggedIn"
+            bottom
+            nudge-top
+            min-width="200px"
+            rounded
+            offset-y
           >
-            <v-card flat>
-              <v-img
-                contain
-                gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
-                height="100"
-                :src="e.image"
+            <template #activator="{ on }">
+              <v-btn
+                data-profile-menu
+                icon
+                x-large
+                v-on="on"
               >
-                <v-row
-                  no-gutters
-                  justify="center"
-                  align="center"
-                  style="height: 100%"
+                <v-avatar
+                  color="brown"
+                  size="48"
                 >
-                  <v-col class="text-center white--text">
-                    <h1 class="title">
-                      {{ e.name }}
-                    </h1>
-                  </v-col>
-                </v-row>
-              </v-img>
+                  <span class="white--text headline">{{ $store.getters.initials }}</span>
+                </v-avatar>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-list-item-content class="justify-center">
+                <div class="mx-auto text-center">
+                  <v-avatar
+                    color="brown"
+                  >
+                    <span class="white--text headline">{{ innitials }}</span>
+                  </v-avatar>
+                  <h3>{{ $auth.user.name }}</h3>
+                  <p class="caption mt-1">
+                    {{ $auth.user.email }}
+                  </p>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    to="/"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Home
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    to="/home"
+                    depressed
+                    rounded
+                    text
+                  >
+                    My account
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    data-start-your-group
+                    to="/groups/create"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Start your group
+                  </v-btn>
+                  <v-divider class="my-3" />
+
+                  <v-btn
+                    to="/events/create"
+                    depressed
+                    rounded
+                    text
+                  >
+                    Create event
+                  </v-btn>
+                  <v-divider class="my-3" />
+                  <v-btn
+                    color="error"
+                    depressed
+                    rounded
+                    text
+                    @click="$auth.logout()"
+                  >
+                    Logout
+                  </v-btn>
+                </div>
+              </v-list-item-content>
             </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+          </v-menu>
+          <template v-else>
+            <v-btn text link to="/login">
+              Login
+            </v-btn>
+          </template>
+        </client-only>
+      </v-toolbar-items>
+    </v-app-bar>
+    <v-container fluid>
+      <v-row justify="center">
+        <v-col cols="12" sm="6" md="4">
+          <v-img
+            contain
+            src="https://res.cloudinary.com/streetcoder/image/upload/v1626949280/events254/undraw_events_2p66_sx7tl4.svg"
+          />
+        </v-col>
 
-    <client-only>
-      <FetchLoading v-if="$fetchState.pending" landing-page />
-      <FetchError v-else-if="$fetchState.error" />
+        <v-col cols="12" sm="6" md="4" class="pt-5">
+          <h3 class="display-1">
+            Events254
+          </h3>
+          <p class="body-1">
+            Find activities, meetups, and more in your city. Sell your tickets, or
+            buy them for free. Find a local event, or create a new one. Find
+            people, or create a new event. The possibilities are endless.
+          </p>
+        </v-col>
+      </v-row>
 
-      <v-row v-else justify="center">
+      <v-row justify="center">
         <v-col cols="12" md="10">
-          <div v-if="eventsObject.events.length === 0" class="text-center">
-            <h3>Nothing here</h3>
-          </div>
-          <v-row v-else>
-            <v-col cols="12">
-              <h3>Events near Nairobi</h3>
+          <v-row cols="12">
+            <v-col>
+              <h3>Browse by category</h3>
             </v-col>
+            <v-col class="text-right">
+              <v-btn text rounded color="primary" to="/categories">
+                See more
+              </v-btn>
+            </v-col>
+          </v-row>
 
+          <v-row>
             <v-col
-              v-for="(e, i) in eventsObject.events"
+              v-for="(e, i) in eventCategories"
               :key="i"
-              cols="12"
               sm="6"
               md="4"
+              cols="12"
             >
-              <v-card
-                height="300"
-                outlined
-                :to="`/events/${e.id}`"
-                class="ma-2 no-overflow"
-                rounded
-              >
-                <v-img height="200" class="pa-3" :src="e.image">
-                  <v-row>
-                    <v-col>
-                      <div class="text-left">
-                        <h3 class="white--text custom-shadow display-1">
-                          {{ new Date(e.startDate).getDate() }}
-                        </h3>
-                        <span class="white--text custom-shadow">{{
-                          months[$moment(e.startDate).month()]
-                        }}</span>
-                      </div>
-                    </v-col>
-                    <v-col
-                      v-if="e.isFree"
-                      class="teal--text title text-right custom-shadow"
-                    >
-                      <h3>Free</h3>
-                    </v-col>
-                    <v-col
-                      v-else
-                      class="text-right title white--text custom-shadow"
-                    >
-                      <h3>{{ formatCurrency(e.lowestPrice) }}</h3>
+              <v-card flat>
+                <v-img
+                  contain
+                  gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+                  height="100"
+                  :src="e.image"
+                >
+                  <v-row
+                    no-gutters
+                    justify="center"
+                    align="center"
+                    style="height: 100%"
+                  >
+                    <v-col class="text-center white--text">
+                      <h1 class="title">
+                        {{ e.name }}
+                      </h1>
                     </v-col>
                   </v-row>
                 </v-img>
-                <v-list-item>
-                  <v-list-item-content class="body-1">
-                    <v-list-item-title :title="e.about">
-                      {{ e.about }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle class="red--text">
-                      <v-icon>mdi-calendar-outline</v-icon>
-                      {{
-                        $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a")
-                      }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle>
-                      <v-icon>mdi-map-marker-outline</v-icon>
-                      {{ e.isOnline ? "Online" : e.location }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <client-only>
+        <FetchLoading v-if="$fetchState.pending" landing-page />
+        <FetchError v-else-if="$fetchState.error" />
+
+        <v-row v-else justify="center">
+          <v-col cols="12" md="10">
+            <div v-if="eventsObject.events.length === 0" class="text-center">
+              <h3>Nothing here</h3>
+            </div>
+            <v-row v-else>
+              <v-col cols="12">
+                <h3>Events near Nairobi</h3>
+              </v-col>
+
+              <v-col
+                v-for="(e, i) in eventsObject.events"
+                :key="i"
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-card
+                  height="300"
+                  outlined
+                  :to="`/events/${e.id}`"
+                  class="ma-2 no-overflow"
+                  rounded
+                >
+                  <v-img height="200" class="pa-3" :src="e.image">
+                    <v-row>
+                      <v-col>
+                        <div class="text-left">
+                          <h3 class="white--text custom-shadow display-1">
+                            {{ new Date(e.startDate).getDate() }}
+                          </h3>
+                          <span class="white--text custom-shadow">{{
+                            months[$moment(e.startDate).month()]
+                          }}</span>
+                        </div>
+                      </v-col>
+                      <v-col
+                        v-if="e.isFree"
+                        class="teal--text title text-right custom-shadow"
+                      >
+                        <h3>Free</h3>
+                      </v-col>
+                      <v-col
+                        v-else
+                        class="text-right title white--text custom-shadow"
+                      >
+                        <h3>{{ formatCurrency(e.lowestPrice) }}</h3>
+                      </v-col>
+                    </v-row>
+                  </v-img>
+                  <v-list-item>
+                    <v-list-item-content class="body-1">
+                      <v-list-item-title :title="e.about">
+                        {{ e.about }}
+                      </v-list-item-title>
+                      <v-list-item-subtitle class="red--text">
+                        <v-icon>mdi-calendar-outline</v-icon>
+                        {{
+                          $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a")
+                        }}
+                      </v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <v-icon>mdi-map-marker-outline</v-icon>
+                        {{ e.isOnline ? "Online" : e.location }}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
                 <!-- <v-card-text class="body-2">
                   <p class="red--text">
                     When: {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }} <br>
@@ -149,42 +254,43 @@
                     </span>
                   </p>
                 </v-card-text> -->
-              </v-card>
-            </v-col>
-          </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </client-only>
+
+      <v-row justify="center">
+        <v-col cols="12" md="4">
+          <v-btn
+            v-if="eventsObject.nextPageUrl != null"
+            large
+            color="primary"
+            block
+            rounded
+            depressed
+            @click="loadMore"
+          >
+            Load more
+          </v-btn>
         </v-col>
       </v-row>
-    </client-only>
 
-    <v-row justify="center">
-      <v-col cols="12" md="4">
+      <v-col cols="12">
         <v-btn
-          v-if="eventsObject.nextPageUrl != null"
-          large
-          color="primary"
-          block
-          rounded
-          depressed
-          @click="loadMore"
+          to="/events/create"
+          color="accent"
+          fab
+          fixed
+          right
+          bottom
         >
-          Load more
+          <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-col>
-    </v-row>
-
-    <v-col cols="12">
-      <v-btn
-        to="/events/create"
-        color="accent"
-        fab
-        fixed
-        right
-        bottom
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </v-col>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 <script>
 export default {

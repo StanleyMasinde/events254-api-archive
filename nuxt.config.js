@@ -118,8 +118,8 @@ module.exports = {
       dark: false,
       themes: {
         light: {
-          primary: '#49c5b6',
-          accent: '#ff8601',
+          primary: '#ff8601',
+          accent: '#49c5b6',
           secondary: colors.blue.accent1,
           info: colors.teal.lighten1,
           warning: colors.amber.base,

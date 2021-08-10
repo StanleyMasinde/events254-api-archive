@@ -2,7 +2,10 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="6" md="4">
-        <v-img contain src="https://res.cloudinary.com/streetcoder/image/upload/v1626949280/events254/undraw_events_2p66_sx7tl4.svg" />
+        <v-img
+          contain
+          src="https://res.cloudinary.com/streetcoder/image/upload/v1626949280/events254/undraw_events_2p66_sx7tl4.svg"
+        />
       </v-col>
 
       <v-col cols="12" sm="6" md="4" class="pt-5">
@@ -10,8 +13,9 @@
           Events254
         </h3>
         <p class="body-1">
-          Find activities, meetups, and more in your city. Sell your tickets, or buy them for free. Find a local event, or create a new one. Find people, or create a new event.
-          The possibilities are endless.
+          Find activities, meetups, and more in your city. Sell your tickets, or
+          buy them for free. Find a local event, or create a new one. Find
+          people, or create a new event. The possibilities are endless.
         </p>
       </v-col>
     </v-row>
@@ -30,10 +34,26 @@
         </v-row>
 
         <v-row>
-          <v-col v-for="(e,i) in eventCategories" :key="i" sm="6" md="4" cols="12">
+          <v-col
+            v-for="(e, i) in eventCategories"
+            :key="i"
+            sm="6"
+            md="4"
+            cols="12"
+          >
             <v-card flat>
-              <v-img gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)" height="80" src="https://source.unsplash.com/random">
-                <v-row no-gutters justify="center" align="center" style="height: 100%;">
+              <v-img
+                contain
+                gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+                height="100"
+                :src="e.image"
+              >
+                <v-row
+                  no-gutters
+                  justify="center"
+                  align="center"
+                  style="height: 100%"
+                >
                   <v-col class="text-center white--text">
                     <h1 class="title">
                       {{ e.name }}
@@ -80,15 +100,23 @@
                     <v-col>
                       <div class="text-left">
                         <h3 class="white--text custom-shadow display-1">
-                          {{ new Date(e.startDate).getDate() }} <br>
-                          {{ months[$moment(e.startDate).month()] }}
+                          {{ new Date(e.startDate).getDate() }}
                         </h3>
+                        <span class="white--text custom-shadow">{{
+                          months[$moment(e.startDate).month()]
+                        }}</span>
                       </div>
                     </v-col>
-                    <v-col v-if="e.isFree" class="teal--text title text-right custom-shadow">
+                    <v-col
+                      v-if="e.isFree"
+                      class="teal--text title text-right custom-shadow"
+                    >
                       <h3>Free</h3>
                     </v-col>
-                    <v-col v-else class="text-right title white--text custom-shadow">
+                    <v-col
+                      v-else
+                      class="text-right title white--text custom-shadow"
+                    >
                       <h3>{{ formatCurrency(e.lowestPrice) }}</h3>
                     </v-col>
                   </v-row>
@@ -99,10 +127,14 @@
                       {{ e.about }}
                     </v-list-item-title>
                     <v-list-item-subtitle class="red--text">
-                      <v-icon>mdi-calendar-outline</v-icon> {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }}
+                      <v-icon>mdi-calendar-outline</v-icon>
+                      {{
+                        $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a")
+                      }}
                     </v-list-item-subtitle>
                     <v-list-item-subtitle>
-                      <v-icon>mdi-map-marker-outline</v-icon> {{ e.isOnline ? 'Online' : e.location }}
+                      <v-icon>mdi-map-marker-outline</v-icon>
+                      {{ e.isOnline ? "Online" : e.location }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
@@ -164,32 +196,32 @@ export default {
         {
           id: 1,
           name: 'General',
-          image: 'https://source.unsplash.com/100x100/?Events,calendar'
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589266/events254/undraw_special_event_4aj8_mfr8rp.svg'
         },
         {
           id: 2,
           name: 'Music',
-          image: 'https://source.unsplash.com/100x100/?Music,calendar'
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589266/events254/undraw_Music_re_a2jk_ixnbvy.svg'
         },
         {
           id: 3,
           name: 'Dance',
-          image: 'https://source.unsplash.com/100x100/?Dance,calendar'
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589266/events254/undraw_workout_gcgu_meujil.svg'
         },
         {
           id: 4,
           name: 'Art',
-          image: 'https://source.unsplash.com/100x100/?Art,calendar'
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589266/events254/undraw_art_museum_8or4_pd70rr.svg'
         },
         {
           id: 5,
-          name: 'Crafts',
-          image: 'https://source.unsplash.com/100x100/?Crafts,calendar'
+          name: 'Online',
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589831/events254/undraw_Online_page_re_lhgx_l5xr01.svg'
         },
         {
           id: 6,
           name: 'Literature',
-          image: 'https://source.unsplash.com/100x100/?Literature,calendar'
+          image: 'https://res.cloudinary.com/streetcoder/image/upload/v1628589266/events254/undraw_Books_l33t_sdmi6k.svg'
         }
       ],
       months: [

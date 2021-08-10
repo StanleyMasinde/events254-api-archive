@@ -120,7 +120,7 @@
           <p class="body-1">
             Find activities, meetups, and more in your city. Sell your tickets, or
             buy them for free. Find a local event, or create a new one. Find
-            people, or create a new event. The possibilities are endless.
+            people, or create a new event. The possibilities are endless!
           </p>
         </v-col>
       </v-row>
@@ -204,10 +204,10 @@
                     <v-row>
                       <v-col>
                         <div class="text-left">
-                          <h3 class="white--text custom-shadow display-1">
+                          <h3 class="error--text custom-shadow display-1">
                             {{ new Date(e.startDate).getDate() }}
                           </h3>
-                          <span class="white--text custom-shadow">{{
+                          <span class="error--text custom-shadow">{{
                             months[$moment(e.startDate).month()]
                           }}</span>
                         </div>
@@ -243,7 +243,7 @@
                       </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
-                <!-- <v-card-text class="body-2">
+                  <!-- <v-card-text class="body-2">
                   <p class="red--text">
                     When: {{ $moment(e.startDate).format("MMMM Do YYYY [at] h:mm a") }} <br>
                     <span :title="e.about" class="black--text">

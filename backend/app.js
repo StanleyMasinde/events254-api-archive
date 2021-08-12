@@ -4,6 +4,8 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser')
 const sessionstore = require('sessionstore')
 
+const Sentry = require('@sentry/node')
+const Tracing = require('@sentry/tracing')
 const publicRouter = require('./routes/public')
 const usersRouter = require('./routes/users')
 const groupsRouter = require('./routes/groups')
@@ -16,8 +18,18 @@ const auth = require('./app/auth/auth')
 
 const app = express()
 
-app.locals.applicationName = 'Events254'
-app.locals.applicationemail = 'info@events254.co.ke'
+Sentry.init({
+  dsn: 'https://6aaa64b176a0433da7cb306409587b56@o954334.ingest.sentry.io/5903368',
+  environment: 'production',
+  integrations: [
+    new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Express({ app })
+  ],
+  tracesSampleRate: 1.0
+})
+
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.tracingHandler())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -50,6 +62,8 @@ app.use('/search', searchRouter)
 app.use('/tickets', ticketRouter)
 app.use('/payments', paymentsRouter)
 app.use('/p', publicRouter)
+
+app.use(Sentry.Handlers.errorHandler())
 
 if (process.env.NODE_ENV === 'api') {
   const port = process.env.PORT | 3000

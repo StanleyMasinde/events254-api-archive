@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 const faker = require('faker')
 chai.use(chaiHttp)
-const application = require('../backend/app')
+const application = require('../app')
 const app = chai.request.agent(application).keepOpen() // This will keep the request open and so the session
 
 describe('#Events test with protected routes', () => {
@@ -22,7 +22,7 @@ describe('#Events test with protected routes', () => {
   it('User creates an event', async () => {
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
       .field({
         location: faker.address.streetAddress(),
         about: 'Awesome event',

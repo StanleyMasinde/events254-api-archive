@@ -5,8 +5,8 @@ const { expect } = require('chai')
 const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 const faker = require('faker')
-const slugify = require('../backend/app/actions/slugify')
-const application = require('../backend/app')
+const slugify = require('../app/actions/slugify')
+const application = require('../app')
 
 const app = chai.request.agent(application).keepOpen()
 
@@ -33,7 +33,7 @@ describe('Groups', () => {
   it('#Create a new group', async () => {
     const res = await app.post('/groups')
       .set('content-type', 'multipart/form-data')
-      .attach('picture', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('picture', fs.readFileSync('./public/icon.png'), 'icon.png')
       .field({
         name,
         description: faker.company.catchPhrase(),
@@ -54,7 +54,7 @@ describe('Groups', () => {
   it('#Update a given group', async () => {
     const res = await app.put(`/groups/${slug}`)
       .set('content-type', 'multipart/form-data')
-      .attach('picture', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('picture', fs.readFileSync('./public/icon.png'), 'icon.png')
       .field({
         name: newName,
         description: faker.company.catchPhrase(),
@@ -80,7 +80,7 @@ describe('Group events', () => {
   it('Group creates and event', async () => {
     const res = await app.post(`/groups/${newSlug}/events`)
       .set('content-type', 'multipart/form-data')
-      .attach('image', fs.readFileSync('./static/icon.png'), 'icon.png')
+      .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
       .field({
         location: faker.address.streetAddress(),
         about: 'Awesome event',

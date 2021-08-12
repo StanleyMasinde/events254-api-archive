@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       customShare: false,
-      fullUrl: `${process.env.APP_URL}/${this.url}`
+      fullUrl: `${process.env.APP_URL}${this.url}`
     }
   },
   methods: {

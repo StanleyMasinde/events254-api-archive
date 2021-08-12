@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const sessionstore = require('sessionstore')
 
 const Sentry = require('@sentry/node')
@@ -17,6 +18,12 @@ const paymentsRouter = require('./routes/payments')
 const auth = require('./app/auth/auth')
 
 const app = express()
+
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || true,
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+}))
 
 Sentry.init({
   dsn: 'https://6aaa64b176a0433da7cb306409587b56@o954334.ingest.sentry.io/5903368',
@@ -62,6 +69,13 @@ app.use('/search', searchRouter)
 app.use('/tickets', ticketRouter)
 app.use('/payments', paymentsRouter)
 app.use('/p', publicRouter)
+
+// Catch all 404 routes
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'The requested resource could not be found.'
+  })
+})
 
 app.use(Sentry.Handlers.errorHandler())
 

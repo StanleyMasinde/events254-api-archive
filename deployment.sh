@@ -11,8 +11,8 @@ npm i
 echo "Running the latest migrations"
 npx knex migrate:latest --env production
 
-echo "Building for production"
-npm run build -- -q
+# echo "Building for production"
+# npm run build -- -q
 
 echo "Restarting the process"
 #pm2 restart all

@@ -109,12 +109,13 @@ class EventsController extends Controller {
 
   /**
    * Show an event
-   * @param {Array} request
+   * @param {import('express').Request} request
    */
   async show (request) {
     try {
       let e = await Event.find(request.params.event)
       const u = await request.user()
+      console.log(request.session.auth);
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
@@ -165,7 +166,6 @@ class EventsController extends Controller {
       }
       return this.response(e)
     } catch (error) {
-      console.log(error);
       return this.response(error, 500)
     }
   }

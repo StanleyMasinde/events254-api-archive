@@ -118,7 +118,7 @@ class EventsController extends Controller {
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
-      if (!e.endDate) {
+      if (e.endDate == null) {
         e.endDate = e.startDate
       }
       // Get the event tickets

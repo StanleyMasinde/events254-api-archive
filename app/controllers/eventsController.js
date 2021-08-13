@@ -113,13 +113,16 @@ class EventsController extends Controller {
    */
   async show (request) {
     try {
-      const e = await Event.find(request.params.event)
+      let e = await Event.find(request.params.event)
       const u = await request.user()
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
-      if (e.endDate == null) {
-        e.endDate = e.startDate
+      if (!e.endDate) {
+        await e.update({
+          endDate: e.startDate
+        })
+        e = await Event.find(request.params.event)
       }
       // Get the event tickets
       e.tickets = await DB('tickets')
@@ -162,6 +165,7 @@ class EventsController extends Controller {
       }
       return this.response(e)
     } catch (error) {
+      console.log(error);
       return this.response(error, 500)
     }
   }

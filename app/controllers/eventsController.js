@@ -31,13 +31,13 @@ class EventsController extends Controller {
         if (eventsObject.lastPage === 0) {
           lastPageUrl = null
         } else {
-          lastPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
+          lastPageUrl = `/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
         }
 
         if (eventsObject.remaining <= 0) {
           nextPageUrl = null
         } else {
-          nextPageUrl = `/api/p/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
+          nextPageUrl = `/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
         }
 
         return this.response({

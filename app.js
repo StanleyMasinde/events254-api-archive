@@ -29,7 +29,7 @@ Sentry.init({
   dsn: 'https://6aaa64b176a0433da7cb306409587b56@o954334.ingest.sentry.io/5903368',
   environment: 'production',
   integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
+    new Sentry.Integrations.Http({ tracing: false }),
     new Tracing.Integrations.Express({ app })
   ],
   tracesSampleRate: 1.0

@@ -45,6 +45,7 @@ const upload = async (file, folder = '/') => {
     return `https://${bucketName}.s3.${REGION}.amazonaws.com/${uploadFolder}`
   } catch (error) {
     fs.writeFileSync('error.log', `${new Date().toUTCString()} | S3 ${new Error(error).message} \n`, { flag: 'a' })
+    return 'https://placeimg.com/640/500/null?30219'
   }
 }
 

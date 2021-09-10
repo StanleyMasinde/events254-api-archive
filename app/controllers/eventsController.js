@@ -225,6 +225,26 @@ class EventsController extends Controller {
   }
 
   /**
+   * Publish and unpublish an event
+   * @param {Express.Request} request
+   */
+  async publish (request, response, next) {
+    const { params } = request
+    const { event } = params
+    const currentEvent = await Event.find(event)
+    console.log(currentEvent);
+    if (canEditEvent(currentEvent, await request.user())) {
+      try {
+        await currentEvent.update({ published: !currentEvent.published })
+        return this.response(currentEvent, 201)
+      } catch (error) {
+        return this.response(error, 500)
+      }
+    }
+    return this.response({ message: 'You don\'t have permission to perform this action' }, 403)
+  }
+
+  /**
    * Get the events for the current user
    * @param {Express.Request} request
    */

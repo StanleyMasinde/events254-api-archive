@@ -106,6 +106,20 @@ router.delete('/:event', authenticated(), async (req, res, next) => {
 })
 
 /**
+ * -------------------------------------------------------------------------
+ * Publish and unpublish an event. A response code 200 is returned on success
+ * -------------------------------------------------------------------------
+ */
+router.put('/:event/publish', authenticated(), async (req, res, next) => {
+  try {
+    const { message, status } = await EventsController.publish(req)
+    res.status(status).json(message)
+  } catch (error) {
+    next(error)
+  }
+})
+
+/**
  * ----------------------------------------------------------------------
  * This route returns the tickets associated with a given event
  * ----------------------------------------------------------------------

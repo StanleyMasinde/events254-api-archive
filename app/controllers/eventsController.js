@@ -217,6 +217,8 @@ class EventsController extends Controller {
     //   return this.response('You dont\'t have permision to perfrom this action', 401)
     // }
     try {
+      // Delete the tickets
+      await DB('tickets').where('event_id', currentEvent.id).delete()
       await currentEvent.destroy()
       return this.response('Deleted')
     } catch (error) {

@@ -24,7 +24,7 @@ class Event extends Model {
       const remaining = parseInt(records[0].recordCount) - totalShown
       const lastPage = parseInt(records[0].recordCount / paginate)
       const events = await DB(this.tableName())
-        .where('startDate', '>', today)
+        .where('startDate', '>=', today)
         .limit(paginate)
         .offset(offset)
         .orderBy('startDate', 'asc')

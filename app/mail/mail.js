@@ -31,6 +31,16 @@ class Mail {
   }
 
   /**
+   * Save sent email to database
+   * @param {Object} email - The email to be saved
+   */
+  async save (email) {
+    const Email = require('../models/email')
+    const newEmail = new Email(email)
+    await newEmail.save()
+  }
+
+  /**
    * Send the email
    */
   async send () {
@@ -43,6 +53,7 @@ class Mail {
         ctx: this.data,
         icalEvent: this.data.icalString
       })
+
     } catch (error) {
       error.status = 500
       throw error

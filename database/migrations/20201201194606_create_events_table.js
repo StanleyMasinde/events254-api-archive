@@ -17,6 +17,10 @@ exports.up = function (knex) {
     table.bigInteger('organisable_id')
     table.string('organisable_type')
     table.timestamps(true, true)
+
+    // Constraints
+    const stateMent = 'ALTER TABLE `events` ADD FULLTEXT(`about,description`);'
+    knex.raw(stateMent)
   })
 }
 

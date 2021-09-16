@@ -14,10 +14,9 @@ class SearchController extends Controller {
     const groupsTable = DB('groups')
     const usersTable = DB('users')
     try {
-      const events = await eventsTable.where('about', 'like', `%${query}%`)
-        .orWhere('description', 'like', `%${query}%`)
-        .orWhere('location', 'like', `%${query}%`)
-        .select('id', 'about', 'startDate', 'image', 'location').limit(50)
+      const res = await DB.
+        raw(`SELECT id, about,startDate,image,location  FROM events WHERE MATCH(about, description) AGAINST(? IN NATURAL LANGUAGE MODE)`, [query])
+      const events = res[0]
 
       const groups = await groupsTable.where('name', 'like', `%${query}%`)
         .orWhere('description', 'like', `%${query}%`)

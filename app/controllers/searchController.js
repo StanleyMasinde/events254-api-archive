@@ -47,7 +47,7 @@ class SearchController extends Controller {
     }
 
     try {
-      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ?)', [month])
+      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, location, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ?)', [month])
       events[0].map(event => {
         if (!event.endDate) {
           event.endDate = event.startDate

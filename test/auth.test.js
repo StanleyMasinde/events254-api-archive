@@ -8,15 +8,23 @@ chai.use(chaiHttp)
 const application = require('../app')
 const app = chai.request.agent(application).keepOpen()
 
+let user = {
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: 'strongpassword'
+}
+
+let user2 = {
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: 'strongpassword'
+}
+
 describe('Session Authentication tests', () => {
   it('Register a user', async () => {
     const res = await app
       .post('/auth/register')
-      .send({
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: '12345678'
-      })
+      .send(user)
     expect(res.status).equals(200)
   })
 
@@ -24,8 +32,8 @@ describe('Session Authentication tests', () => {
     const res = await app
       .post('/auth/login')
       .send({
-        email: 'john@example.com',
-        password: '1234567'
+        email: user.email,
+        password: 'wrongpassword'
       })
     expect(res.status).equals(401)
   })
@@ -34,8 +42,8 @@ describe('Session Authentication tests', () => {
     const res = await app
       .post('/auth/login')
       .send({
-        email: 'john@mail.com',
-        password: '12345678'
+        email: 'user@mail.com',
+        password: user.password
       })
     expect(res.status).equals(401)
   })
@@ -44,8 +52,8 @@ describe('Session Authentication tests', () => {
     const res = await app
       .post('/auth/login')
       .send({
-        email: 'john@example.com',
-        password: '12345678'
+        email: user.email,
+        password: user.password
       })
     expect(res.status).equals(200)
   })
@@ -77,7 +85,7 @@ describe('Session Authentication tests', () => {
   it('Send a password reset notification', async () => {
     const res = await app.post('/auth/password')
       .send({
-        email: 'john@example.com'
+        email: user.email
       })
     expect(res.status).equals(200)
   })
@@ -89,11 +97,7 @@ describe('Authentication with personal API Tokens', () => {
     const res = await app
       .post('/auth/register')
       .set('X-requested-with', 'mobile')
-      .send({
-        name: 'John Doe',
-        email: 'john@mobile.com',
-        password: '12345678'
-      })
+      .send(user2)
     expect(res.status).equals(200)
     expect(res.body).to.haveOwnProperty('user')
     expect(res.body.user).to.haveOwnProperty('token')
@@ -104,8 +108,8 @@ describe('Authentication with personal API Tokens', () => {
       .post('/auth/login')
       .set('X-requested-with', 'mobile')
       .send({
-        email: 'john@mobile.com',
-        password: '12345678'
+        email: user2.email,
+        password: user2.password
       })
     expect(res.status).equals(200)
     expect(res.body).to.haveOwnProperty('user')
@@ -125,24 +129,28 @@ describe('Authentication with personal API Tokens', () => {
     const res = await app
       .get('/auth/user')
       .set('X-requested-with', 'mobile')
-    console.log(res.body)
     expect(res.status).equals(401)
   })
 
   it('Create an event using API token', async () => {
-    const res = await app
-      .post('/events')
-      .set('content-type', 'multipart/form-data')
-      .set('X-requested-with', 'mobile')
-      .set('Authorization', `Bearer ${token}`)
-      .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
-      .field({
-        location: faker.address.streetAddress(),
-        about: 'Awesome event',
-        description: faker.lorem.paragraph(10),
-        startDate: new Date().toISOString().substr(0, 10),
-        startTime: '09:30'
-      })
-    expect(res.status).equals(201)
+    try {
+      const res = await app
+        .post('/events')
+        .set('content-type', 'multipart/form-data')
+        .set('X-requested-with', 'mobile')
+        .set('Authorization', `Bearer ${token}`)
+        .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
+        .field({
+          location: faker.address.streetAddress(),
+          about: 'Awesome event',
+          description: faker.lorem.paragraph(10),
+          startDate: new Date().toISOString().substr(0, 10),
+          startTime: '09:30'
+        })
+      expect(res.status).equals(201)
+      expect(res.body).to.haveOwnProperty('about')
+    } catch (err) {
+      console.log(err)
+    }
   })
 })

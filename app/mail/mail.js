@@ -7,8 +7,8 @@ const mail = nodemailer.createTransport({
   port: process.env.MAIL_PORT || 2525,
   secure: false,
   auth: {
-    user: process.env.MAIL_USERNAME,
-    pass: process.env.MAIL_PASSWORD
+    user: process.env.MAIL_USERNAME || '',
+    pass: process.env.MAIL_PASSWORD || ''
   }
 })
 mail.use('compile', pugEngine({
@@ -22,7 +22,7 @@ class Mail {
    * @param {String} subject - the subject of the email
    * @param {Object} Options - The email params
    */
-  constructor (recipient, subject, options = { template: null, data: null }) {
+  constructor(recipient, subject, options = { template: null, data: null }) {
     this.sender = '"Events254" <no-reply@events254.com>'
     this.recipient = recipient
     this.subject = subject
@@ -34,7 +34,7 @@ class Mail {
    * Save sent email to database
    * @param {Object} email - The email to be saved
    */
-  async save (email) {
+  async save(email) {
     const Email = require('../models/email')
     const newEmail = new Email(email)
     await newEmail.save()
@@ -43,7 +43,7 @@ class Mail {
   /**
    * Send the email
    */
-  async send () {
+  async send() {
     try {
       await mail.sendMail({
         from: this.sender,

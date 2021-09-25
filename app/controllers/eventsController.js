@@ -115,7 +115,6 @@ class EventsController extends Controller {
     try {
       let e = await Event.find(request.params.event)
       const u = await request.user()
-      console.log(request.session.auth);
       if (!e) { // The event was not found in the database
         return this.response('Model not found', 404)
       }
@@ -281,6 +280,12 @@ class EventsController extends Controller {
       }
       const currentEvent = await Event.find(params.event)
       const currentTicket = await Ticket.find(body.ticket_id)
+      if(!currentTicket) {
+        return this.response('Ticket not found')
+      }
+      if(!currentEvent) {
+        return this.response('Event not found')
+      }
       const ticketId = await DB('event_rsvps').insert({
         event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
       })

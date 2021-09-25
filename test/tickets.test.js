@@ -7,15 +7,24 @@ const faker = require('faker')
 chai.use(chaiHttp)
 const application = require('../app')
 const app = chai.request.agent(application).keepOpen()
+const User = require('../app/models/user')
+
+let user = {
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: 'strongpassword'
+}
+let ticketId
+let eventId
 
 describe('#Events test with protected routes', () => {
-  let eventId
   before(async () => {
+    await User.register(user)
     await app
       .post('/auth/login')
       .send({
-        email: 'john@example.com',
-        password: '12345678'
+        email: user.email,
+        password: 'strongpassword'
       })
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
@@ -38,7 +47,8 @@ describe('#Events test with protected routes', () => {
         description: faker.random.arrayElement(['VIP', 'Regular', 'General'])
       })
     expect(res.status).equals(201)
-    expect(res.body).to.haveOwnProperty('event_id', 4)
+    ticketId = res.body.id
+    // expect(res.body).to.haveOwnProperty('event_id', 4)
   })
 
   it('Get all tickets', async () => {
@@ -48,14 +58,14 @@ describe('#Events test with protected routes', () => {
   })
 
   it('Get a specified ticket', async () => {
-    const res = await app.get('/events/4/tickets/1')
+    const res = await app.get(`/events/${eventId}/tickets/${ticketId}`)
     expect(res.body).to.be.an('Object')
-    expect(res.body).to.haveOwnProperty('event_id', 2)
-    expect(res.body).to.haveOwnProperty('id', 1)
+    expect(res.body).to.haveOwnProperty('event_id', eventId)
+    expect(res.body).to.haveOwnProperty('id', ticketId)
   })
 
   it('Update a specified ticket', async () => {
-    const res = await app.put('/events/4/tickets/1')
+    const res = await app.put(`/events/${eventId}/tickets/${ticketId}`)
       .send({
         price: 100,
         limit: 1,
@@ -67,7 +77,7 @@ describe('#Events test with protected routes', () => {
   })
 
   it('Delete a ticket', async () => {
-    const res = await app.delete('/events/4/tickets/1')
+    const res = await app.delete(`/events/${eventId}/tickets/${ticketId}`)
     expect(res.status).equals(200)
   })
 })

@@ -7,7 +7,7 @@ class SearchController extends Controller {
    * @param {import('express').Request} request
    * @param {import('express').Response} response
    */
-  async index (request, response) {
+  async index(request, response) {
     // TODO midularize this search
     const query = request.query.q
     const eventsTable = DB('events')
@@ -37,11 +37,23 @@ class SearchController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async calendar (req, res, next) {
-    // TODO add timezone
-    const date = req.query.date
+  async calendar(req, res, next) {
+    let month
+    if (!req.query.date) {
+      month = new Date().getMonth() + 1
+    }
+    else {
+      month = req.query.date.split('-')[1]
+    }
+
     try {
-      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE DATE(startDate) = ? LIMIT 100) ORDER BY `startDate` ASC', [date])
+      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ?)', [month])
+      events[0].map(event => {
+        if (!event.endDate) {
+          event.endDate = event.startDate
+        }
+        return event
+      })
       res.json(events[0])
     } catch (error) {
       res.status(500).json(new Error(error).message)

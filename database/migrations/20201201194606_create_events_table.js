@@ -18,9 +18,9 @@ exports.up = function (knex) {
     table.string('organisable_type')
     table.timestamps(true, true)
 
-    // Constraints
-    const stateMent = 'ALTER TABLE `events` ADD FULLTEXT(`about,description`);'
-    knex.raw(stateMent)
+    // Create a fullText index
+    table.index(['about', 'description'], 'fullTextIndex', 'FULLTEXT')
+
   })
 }
 

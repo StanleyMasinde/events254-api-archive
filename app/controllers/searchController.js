@@ -39,15 +39,18 @@ class SearchController extends Controller {
    */
   async calendar(req, res, next) {
     let month
+    let year
     if (!req.query.date) {
       month = new Date().getMonth() + 1
+      year = new Date().getFullYear()
     }
     else {
       month = req.query.date.split('-')[1]
+      year = req.query.date.split('-')[0]
     }
 
     try {
-      const events = await DB.raw('(SELECT `id`, `about`,`image`, `startDate`, `endDate`, location, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ?)', [month])
+      const events = await DB.raw('(SELECT `id`, `about`, `startDate`, `endDate`, `location`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ? AND YEAR(startDate) = ?', [month, year])
       events[0].map(event => {
         if (!event.endDate) {
           event.endDate = event.startDate

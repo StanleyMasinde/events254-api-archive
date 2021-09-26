@@ -162,7 +162,7 @@ class UserController extends Controller {
         }
       }
       /** Send a failed response */
-      return this.response('Invalid token', 422)
+      return this.response('Invalid token or token has expired please reset your password again', 422)
     } catch (error) {
       return this.response(error, error.status || 422)
     }

@@ -50,7 +50,7 @@ class SearchController extends Controller {
     }
 
     try {
-      const events = await DB.raw('(SELECT `id`, `about`, `startDate`, `endDate`, `location`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ? AND YEAR(startDate) = ?', [month, year])
+      const events = await DB.raw('SELECT `id`, `about`, `startDate`, `endDate`, `location`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ? AND YEAR(startDate) = ?', [month, year])
       events[0].map(event => {
         if (!event.endDate) {
           event.endDate = event.startDate
@@ -59,7 +59,7 @@ class SearchController extends Controller {
       })
       res.json(events[0])
     } catch (error) {
-      res.status(500).json(new Error(error).message)
+      next(error)
     }
   }
 }

@@ -18,6 +18,7 @@ const auth = () => {
       const { email, password } = this.body
       DB.table(guard)
         .where({ email })
+        .orWhere({ username: email })
         .first()
         .then((user) => {
           // The email is correct

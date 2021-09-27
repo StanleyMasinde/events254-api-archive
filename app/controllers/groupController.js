@@ -16,7 +16,7 @@ class GroupController extends Controller {
    * By default, these results will paginated when the app grows
   * @returns {Object} A collection of users
   */
-  async index () {
+  async index() {
     try {
       return this.response(await Group.all())
     } catch (error) {
@@ -30,7 +30,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async create (request) {
+  async create(request) {
     const { body, file } = request
     try {
       const user = await request.user() // The current user
@@ -56,15 +56,17 @@ class GroupController extends Controller {
    * Show a specified group
    * We use the slug to identify a group.
    * e.g events-254-kenya
-   * @param {Express.Request} request
-   * @returns Group
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Group} group
    */
-  async show (request) {
-    const { params, user } = request
-    const u = await user()
+  async show(req, res, next) {
     try {
+      const u = await req.user()
+      console.log(u)
       const group = await Group.where({
-        slug: params.slug
+        slug: req.params.slug
       }).first()
 
       if (group) {
@@ -74,11 +76,11 @@ class GroupController extends Controller {
         group.isManager = canManageGroup(group, u)
         group.isMember = await group.isMember(u)
         group.organisers.map(o => delete o.password)
-        return this.response(group)
+        return res.json(group)
       }
-      return this.response('Group not found', 404)
+      return res.status(404).json('We could not find the group 😢')
     } catch (error) {
-      return this.response(error, error.status | 500)
+      next(error)
     }
   }
 
@@ -87,7 +89,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async update (request) {
+  async update(request) {
     const { body, params, file } = request
 
     try {
@@ -116,7 +118,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns response
    */
-  async delete (request) {
+  async delete(request) {
     const group = await Group.where({
       slug: request.params.slug
     }).first()
@@ -133,7 +135,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async currentUser (request) {
+  async currentUser(request) {
     const { user } = request
     try {
       const u = await user()
@@ -153,7 +155,7 @@ class GroupController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async members (request) {
+  async members(request) {
     const slug = request.params.slug
     try {
       const group = await Group.where({
@@ -169,7 +171,7 @@ class GroupController extends Controller {
    * List all group events
    * @param {Express.Request} request
    */
-  async groupEvents (request) {
+  async groupEvents(request) {
     const filter = request.query.filter
     const { slug } = request.params
     try {
@@ -198,7 +200,7 @@ class GroupController extends Controller {
    * Create a new event
    * @param {Express.Request} request
    */
-  async createEvent (request) {
+  async createEvent(request) {
     const { body, file, params } = request
     const group = await Group.where({ slug: params.slug }).first()
 
@@ -233,10 +235,80 @@ class GroupController extends Controller {
   }
 
   /**
+   * Show an event using it's id
+   * @param {import('express').Request}
+   * @param {import('superagent').Response}
+   * @param {import('express').NextFunction}
+   * @returns {Event} event
+   */
+  async showEvent(req, res, next) {
+    try {
+      const u = await req.user()
+      const group = await Group.where({
+        slug: req.params.slug
+      }).first()
+
+      if (group) {
+        const event = await Event.where({
+          id: req.params.event,
+          organisable_type: 'Group',
+          organisable_id: group.id
+        }).first()
+
+        if (event) {
+          if (!event.endDate) {
+            await event.update({
+              endDate: event.startDate
+            })
+            event = await Event.find(request.params.event)
+          }
+          event.tickets = await DB('tickets')
+            .where('event_id', event.id) || []
+          event.isFree = event.tickets[0] == null
+          event.allDay = new Date(event.startDate).getHours() === new Date(event.endDate).getHours()
+          event.inProgress = new Date(event.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()
+          event.past = new Date(event.startDate).getTime() < new Date().getTime()
+          event.hasEndTime = event.startDate !== event.endDate
+          // TODO this is a temp fix
+          event.attendees = await DB('event_rsvps')
+            .join('users', 'event_rsvps.user_id', '=', 'users.id')
+            .where({
+              'event_rsvps.event_id': event.id
+            })
+            .select('users.name AS name', 'users.bio AS bio')
+          event.organiser = await getEventOrganiser(event)
+          event.can_edit = canEditEvent(event, u)
+          if (u) {
+            event.currentUserTicket = await DB('event_rsvps')
+              .join('tickets', 'event_rsvps.ticket_id', '=', 'tickets.id')
+              .where({
+                'event_rsvps.event_id': event.id,
+                'event_rsvps.user_id': u.id
+              })
+              .first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
+          }
+          delete event.organisable_id; delete event.organisable_type
+          if (!event.location) {
+            event.location = 'N/A'
+          }
+          if (!event.online_link) {
+            event.online_link = 'N/A'
+          }
+          return res.json(event)
+        }
+        return res.status(404).json('We could not find the event 😢')
+      }
+      return res.status(404).json('We could not find the event 😢')
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
    * Update a given event
    * @param {Express.Request} request
    */
-  async updateEvent (request) {
+  async updateEvent(request) {
     const user = await request.user()
     const { body, params } = request
     const { event } = params // The the event Id
@@ -268,7 +340,7 @@ class GroupController extends Controller {
    * Delete a given event
    * @param {Express.Request} request
    */
-  async deleteEvent (request) {
+  async deleteEvent(request) {
     const { params } = request
     // The the event Id
     const { event } = params
@@ -292,7 +364,7 @@ class GroupController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async join (req, res, next) {
+  async join(req, res, next) {
     try {
       const group = await DB('groups').where('slug', req.params.slug).first()
       const user = await req.user()
@@ -313,7 +385,7 @@ class GroupController extends Controller {
    * @param {Array} body
    * @returns Promise
    */
-  validate (body) {
+  validate(body) {
     return new Validator(body, {
       name: 'required',
       description: 'required'

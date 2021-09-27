@@ -58,13 +58,8 @@ router.get('/currentUser', async (req, res, next) => {
  * On the client side it would be something like domain.com/opensource254
  * ------------------------------------------------------------------------
  */
-router.get('/:slug', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.show(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+router.get('/:slug', (req, res, next) => {
+  GroupController.show(req, res, next)
 })
 
 /**
@@ -137,6 +132,16 @@ router.get('/:slug/events', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+/**
+ * -----------------------------------------------------------------------
+ * Get a group's specific events using it's slug and event id
+ * e.g /api/groups/opensource254/events/1
+ * On the client side it would be something like domain.com/opensource254/events/1
+ */
+ router.get('/:slug/:event', (req, res, next) => {
+  GroupController.showEvent(req, res, next)
 })
 
 /**

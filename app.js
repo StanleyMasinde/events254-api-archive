@@ -78,13 +78,4 @@ app.use((req, res) => {
 })
 
 app.use(Sentry.Handlers.errorHandler())
-
-if (process.env.NODE_ENV === 'api') {
-  const port = process.env.PORT | 3000
-  app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`API DEV server running on http://localhost:${port}`)
-  })
-} else {
-  module.exports = app
-}
+module.exports = app

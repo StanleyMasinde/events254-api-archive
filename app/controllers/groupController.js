@@ -124,6 +124,9 @@ class GroupController extends Controller {
     }).first()
 
     if (group) {
+      await DB('group_organisers').where({
+        group_id: group.id
+      }).del()
       await group.destroy()
       return this.response(`${group.name} has been deleted.`)
     }

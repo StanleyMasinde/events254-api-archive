@@ -146,8 +146,17 @@ class UserController extends Controller {
       const rec = await DB.table('password_resets')
         .where('email', payload.email)
         .first()
+
+
       // The record exists
       if (rec) {
+        // if the token was created more than 30 minutes ago, it is invalid
+        const created_at = new Date(rec.created_at).toUTCString()
+        const now = new Date().toUTCString()
+        const diff = (new Date(now) - new Date(created_at)) / 1000
+        if (diff > 1800) {
+          return this.response('The token has expired reset your password again', 422)
+        }
         // Compare the two tokens
         if (rec.token === payload.token) {
           /** Hash the given password */

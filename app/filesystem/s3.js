@@ -28,8 +28,9 @@ const upload = async (file, folder = '/') => {
 
   const uploadFolder = `${folder}/${filename}${originalname}`
   // Do not upload to S3 in test environmets
-  if (process.env.NODE_ENV === 'testing') {
-    return 'https://fakeurl.com'
+  if (process.env.NODE_ENV === 'testing' || process.env.NODE_ENV === 'development') {
+    // return a random image from placeimg
+    return `https://placeimg.com/640/500/any?${Math.floor(Math.random() * 100000)}`
   }
   // Object params for the upload
   const objectParams = {

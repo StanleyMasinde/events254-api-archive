@@ -44,5 +44,16 @@
     "faker": "^5.5.3",
     "mocha": "^9.1.2",
     "nodemon": "^2.0.13"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opensource254/events254.git"
+  },
+  "bugs": {
+    "url": "https://github.com/opensource254/events254/issues"
+  },
+  "homepage": "https://github.com/opensource254/events254#readme"
 }

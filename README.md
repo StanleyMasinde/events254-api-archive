@@ -7,7 +7,7 @@
 2. npm install
 3. npm run dev --spa
 
-## API only develoment
+## API only development
 If by any chance you might need to only run the api server alone you can do that by running the following
 `yarn dev:api` or `npm run dev:api`.
  *Please not that the api server does not have the `/api` prefix eg getting users is as simple as `/users` because `/api/users` will result in a 404 response*

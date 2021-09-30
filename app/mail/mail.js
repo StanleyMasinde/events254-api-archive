@@ -5,7 +5,7 @@ const mail = nodemailer.createTransport({
   streamTransport: process.env.STREAM_MAIL === 'true',
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: process.env.MAIL_PORT || 2525,
-  secure: false,
+  secure: true,
   auth: {
     user: process.env.MAIL_USERNAME || '',
     pass: process.env.MAIL_PASSWORD || ''

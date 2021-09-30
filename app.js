@@ -26,7 +26,7 @@ app.use(cors({
 }))
 
 Sentry.init({
-  dsn: 'https://6aaa64b176a0433da7cb306409587b56@o954334.ingest.sentry.io/5903368',
+  dsn: 'https://d88004dc1b994722b6152a3d89af37e4@o954334.ingest.sentry.io/5986920',
   environment: 'production',
   integrations: [
     new Sentry.Integrations.Http({ tracing: false }),

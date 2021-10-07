@@ -1,6 +1,6 @@
 #!/bin/sh
-echo "Installing dependencies with npm"
-npm i
+echo "Installing dependencies with yarn"
+yarn
 
 echo "Running the latest migrations"
 npm run migrate

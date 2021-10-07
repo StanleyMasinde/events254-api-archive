@@ -3,7 +3,7 @@ echo "Installing dependencies with npm"
 npm i
 
 echo "Running the latest migrations"
-npx knex migrate:latest --env production
+npm run migrate
 
 echo "Restarting the process"
 pm2 restart ecosystem.config.js

@@ -7,7 +7,8 @@
     "pretest": "NODE_ENV=production knex migrate:latest",
     "test": "NODE_ENV=testing mocha --exit --bail",
     "start": "node bin/www",
-    "dev": "DEBUG=express* nodemon bin/www"
+    "dev": "DEBUG=express* nodemon bin/www",
+    "migrate": "NODE_ENV=production knex migrate:latest"
   },
   "keywords": [
     "Events254",

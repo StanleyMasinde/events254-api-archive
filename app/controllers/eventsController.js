@@ -252,9 +252,10 @@ class EventsController extends Controller {
   async currentUserEvents (request) {
     try {
       const user = await request.user()
-      const events = await new User(user.id).events()
+      const events = await new User(user).events()
       return this.response(events)
     } catch (error) {
+      console.log(error)
       return this.response(error, 500)
     }
   }

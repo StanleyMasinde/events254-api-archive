@@ -1,5 +1,6 @@
 const { Model, DB } = require('mevn-orm')
 const moment = require('moment-timezone')
+
 class Event extends Model {
   /**
      * -------------------------------------------
@@ -19,11 +20,11 @@ class Event extends Model {
     try {
       const today = moment.tz('Africa/Nairobi').utc().toISOString()
       const offset = paginate * (page - 1)
-      const records = await DB(this.tableName()).where('startDate', '>', new Date()).count('id as recordCount')
+      const records = await DB('events').whereRaw('startDate >= ?', today).count('id as recordCount')
       const totalShown = paginate * page
       const remaining = parseInt(records[0].recordCount) - totalShown
       const lastPage = parseInt(records[0].recordCount / paginate)
-      const events = await DB(this.tableName())
+      const events = await DB('events')
         .where('startDate', '>=', today)
         .limit(paginate)
         .offset(offset)

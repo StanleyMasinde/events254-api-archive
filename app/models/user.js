@@ -1,4 +1,4 @@
-const { Model } = require('mevn-orm')
+const { Model, DB } = require('mevn-orm')
 const { hash } = require('bcrypt')
 
 class User extends Model {
@@ -22,7 +22,11 @@ class User extends Model {
    * Get the events created by the current User
    */
   events () {
-    return this.morphMany('Event', 'organisable')
+    // return this.morphMany('Event', 'organisable') // TODO Fix this in the future
+    return DB.table('events').where({
+      organisable_id: this.id,
+      organisable_type: 'User'
+    })
   }
 
   /**

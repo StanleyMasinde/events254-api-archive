@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "ical-generator": "^3.0.1",
-    "mevn-orm": "^2.2.5",
+    "mevn-orm": "^2.2.7",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.33",
     "morgan": "^1.10.0",

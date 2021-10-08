@@ -54,14 +54,15 @@ class UserController extends Controller {
       // user exists
       const { email } = body
       const exists = await User.where({ email }).first()
-      if (exists) {
+   
+      if (exists.id) {
         return this.response({ errors: { email: 'This email is already registerd' } }, 422)
       }
 
       // Generate a unique username from the name. ensure it is not taken
       let username = body.name.replace(/\s/g, '').toLowerCase()
       let i = 1
-      while (await User.where({ username }).first()) {
+      while (await User.where({ username }).first().id) {
         username = body.name.replace(/\s/g, '').toLowerCase() + i
         i++
       }

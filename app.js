@@ -73,7 +73,7 @@ app.use('/p', publicRouter)
 // Catch all 404 routes
 app.use((req, res) => {
   res.status(404).json({
-    error: 'Sorry, the requested resource doesn not live here 😢'
+    error: 'Sorry, the requested resource does not live here 😢'
   })
 })
 

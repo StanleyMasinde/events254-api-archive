@@ -17,7 +17,7 @@
   "author": "Opensource254",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.35.0",
+    "@aws-sdk/client-s3": "^3.36.0",
     "@sentry/node": "^6.13.3",
     "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "ical-generator": "^3.0.1",
-    "mevn-orm": "^2.2.1",
+    "mevn-orm": "^2.2.2",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.33",
     "morgan": "^1.10.0",

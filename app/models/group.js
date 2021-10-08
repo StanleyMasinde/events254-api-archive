@@ -20,7 +20,11 @@ class Group extends Model {
    * All events by default
    */
   events () {
-    return this.morphMany('Event', 'organisable')
+    // return this.morphMany('Event', 'organisable') TODO this should be it
+    return DB('events').where({
+      organisable_id: this.id,
+      organisable_type: 'group'
+    })
   }
 
   /**

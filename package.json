@@ -5,7 +5,7 @@
   "main": "bin/www",
   "scripts": {
     "pretest": "NODE_ENV=production knex migrate:latest",
-    "test": "NODE_ENV=testing mocha --exit --bail",
+    "test": "NODE_ENV=production mocha --exit --bail",
     "start": "node bin/www",
     "dev": "DEBUG=express* nodemon bin/www",
     "migrate": "NODE_ENV=production knex migrate:latest"

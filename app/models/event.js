@@ -82,7 +82,7 @@ class Event extends Model {
         events, lastPage, remaining
       }
     } catch (error) {
-      console.log(error) // TODO: handle error
+      throw new Error(error)
     }
   }
 }

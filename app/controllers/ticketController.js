@@ -9,7 +9,7 @@ class TicketController extends Controller {
      * Get all the tickets of the current event
      * @param {*} request the request body
      */
-  async allEventTickets (request) {
+  async allEventTickets(request) {
     const { params } = request
     try {
       const events = await this.connection().where({ event_id: params.event })
@@ -23,7 +23,7 @@ class TicketController extends Controller {
      * Create a ticket for the current event
      * @param {*} request the request body
      */
-  async createEventTicket (request) {
+  async createEventTicket(request) {
     const { params, body } = request
     const { event } = params // Get the event ID
     const { price, limit, type } = body
@@ -42,7 +42,7 @@ class TicketController extends Controller {
      * Show a specified ticket for the current event
      * @param {*} request the request body
      */
-  async showEventTicket (request) {
+  async showEventTicket(request) {
     try {
       const ticket = await Ticket.find(request.params.ticket)
       return this.response(ticket)
@@ -55,7 +55,7 @@ class TicketController extends Controller {
      * Update a ticket information
      * @param {*} request the request body
      */
-  async upDateEventTicket (request) {
+  async upDateEventTicket(request) {
     try {
       await new Validator(request.body, {
         type: 'required'
@@ -76,7 +76,7 @@ class TicketController extends Controller {
      * Delete a ticket
      * @param {*} request
      */
-  async deleteEventTicket (request) {
+  async deleteEventTicket(request) {
     try {
       const ticket = await Ticket.find(request.params.ticket)
       if (ticket) {
@@ -94,7 +94,7 @@ class TicketController extends Controller {
    *
    * @param {Express.Request} request
    */
-  async currentUser (request) {
+  async currentUser(request) {
     try {
       const user = await request.user()
       const tickets = await DB('event_rsvps')
@@ -115,7 +115,7 @@ class TicketController extends Controller {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async getTicket (req, res, next) {
+  async getTicket(req, res, next) {
     const ticketId = req.params.id
     try {
       const user = await req.user()
@@ -153,14 +153,18 @@ class TicketController extends Controller {
           organiser.type = 'user'
         }
       } else {
-        const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
-          .where({
-            id: ticket.organisableId
-          }).first('name', 'slug', 'id')
-        if (organiser) {
-          organiser.type = 'group'
+        if (!ticket.organisableType) {
+          ticket.orgsniser = 'Organiszer not found'
+        } else {
+          const organiser = await DB(pluralize(ticket.organisableType.toLowerCase()))
+            .where({
+              id: ticket.organisableId
+            }).first('name', 'slug', 'id')
+          if (organiser) {
+            organiser.type = 'group'
+          }
+          ticket.organiser = organiser
         }
-        ticket.organiser = organiser
       }
       delete ticket.organisableId; delete ticket.organisableType
       res.json(ticket)
@@ -173,7 +177,7 @@ class TicketController extends Controller {
    * The database connection
    * @returns {DB}
    */
-  connection () {
+  connection() {
     return DB('tickets')
   }
 }

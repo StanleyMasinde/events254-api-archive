@@ -18,10 +18,8 @@ const authenticated = require('../app/middleware/authenticated')
  * --------------------------------------------------------
  */
 router.get('/', async (req, res, next) => {
-  const { message, status } = await EventsController.index(req)
-  res.status(status).json(message)
+  EventsController.index(req, res, next)
 })
-
 /**
  * -----------------------------------------------------------------------------
  * Create a new event in the system
@@ -64,13 +62,8 @@ router.get('/currentUser', authenticated(), async (req, res, next) => {
  * The same rules a the event creation route above
  * ---------------------------------------------------------------------
  */
-router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.update(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
+  EventsController.update(req, res, next)
 })
 
 /**
@@ -82,14 +75,8 @@ router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('ima
  * ----------------------------------------------------------------------------------------------------------
  */
 router.get('/:event', async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.show(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+  EventsController.show(req, res, next)
 })
-
 /**
  * -------------------------------------------------------------------------
  * Delete a given event from the database. A response code 200 is returned

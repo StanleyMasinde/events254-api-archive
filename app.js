@@ -77,5 +77,20 @@ app.use((req, res) => {
   })
 })
 
+// Catch all error routes
+app.use((err, req, res, next) => {
+  const env = process.env.NODE_ENV
+  if (env === 'development') {
+    return res.status(err.status || 500).json({
+      error: err.message,
+      stack: err.stack
+    })
+  }
+
+  return res.status(err.status || 500).json({
+    error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
+  })
+})
+
 app.use(Sentry.Handlers.errorHandler())
 module.exports = app

@@ -6,6 +6,9 @@ const pluralize = require('pluralize')
    * @returns Object || null
    */
 const getEventOrganiser = async (event = {}) => {
+  if (!event.organisable_type || !event.organisable_id) {
+    return {}
+  }
   const organisableType = event.organisable_type
   if (organisableType === 'User') {
     const organiser = await DB(pluralize(organisableType.toLowerCase()))

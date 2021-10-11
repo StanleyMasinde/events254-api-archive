@@ -173,11 +173,13 @@ class GroupController extends Controller {
 
   /**
    * List all group events
-   * @param {Express.Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
-  async groupEvents(request) {
-    const filter = request.query.filter
-    const { slug } = request.params
+  async groupEvents(req, res, next) {
+    const filter = req.query.filter
+    const { slug } = req.params
     try {
       const group = await Group.where({
         slug
@@ -194,9 +196,9 @@ class GroupController extends Controller {
           events = await group.events()
           break
       }
-      return this.response(events)
+      return res.json(events)
     } catch (error) {
-      return this.response(error, 500)
+      next(error)
     }
   }
 
@@ -270,7 +272,7 @@ class GroupController extends Controller {
             .where('event_id', event.id) || []
           event.isFree = event.tickets[0] == null
           event.allDay = new Date(event.startDate).getHours() === new Date(event.endDate).getHours()
-          event.inProgress = new Date(event.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()
+          event.inProgress = new Date(event.startDate).getTime() < new Date().getTime() && new Date(event.endDate).getTime() > new Date().getTime()
           event.past = new Date(event.startDate).getTime() < new Date().getTime()
           event.hasEndTime = event.startDate !== event.endDate
           // TODO this is a temp fix

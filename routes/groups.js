@@ -126,12 +126,7 @@ router.get('/:slug/members', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.get('/:slug/events', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.groupEvents(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+  GroupController.groupEvents(req, res, next)
 })
 
 /**

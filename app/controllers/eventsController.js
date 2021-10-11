@@ -16,31 +16,33 @@ class EventsController extends Controller {
   /**
    * GET all the events. This route is very unnecessary for normal users
    * IT will be usefull for debugging though
-   * @param {import('express').Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
-  async index (request) {
+  async index(req, res, next) {
     // TODO add pagination
     try {
       let events = []
-      if (request.query.paginate) {
-        const eventsObject = await Event.landingPage(request.query.paginate, request.query.page)
-        const currentPage = request.query.page || 1
+      if (req.query.paginate) {
+        const eventsObject = await Event.landingPage(req.query.paginate, req.query.page)
+        const currentPage = req.query.page || 1
         events = eventsObject.events
         let lastPageUrl
         let nextPageUrl
         if (eventsObject.lastPage === 0) {
           lastPageUrl = null
         } else {
-          lastPageUrl = `/events/?paginate=${request.query.paginate}&page=${eventsObject.lastPage}`
+          lastPageUrl = `/events/?paginate=${req.query.paginate}&page=${eventsObject.lastPage}`
         }
 
         if (eventsObject.remaining <= 0) {
           nextPageUrl = null
         } else {
-          nextPageUrl = `/events/?paginate=${request.query.paginate}&page=${parseInt(currentPage) + 1}`
+          nextPageUrl = `/events/?paginate=${req.query.paginate}&page=${parseInt(currentPage) + 1}`
         }
 
-        return this.response({
+        return res.json({
           currentPage,
           nextPageUrl,
           lastPageUrl,
@@ -48,11 +50,11 @@ class EventsController extends Controller {
           events
         })
       } else {
-        events = await Event.all() // TODO deprecate this
+        events = await Event.landingPage()
       }
-      return this.response(events)
+      return res.json(events)
     } catch (error) {
-      return this.response(error, 500)
+      next(error)
     }
   }
 
@@ -60,7 +62,7 @@ class EventsController extends Controller {
      * Store a new event in the database
      * @param {import('express').Request} request
      */
-  async store (request) {
+  async store(request) {
     const { body, file } = request
     const user = await request.user()
     try {
@@ -109,14 +111,18 @@ class EventsController extends Controller {
 
   /**
    * Show an event
-   * @param {import('express').Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
-  async show (request) {
+  async show(req, res, next) {
     try {
-      let e = await Event.find(request.params.event)
-      const u = await request.user()
+      let e = await Event.find(req.params.event)
+      const u = await req.user()
       if (!e) { // The event was not found in the database
-        return this.response('Model not found', 404)
+        return res.status(404).json({
+          error: 'Event not found'
+        })
       }
       if (!e.endDate) {
         await e.update({
@@ -163,10 +169,9 @@ class EventsController extends Controller {
       if (!e.online_link) {
         e.online_link = 'N/A'
       }
-      return this.response(e)
+      return res.json(e)
     } catch (error) {
-      console.log(error)
-      return this.response(error, 500)
+      next(error)
     }
   }
 
@@ -174,7 +179,7 @@ class EventsController extends Controller {
    * Update an event
    * @param {Array} request
    */
-  async update (request) {
+  async update(request) {
     const { body, params } = request
     const user = await request.user() // The current user
     const { event } = params // The the event Id
@@ -205,7 +210,7 @@ class EventsController extends Controller {
    * Delete the current model
    * @param {Array} payload
    */
-  async delete (payload = {}) {
+  async delete(payload = {}) {
     const { params } = payload
     // The the event Id
     const { event } = params
@@ -230,7 +235,7 @@ class EventsController extends Controller {
    * Publish and unpublish an event
    * @param {Express.Request} request
    */
-  async publish (request, response, next) {
+  async publish(request, response, next) {
     const { params } = request
     const { event } = params
     const currentEvent = await Event.find(event)
@@ -250,7 +255,7 @@ class EventsController extends Controller {
    * Get the events for the current user
    * @param {Express.Request} request
    */
-  async currentUserEvents (request) {
+  async currentUserEvents(request) {
     try {
       const user = await request.user()
       const events = await new User(user).events()
@@ -268,7 +273,7 @@ class EventsController extends Controller {
    * @returns response
    *
    */
-  async registerForEvent ({ body, params, user }) {
+  async registerForEvent({ body, params, user }) {
     try {
       await new Validator(body, { // Validate the input
         ticket_id: 'required',
@@ -282,10 +287,10 @@ class EventsController extends Controller {
       }
       const currentEvent = await Event.find(params.event)
       const currentTicket = await Ticket.find(body.ticket_id)
-      if(!currentTicket) {
+      if (!currentTicket) {
         return this.response('Ticket not found')
       }
-      if(!currentEvent) {
+      if (!currentEvent) {
         return this.response('Event not found')
       }
       const ticketId = await DB('event_rsvps').insert({

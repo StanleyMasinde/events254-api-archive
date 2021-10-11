@@ -27,18 +27,8 @@ router.get('/', async (req, res, next) => {
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.store(req)
-
-    if (req.file) {
-      fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
-    }
-
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
+  EventsController.store(req, res, next)
 })
 
 /**

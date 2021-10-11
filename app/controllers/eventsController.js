@@ -60,11 +60,13 @@ class EventsController extends Controller {
 
   /**
      * Store a new event in the database
-     * @param {import('express').Request} request
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @param {import('express').NextFunction} next
      */
-  async store(request) {
-    const { body, file } = request
-    const user = await request.user()
+  async store(req, res, next) {
+    const { body, file } = req
+    const user = await req.user()
     try {
       await new Validator(body, {
         about: 'required',
@@ -103,9 +105,9 @@ class EventsController extends Controller {
         organisable_type
       })
       // Add the organiser
-      return this.response(e, 201)
+      return res.json(e)
     } catch (error) {
-      return this.response(error, error.status || 422)
+      next(error)
     }
   }
 
@@ -128,7 +130,7 @@ class EventsController extends Controller {
         await e.update({
           endDate: e.startDate
         })
-        e = await Event.find(request.params.event)
+        e = await Event.find(req.params.event)
       }
       // Get the event tickets
       e.tickets = await DB('tickets')

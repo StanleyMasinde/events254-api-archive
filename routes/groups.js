@@ -26,14 +26,8 @@ router.get('/', async (req, res, next) => {
  * The request is validated before any creation event
  * ------------------------------------------------------------
  */
-router.post('/', multer({ dest: './uploads' }).single('picture'), async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.create(req)
-    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+router.post('/', multer({ dest: './uploads' }).single('picture'), (req, res, next) => {
+  GroupController.create(req, res, next)
 })
 
 /**
@@ -135,7 +129,7 @@ router.get('/:slug/events', async (req, res, next) => {
  * e.g /api/groups/opensource254/events/1
  * On the client side it would be something like domain.com/opensource254/events/1
  */
- router.get('/:slug/:event', (req, res, next) => {
+router.get('/:slug/:event', (req, res, next) => {
   GroupController.showEvent(req, res, next)
 })
 
@@ -145,13 +139,8 @@ router.get('/:slug/events', async (req, res, next) => {
  * the current group
  * --------------------------------------------------------------------
  */
-router.post('/:slug/events', multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.createEvent(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+router.post('/:slug/events', multer({ dest: './uploads' }).single('image'), (req, res, next) => {
+  GroupController.createEvent(req, res, next)
 })
 
 /**

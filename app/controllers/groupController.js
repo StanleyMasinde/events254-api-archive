@@ -27,17 +27,25 @@ class GroupController extends Controller {
   /**
    * Create a new group.
    * A group will contain the user that created it
-   * @param {Express.Request} request
-   * @returns response
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Group} group
    */
-  async create(request) {
-    const { body, file } = request
+  async create(req, res, next) {
+    const { body, file } = req
     try {
-      const user = await request.user() // The current user
+      const user = await req.user() // The current user
       await this.validate(body) // 👀 Looks good let us add it to the DB
       const pictureUrl = await upload(file, 'groups')
       body.pictureUrl = pictureUrl
-      body.slug = slugify(body.name) // TODO add group picture and Organiser's
+      body.slug = slugify(body.name)
+      
+      
+     while ((await Group.where({ slug: body.slug }).first()).id) {
+        body.slug = `${body.slug}-${Math.floor(Math.random() * 100)}`
+      }
+
       const group = await Group.create(body)
       await DB('group_organisers').insert({
         group_id: group.id,
@@ -45,10 +53,9 @@ class GroupController extends Controller {
       })
       group.organisers = await group.organisers()
       group.organisers.map(o => delete o.password) // TODO this should happend at the model level
-      return this.response(group, 201)
+      return res.status(201).json(group)
     } catch (error) {
-      console.log(error);
-      return this.response(error, 422)
+      next(error)
     }
   }
 
@@ -104,6 +111,9 @@ class GroupController extends Controller {
       }
 
       body.slug = slugify(body.name) // TODO make sure the slug is unique
+      while ((await Group.where({ slug: body.slug }).first()).id) {
+        body.slug = `${body.slug}-${Math.floor(Math.random() * 100)}`
+      }
       if (group) {
         await group.update(body)
         return this.response(await Group.find(group.id), 201)
@@ -204,10 +214,13 @@ class GroupController extends Controller {
 
   /**
    * Create a new event
-   * @param {Express.Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-  async createEvent(request) {
-    const { body, file, params } = request
+  async createEvent(req, res, next) {
+    const { body, file, params } = req
     const group = await Group.where({ slug: params.slug }).first()
 
     try {
@@ -234,9 +247,9 @@ class GroupController extends Controller {
       const organisable_type = 'Group' // The organiser's Model can be group or user
       const e = await Event.create({ image, location, online_link, about, description, startDate: startDateTime, endDate: endDatetime, organisable_id, organisable_type })
       // Add the organiser
-      return this.response(e, 201)
+      return res.status(201).json(e)
     } catch (error) {
-      return this.response(error, error.status || 422)
+      return next(error)
     }
   }
 

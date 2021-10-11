@@ -43,6 +43,7 @@ const upload = async (file, folder = '/') => {
   try {
     await s3.send(new PutObjectCommand(objectParams))
     // The upload was successful
+    fs.unlinkSync(path)
     return `https://${bucketName}.s3.${REGION}.amazonaws.com/${uploadFolder}`
   } catch (error) {
     fs.writeFileSync('error.log', `${new Date().toUTCString()} | S3 ${new Error(error).message} \n`, { flag: 'a' })

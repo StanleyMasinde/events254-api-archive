@@ -13,10 +13,11 @@ module.exports = function canEditEvent (event, user, organisableType = 'User', g
     if (event.organisable_type === 'User') {
       return event.organisable_id === user.id && event.organisable_type === organisableType
     }
-    if(!event.organisers) {
+    if(!event.organiser) {
       return false
     }
     const ids = event.organiser.adminIds.map(r => r.user_id)
+    console.log(ids)
     return ids.includes(user.id)
   } catch (error) {
     throw new Error(error)

@@ -26,7 +26,7 @@ const getEventOrganiser = async (event = {}) => {
     }).first('name', 'slug', 'id')
   if (organiser) {
     organiser.type = 'group'
-    organiser.adminIds = await DB('group_organisers').where('group_id', '=', organiser.id)
+    organiser.adminIds = await DB('group_organisers').where('group_id', '=', organiser.id).select('user_id')
   }
   return organiser
 }

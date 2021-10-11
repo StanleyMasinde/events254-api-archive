@@ -136,15 +136,11 @@ class EventsController extends Controller {
       e.tickets = await DB('tickets')
         .where('event_id', e.id) || []
 
-      // Boolean to check if event is free
+      
       e.isFree = e.tickets[0] == null
-      // Boolean to show that event is all day
       e.allDay = new Date(e.startDate).getHours() === new Date(e.endDate).getHours()
-      // Bolean to show that event is in progress
       e.inProgress = new Date(e.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()
-      // Boolean to show that event is in the past
       e.past = new Date(e.startDate).getTime() < new Date().getTime()
-      // Boolean an event has end time if the startDate is not equal to the endDate
       e.hasEndTime = e.startDate !== e.endDate
       // TODO this is a temp fix
       e.attendees = await DB('event_rsvps')

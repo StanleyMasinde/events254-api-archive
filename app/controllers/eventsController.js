@@ -206,26 +206,28 @@ class EventsController extends Controller {
 
   /**
    * Delete the current model
-   * @param {Array} payload
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-  async delete(payload = {}) {
-    const { params } = payload
-    // The the event Id
+  async delete(req, res, next) {
+    const { params } = req
     const { event } = params
-    // Load the current event
-    const currentEvent = await Event.find(event)
     // A user can only update his/her own event
     // TODO add this middleware
     // if (await currentEvent.user_id !== user.id) {
     //   return this.response('You dont\'t have permision to perfrom this action', 401)
     // }
     try {
-      // Delete the tickets
+      const currentEvent = await Event.find(event)
       await DB('tickets').where('event_id', currentEvent.id).delete()
-      await currentEvent.destroy()
-      return this.response('Deleted')
+      await currentEvent.delete()
+      res.status(204).json({
+        message: 'Event deleted'
+      })
     } catch (error) {
-      return this.response(error, 500)
+      next(error)
     }
   }
 

@@ -42,7 +42,7 @@ class GroupController extends Controller {
       body.slug = slugify(body.name)
       
       
-     while ((await Group.where({ slug: body.slug }).first()).id) {
+     while (await Group.where({ slug: body.slug }).first()) {
         body.slug = `${body.slug}-${Math.floor(Math.random() * 100)}`
       }
 
@@ -111,7 +111,7 @@ class GroupController extends Controller {
       }
 
       body.slug = slugify(body.name) // TODO make sure the slug is unique
-      while ((await Group.where({ slug: body.slug }).first()).id) {
+      while (await Group.where({ slug: body.slug }).first()) {
         body.slug = `${body.slug}-${Math.floor(Math.random() * 100)}`
       }
       if (group) {
@@ -138,7 +138,7 @@ class GroupController extends Controller {
       await DB('group_organisers').where({
         group_id: group.id
       }).del()
-      await group.destroy()
+      await group.delete()
       return this.response(`${group.name} has been deleted.`)
     }
     return this.response('Could not find the group 😢', 404)

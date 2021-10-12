@@ -74,12 +74,7 @@ router.get('/:event', async (req, res, next) => {
  * -------------------------------------------------------------------------
  */
 router.delete('/:event', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.delete(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+  EventsController.delete(req, res, next)
 })
 
 /**

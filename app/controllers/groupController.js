@@ -14,13 +14,31 @@ class GroupController extends Controller {
   /**
    * Return all groups in the database.
    * By default, these results will paginated when the app grows
-  * @returns {Object} A collection of users
+  * @param {import('express').Request} req
+  * @param {import('express').Response} res
+  * @param {import('express').NextFunction} next
+  * @returns {Group} group
   */
-  async index() {
+  async index(req, res, next) {
+    const currentPage = +req.query.page || 1
+    const limit = req.query.limit || 500
+    const offset = (currentPage - 1) * limit 
     try {
-      return this.response(await Group.all())
+      const groups = await DB('groups').limit(limit).offset(offset)
+      const count = await DB('groups').count('* as count')
+      const total = count[0].count
+      const pages = Math.ceil(total / limit)
+
+      return res.json({
+        currentPage,
+        limit,
+        offset,
+        pages,
+        total,
+        data: groups
+      })
     } catch (error) {
-      return this.response(error, 500)
+      next(error)
     }
   }
 

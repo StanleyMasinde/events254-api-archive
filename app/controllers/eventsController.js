@@ -50,7 +50,7 @@ class EventsController extends Controller {
           events
         })
       } else {
-        events = await Event.landingPage()
+        events = await Event.landingPage(500)
       }
       return res.json(events)
     } catch (error) {

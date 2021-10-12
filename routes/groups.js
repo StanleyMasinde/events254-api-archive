@@ -11,12 +11,7 @@ const authenticated = require('../app/middleware/authenticated')
  * -----------------------------------------------------------------
  */
 router.get('/', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.index()
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+  GroupController.index(req, res, next)
 })
 
 /**

@@ -9,13 +9,35 @@ const Controller = require('./controller')
 
 class UserController extends Controller {
   /**
-  * @returns {Array} A collection of users
+  * Get all users
+  * @param {import('express').Request} req
+  * @param {import('express').Response} res
+  * @param {import('express').NextFunction} next
+  * @returns {import('../models/user')} Users
   */
-  async index () {
+  async index (req, res, next) {
+    const currentPage = +req.query.page || 1
+    const limit = req.query.limit || 500
+    const offset = (currentPage - 1) * limit 
     try {
-      return this.response(await User.all())
+      const userCount = await DB('users').count('id as count')
+      const users = await DB('users').select('*').limit(limit).offset(offset)
+      const totalPages = Math.ceil(userCount[0].count / limit)
+      const remainingPages = totalPages - currentPage
+      users.map(user => {
+        delete user.password
+      })
+      return res.json({
+        nextPageUrl: remainingPages > 0 ? `${process.env.APP_URL}/users?page=${currentPage + 1}&limit=${limit}` : null,
+        previousPageUrl: currentPage > 1 ? `${process.env.APP_URL}/users?page=${currentPage - 1}&limit=${limit}` : null,
+        totalPages,
+        currentPage,
+        limit,
+        totalCount: userCount[0].count,
+        data: users
+      })
     } catch (error) {
-      throw new Error(error)
+      next(error)
     }
   }
 

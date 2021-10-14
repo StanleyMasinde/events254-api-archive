@@ -23,7 +23,7 @@ let user = {
 
 describe('Groups', () => {
 	before(async () => {
-		let u = await User.register(user)
+		await User.register(user)
 		const res = await app
 			.post('/auth/login')
 			.send({

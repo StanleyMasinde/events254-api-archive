@@ -97,8 +97,7 @@ router.put('/:event/publish', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------
  */
 router.get('/:event/tickets', async (req, res, next) => {
-	const { status, message } = await TicketController.allEventTickets(req)
-	res.status(status).json(message)
+	TicketController.allEventTickets(req, res, next)
 })
 
 /**
@@ -107,8 +106,7 @@ router.get('/:event/tickets', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/:event/tickets', authenticated(), async (req, res, next) => {
-	const { message, status } = await TicketController.createEventTicket(req)
-	res.status(status).json(message)
+	TicketController.createEventTicket(req, res, next)
 })
 
 /**
@@ -117,8 +115,7 @@ router.post('/:event/tickets', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------------
  */
 router.get('/:event/tickets/:ticket', async (req, res, next) => {
-	const { message, status } = await TicketController.showEventTicket(req)
-	res.status(status).json(message)
+	await TicketController.showEventTicket(req, res, next)
 })
 
 /**
@@ -127,8 +124,7 @@ router.get('/:event/tickets/:ticket', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
-	const { message, status } = await TicketController.upDateEventTicket(req)
-	res.status(status).json(message)
+	TicketController.upDateEventTicket(req, res, next)
 })
 
 /**
@@ -146,8 +142,7 @@ router.delete('/:event/tickets/:ticket', (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.post('/:event/register', authenticated(), async (req, res, next) => {
-	const { message, status } = await EventsController.registerForEvent(req)
-	res.status(status).json(message)
+	EventsController.registerForEvent(req, res, next)
 })
 
 export default router

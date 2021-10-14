@@ -149,7 +149,7 @@ class GroupController extends Controller {
    * @returns response
    */
 	async delete(request) {
-		const group = await _where({
+		const group = await Group.where({
 			slug: request.params.slug
 		}).first()
 
@@ -191,7 +191,7 @@ class GroupController extends Controller {
 	async members(request) {
 		const slug = request.params.slug
 		try {
-			const group = await _where({
+			const group = await Group.where({
 				slug
 			}).first()
 			return this.response(await group.members())
@@ -287,7 +287,7 @@ class GroupController extends Controller {
 			}).first()
 
 			if (group) {
-				const event = await where({
+				let event = await Event.where({
 					id: req.params.event,
 					organisable_type: 'Group',
 					organisable_id: group.id
@@ -298,7 +298,7 @@ class GroupController extends Controller {
 						await event.update({
 							endDate: event.startDate
 						})
-						event = await find(request.params.event)
+						event = await Event.find(req.params.event)
 					}
 					event.tickets = await DB('tickets')
 						.where('event_id', event.id) || []
@@ -350,7 +350,7 @@ class GroupController extends Controller {
 		const user = await request.user()
 		const { body, params } = request
 		const { event } = params // The the event Id
-		const currentEvent = await find(event) // Load the current event
+		const currentEvent = await Event.find(event) // Load the current event
 		currentEvent.organiser = await getEventOrganiser(currentEvent)
 		if (canEditEvent(currentEvent, user)) {
 			try {
@@ -383,7 +383,7 @@ class GroupController extends Controller {
 		// The the event Id
 		const { event } = params
 		// Load the current event
-		const currentEvent = await find(event)
+		const currentEvent = await Event.find(event)
 		// A user can only update his/her own event
 		// TODO add this middleware
 		// if (await currentEvent.user_id !== user.id) {

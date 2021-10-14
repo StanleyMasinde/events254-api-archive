@@ -9,9 +9,8 @@ const router = Router()
  * -------------------------------------------------------------------------------
  */
 
-router.get('/events', async (req, res, next) => {
-	const { message, status } = await EventsController.index(req)
-	res.status(status).json(message)
+router.get('/events', (req, res, next) => {
+	EventsController.index(req, res, next)
 })
 /**
  * ----------------------------------------------------------------------------------------------------------

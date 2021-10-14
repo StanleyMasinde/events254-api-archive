@@ -1,4 +1,3 @@
-import { unlinkSync } from 'fs'
 import { Router } from 'express'
 import multer from 'multer'
 import GroupController from '../app/controllers/groupController.js'

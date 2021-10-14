@@ -5,7 +5,7 @@
  * @param {*} guard The guard to use
  * @returns Boolean
  */
-export default function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
+export default function canEditEvent (event, user, organisableType = 'User') {
 	try {
 		if (!user) {
 			return false

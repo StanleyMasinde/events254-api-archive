@@ -10,7 +10,6 @@ class SearchController extends Controller {
 	async index(request, response) {
 		// TODO midularize this search
 		const query = request.query.q
-		const eventsTable = DB('events')
 		const groupsTable = DB('groups')
 		const usersTable = DB('users')
 		try {

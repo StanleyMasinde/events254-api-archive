@@ -238,21 +238,28 @@ class EventsController extends Controller {
 
 	/**
    * Publish and unpublish an event
-   * @param {Express.Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-	async publish(request, response, next) {
-		const { params } = request
+	async publish(req, res, next) {
+		const { params } = req
 		const { event } = params
-		const currentEvent = await find(event)
-		if (canEditEvent(currentEvent, await request.user())) {
+		const currentEvent = await Event.find(event)
+		if (canEditEvent(currentEvent, await req.user())) {
 			try {
 				await currentEvent.update({ published: !currentEvent.published })
-				return this.response(currentEvent, 201)
+				return res.status(201).json({
+					message: 'Event published'
+				})
 			} catch (error) {
-				return this.response(error, 500)
+				return next(error)
 			}
 		}
-		return this.response({ message: 'You don\'t have permission to perform this action' }, 403)
+		return res.status(401).json({
+			error: 'You are not authorized to edit this event'
+		})
 	}
 
 	/**

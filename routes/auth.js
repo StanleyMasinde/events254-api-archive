@@ -56,7 +56,7 @@ router.post('/password/update', async (req, res, next) => {
 /**
  * Get the current authenticated user
  */
-router.get('/user', authenticated(), async (req, res, next) => {
+router.get('/user', authenticated(), async (req, res) => {
 	const user = await req.user()
 	if (user) {
 		delete user.password

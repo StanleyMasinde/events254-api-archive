@@ -4,11 +4,11 @@
  * @returns Promise
  */
 exports.up = function (knex) {
-  return knex.schema.createTable('password_resets', (table) => {
-    table.string('email').index()
-    table.string('token')
-    table.timestamp('created_at')
-  })
+	return knex.schema.createTable('password_resets', (table) => {
+		table.string('email').index()
+		table.string('token')
+		table.timestamp('created_at')
+	})
 }
 
 /**
@@ -17,5 +17,5 @@ exports.up = function (knex) {
  * @returns Promise
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('password_resets')
+	return knex.schema.dropTableIfExists('password_resets')
 }

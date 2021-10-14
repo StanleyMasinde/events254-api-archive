@@ -10,8 +10,8 @@ const router = Router()
  */
 
 router.get('/events', async (req, res, next) => {
-  const { message, status } = await EventsController.index(req)
-  res.status(status).json(message)
+	const { message, status } = await EventsController.index(req)
+	res.status(status).json(message)
 })
 /**
  * ----------------------------------------------------------------------------------------------------------
@@ -22,12 +22,12 @@ router.get('/events', async (req, res, next) => {
  * ----------------------------------------------------------------------------------------------------------
  */
 router.get('/events/:event', async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.show(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.show(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 export default router

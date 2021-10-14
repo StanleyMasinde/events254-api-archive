@@ -12,7 +12,7 @@ const router = Router()
  * -----------------------------------------------------------------
  */
 router.get('/', async (req, res, next) => {
-  GroupController.index(req, res, next)
+	GroupController.index(req, res, next)
 })
 
 /**
@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
  * ------------------------------------------------------------
  */
 router.post('/', multer({ dest: './uploads' }).single('picture'), (req, res, next) => {
-  GroupController.create(req, res, next)
+	GroupController.create(req, res, next)
 })
 
 /**
@@ -33,12 +33,12 @@ router.post('/', multer({ dest: './uploads' }).single('picture'), (req, res, nex
  * -----------------------------------------------------------------
  */
 router.get('/currentUser', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.currentUser(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await GroupController.currentUser(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -49,7 +49,7 @@ router.get('/currentUser', async (req, res, next) => {
  * ------------------------------------------------------------------------
  */
 router.get('/:slug', (req, res, next) => {
-  GroupController.show(req, res, next)
+	GroupController.show(req, res, next)
 })
 
 /**
@@ -61,7 +61,7 @@ router.get('/:slug', (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.put('/:slug', multer({ dest: './uploads' }).single('picture'), async (req, res, next) => {
-  GroupController.update(req, res, next)
+	GroupController.update(req, res, next)
 })
 
 /**
@@ -72,12 +72,12 @@ router.put('/:slug', multer({ dest: './uploads' }).single('picture'), async (req
  * ---------------------------------------------------------------------
  */
 router.delete('/:slug', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.delete(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await GroupController.delete(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -86,7 +86,7 @@ router.delete('/:slug', async (req, res, next) => {
  *-----------------------------
  */
 router.post('/:slug/join', authenticated(), (req, res, next) => {
-  GroupController.join(req, res, next)
+	GroupController.join(req, res, next)
 })
 
 /**
@@ -95,12 +95,12 @@ router.post('/:slug/join', authenticated(), (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.get('/:slug/members', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.members(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await GroupController.members(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -110,7 +110,7 @@ router.get('/:slug/members', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.get('/:slug/events', async (req, res, next) => {
-  GroupController.groupEvents(req, res, next)
+	GroupController.groupEvents(req, res, next)
 })
 
 /**
@@ -120,7 +120,7 @@ router.get('/:slug/events', async (req, res, next) => {
  * On the client side it would be something like domain.com/opensource254/events/1
  */
 router.get('/:slug/:event', (req, res, next) => {
-  GroupController.showEvent(req, res, next)
+	GroupController.showEvent(req, res, next)
 })
 
 /**
@@ -130,7 +130,7 @@ router.get('/:slug/:event', (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.post('/:slug/events', multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-  GroupController.createEvent(req, res, next)
+	GroupController.createEvent(req, res, next)
 })
 
 /**
@@ -139,12 +139,12 @@ router.post('/:slug/events', multer({ dest: './uploads' }).single('image'), (req
  * --------------------------------------------------------------------
  */
 router.put('/:slug/events/:event', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.updateEvent(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await GroupController.updateEvent(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -153,12 +153,12 @@ router.put('/:slug/events/:event', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.delete('/:slug/events/:event', async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.delete(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await GroupController.delete(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 export default router

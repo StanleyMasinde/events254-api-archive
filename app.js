@@ -22,19 +22,19 @@ import auth from './app/auth/auth.js'
 const app = express()
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || true,
-  credentials: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	origin: process.env.CORS_ORIGIN || true,
+	credentials: true,
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }))
 
 init({
-  dsn: 'https://d88004dc1b994722b6152a3d89af37e4@o954334.ingest.sentry.io/5986920',
-  environment: 'production',
-  integrations: [
-    new Integrations.Http({ tracing: false }),
-    new _Integrations.Express({ app })
-  ],
-  tracesSampleRate: 1.0
+	dsn: 'https://d88004dc1b994722b6152a3d89af37e4@o954334.ingest.sentry.io/5986920',
+	environment: 'production',
+	integrations: [
+		new Integrations.Http({ tracing: false }),
+		new _Integrations.Express({ app })
+	],
+	tracesSampleRate: 1.0
 })
 
 app.use(Handlers.requestHandler())
@@ -45,21 +45,21 @@ app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
 
 app.use(session({
-  rolling: true,
-  secret: 'super-secret-cookie',
-  resave: false,
-  saveUninitialized: true,
-  name: 'events254_session',
-  cookie: {
-    maxAge: 365 * 24 * 60 * 60 * 1000,
-    sameSite: 'lax',
-    secure: 'auto'
-  },
-  store: process.env.NODE_ENV === 'testing'
-    ? null
-    : createSessionStore({
-      type: 'redis'
-    })
+	rolling: true,
+	secret: 'super-secret-cookie',
+	resave: false,
+	saveUninitialized: true,
+	name: 'events254_session',
+	cookie: {
+		maxAge: 365 * 24 * 60 * 60 * 1000,
+		sameSite: 'lax',
+		secure: 'auto'
+	},
+	store: process.env.NODE_ENV === 'testing'
+		? null
+		: createSessionStore({
+			type: 'redis'
+		})
 }))
 app.use(auth)
 
@@ -74,24 +74,25 @@ app.use('/p', publicRouter)
 
 // Catch all 404 routes
 app.use((req, res) => {
-  res.status(404).json({
-    error: 'Sorry, the requested resource does not live here 😢'
-  })
+	res.status(404).json({
+		error: 'Sorry, the requested resource does not live here 😢'
+	})
 })
 
 // Catch all error routes
-app.use((err, req, res, next) => {
-  const env = process.env.NODE_ENV
-  if (env === 'development' || env === 'testing' || process.env.DEBUG) {
-    return res.status(err.status || 500).json({
-      error: err.message,
-      stack: err.stack
-    })
-  }
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
+	const env = process.env.NODE_ENV
+	if (env === 'development' || env === 'testing' || process.env.DEBUG) {
+		return res.status(err.status || 500).json({
+			error: err.message,
+			stack: err.stack
+		})
+	}
 
-  return res.status(err.status || 500).json({
-    error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
-  })
+	return res.status(err.status || 500).json({
+		error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
+	})
 })
 
 app.use(Handlers.errorHandler())

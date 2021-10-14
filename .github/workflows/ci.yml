@@ -25,4 +25,7 @@ jobs:
     - run: sudo mysql -e 'CREATE DATABASE events254_test;' -proot
     - run: cp .env.example .env
     - run: npm ci
+    - run: echo "Linting 👀"
+    - run: npm run lint
+    - run: echo "Testing 🚀"
     - run: npm test

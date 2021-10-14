@@ -18,7 +18,7 @@ const router = Router()
  * --------------------------------------------------------
  */
 router.get('/', async (req, res, next) => {
-  EventsController.index(req, res, next)
+	EventsController.index(req, res, next)
 })
 /**
  * -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ router.get('/', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-  EventsController.store(req, res, next)
+	EventsController.store(req, res, next)
 })
 
 /**
@@ -38,12 +38,12 @@ router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'),
  * -----------------------------------------------------------------
  */
 router.get('/currentUser', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.currentUserEvents(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.currentUserEvents(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -53,7 +53,7 @@ router.get('/currentUser', authenticated(), async (req, res, next) => {
  * ---------------------------------------------------------------------
  */
 router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-  EventsController.update(req, res, next)
+	EventsController.update(req, res, next)
 })
 
 /**
@@ -65,7 +65,7 @@ router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('ima
  * ----------------------------------------------------------------------------------------------------------
  */
 router.get('/:event', async (req, res, next) => {
-  EventsController.show(req, res, next)
+	EventsController.show(req, res, next)
 })
 /**
  * -------------------------------------------------------------------------
@@ -74,7 +74,7 @@ router.get('/:event', async (req, res, next) => {
  * -------------------------------------------------------------------------
  */
 router.delete('/:event', authenticated(), async (req, res, next) => {
-  EventsController.delete(req, res, next)
+	EventsController.delete(req, res, next)
 })
 
 /**
@@ -83,12 +83,12 @@ router.delete('/:event', authenticated(), async (req, res, next) => {
  * -------------------------------------------------------------------------
  */
 router.put('/:event/publish', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.publish(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.publish(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -97,8 +97,8 @@ router.put('/:event/publish', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------
  */
 router.get('/:event/tickets', async (req, res, next) => {
-  const { status, message } = await TicketController.allEventTickets(req)
-  res.status(status).json(message)
+	const { status, message } = await TicketController.allEventTickets(req)
+	res.status(status).json(message)
 })
 
 /**
@@ -107,8 +107,8 @@ router.get('/:event/tickets', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/:event/tickets', authenticated(), async (req, res, next) => {
-  const { message, status } = await TicketController.createEventTicket(req)
-  res.status(status).json(message)
+	const { message, status } = await TicketController.createEventTicket(req)
+	res.status(status).json(message)
 })
 
 /**
@@ -117,8 +117,8 @@ router.post('/:event/tickets', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------------
  */
 router.get('/:event/tickets/:ticket', async (req, res, next) => {
-  const { message, status } = await TicketController.showEventTicket(req)
-  res.status(status).json(message)
+	const { message, status } = await TicketController.showEventTicket(req)
+	res.status(status).json(message)
 })
 
 /**
@@ -127,8 +127,8 @@ router.get('/:event/tickets/:ticket', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
-  const { message, status } = await TicketController.upDateEventTicket(req)
-  res.status(status).json(message)
+	const { message, status } = await TicketController.upDateEventTicket(req)
+	res.status(status).json(message)
 })
 
 /**
@@ -137,7 +137,7 @@ router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) =
  * --------------------------------------------------------------------
  */
 router.delete('/:event/tickets/:ticket', (req, res, next) => {
-  TicketController.deleteEventTicket(req, res, next)
+	TicketController.deleteEventTicket(req, res, next)
 })
 
 /**
@@ -146,8 +146,8 @@ router.delete('/:event/tickets/:ticket', (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.post('/:event/register', authenticated(), async (req, res, next) => {
-  const { message, status } = await EventsController.registerForEvent(req)
-  res.status(status).json(message)
+	const { message, status } = await EventsController.registerForEvent(req)
+	res.status(status).json(message)
 })
 
 export default router

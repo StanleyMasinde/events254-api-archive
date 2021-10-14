@@ -7,7 +7,7 @@ const router = Router()
  *
  */
 router.get('/:id', (req, res, next) => {
-  TicketController.getTicket(req, res, next)
+	TicketController.getTicket(req, res, next)
 })
 
 export default router

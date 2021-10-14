@@ -7,14 +7,14 @@ const router = Router()
  *
  */
 router.get('/', (req, res, next) => {
-  SearchController.index(req, res, next)
+	SearchController.index(req, res, next)
 })
 
 /**
  * Filter events by a calendar date
  */
 router.get('/calendar', (req, res, next) => {
-  SearchController.calendar(req, res, next)
+	SearchController.calendar(req, res, next)
 })
 
 export default router

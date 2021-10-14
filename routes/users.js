@@ -7,16 +7,16 @@ const router = Router()
  *
  */
 router.get('/', (req, res, next) => {
-  UsersController.index(req, res, next)
+	UsersController.index(req, res, next)
 })
 
 router.get('/:id', async (req, res, next) => {
-  try {
-    const { status, message } = await UsersController.show(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { status, message } = await UsersController.show(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 export default router

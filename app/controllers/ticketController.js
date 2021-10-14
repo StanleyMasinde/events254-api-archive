@@ -6,25 +6,31 @@ import Controller from './controller.js'
 
 class TicketController extends Controller {
 	/**
-     * Get all the tickets of the current event
-     * @param {*} request the request body
-     */
-	async allEventTickets(request) {
-		const { params } = request
+	 * Get all the tickets of the current event
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
+	async allEventTickets(req, res, next) {
+		const { params } = req
 		try {
 			const events = await this.connection().where({ event_id: params.event })
-			return this.response(events)
+			return res.status(200).json(events)
 		} catch (error) {
-			return this.response(error, 500)
+			return next(error)
 		}
 	}
 
 	/**
-     * Create a ticket for the current event
-     * @param {*} request the request body
-     */
-	async createEventTicket(request) {
-		const { params, body } = request
+	 * Create a ticket for the current event
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
+	async createEventTicket(req, res, next) {
+		const { params, body } = req
 		const { event } = params // Get the event ID
 		const { price, limit, type } = body
 
@@ -32,53 +38,64 @@ class TicketController extends Controller {
 			const ticket = await Ticket.create({
 				price, limit, type, event_id: event
 			})
-			return this.response(ticket, 201)
+			return res.status(201).json(ticket)
 		} catch (error) {
-			return this.response(error, 500)
+			return next(error)
 		}
 	}
 
 	/**
-     * Show a specified ticket for the current event
-     * @param {*} request the request body
-     */
-	async showEventTicket(request) {
+	 * Show a specified ticket for the current event
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
+	async showEventTicket(req, res, next) {
 		try {
-			const ticket = await Ticket.find(request.params.ticket)
-			return this.response(ticket)
+			const ticket = await Ticket.find(req.params.ticket)
+			if (!ticket) {
+				return res.status(404).json({
+					message: 'Ticket not found'
+				})
+			}
+			res.json(ticket)
 		} catch (error) {
-			return this.response(error, 500)
+			next(error)
 		}
 	}
 
 	/**
-     * Update a ticket information
-     * @param {*} request the request body
-     */
-	async upDateEventTicket(request) {
+	 * Update a ticket information
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
+	async upDateEventTicket(req, res, next) {
 		try {
-			await new Validator(request.body, {
+			await new Validator(req.body, {
 				type: 'required'
 			}).validate()
 
-			const ticket = await Ticket.find(request.params.ticket)
-			const { price, limit, type } = request.body
+			const ticket = await Ticket.find(req.params.ticket)
+			const { price, limit, type } = req.body
 			await ticket.update({
 				price, limit, type
 			})
-			return this.response(await this.connection().where({ id: request.params.ticket }).first()) // TODO fix this spaghetti
+			res.json(await this.connection().where({ id: req.params.ticket }).first()) // TODO fix this spaghetti
 		} catch (error) {
-			return this.response(error, 422)
+			next(error)
 		}
 	}
 
 	/**
-     * Delete a ticket
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
-     * @returns {Promise<void>}
-     */
+	 * Delete a ticket
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
 	async deleteEventTicket(req, res, next) {
 		try {
 			const ticket = await Ticket.find(req.params.ticket)
@@ -98,12 +115,14 @@ class TicketController extends Controller {
 
 	/**
    * Get the current user's tickets
-   *
-   * @param {Express.Request} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-	async currentUser(request) {
+	async currentUser(req, res, next) {
 		try {
-			const user = await request.user()
+			const user = await req.user()
 			const tickets = await DB('event_rsvps')
 				.join('tickets', 'event_rsvps.ticket_id', 'tickets.id')
 				.join('events', 'tickets.event_id', 'events.id')
@@ -111,9 +130,9 @@ class TicketController extends Controller {
 					'event_rsvps.user_id': user.id
 				})
 				.select('events.about AS eventName', 'events.startDate AS eventDate', 'events.location AS eventLocation', 'event_rsvps.id AS ticketId', 'event_rsvps.rsvp_count AS ticketCount', 'tickets.type AS ticketType', 'tickets.price AS ticketPrice')
-			return this.response(tickets)
+			res.status(200).json(tickets)
 		} catch (error) {
-			return this.response(error, 500)
+			next(error)
 		}
 	}
 

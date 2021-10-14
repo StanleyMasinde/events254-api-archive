@@ -280,32 +280,39 @@ class EventsController extends Controller {
 	/**
    * -----------------------------------------------------------------
    * User registers for an event
-   * @param {import('express').Request} param
-   * @returns response
-   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-	async registerForEvent({ body, params, user }) {
+	async registerForEvent(req, res, next) {
 		try {
-			await new Validator(body, { // Validate the input
+			await new Validator(req.body, { // Validate the input
 				ticket_id: 'required',
 				rsvp_count: 'required'
 			}).validate()
-			const currentUser = await user() // The user making the request
+			const currentUser = await req.user() // The user making the request
 			// Next we check if the current user has registerd for the current event
-			const alreadyRegisterd = await DB('event_rsvps').where({ event_id: params.event, user_id: currentUser.id }).first()
+			const alreadyRegisterd = await DB('event_rsvps').where({ event_id: req.params.event, user_id: currentUser.id }).first()
 			if (alreadyRegisterd) {
-				return this.response('You have already registerd for this event')
+				return res.status(409).json({
+					error: 'You have already registered for this event'
+				})
 			}
-			const currentEvent = await Event.find(params.event)
-			const currentTicket = await Ticket.find(body.ticket_id)
+			const currentEvent = await Event.find(req.params.event)
+			const currentTicket = await Ticket.find(req.body.ticket_id)
 			if (!currentTicket) {
-				return this.response('Ticket not found')
+				return res.status(404).json({
+					error: 'Ticket not found'
+				})
 			}
 			if (!currentEvent) {
-				return this.response('Event not found')
+				return res.status(404).json({
+					error: 'Event not found'
+				})
 			}
 			const ticketId = await DB('event_rsvps').insert({
-				event_id: params.event, user_id: currentUser.id, ticket_id: body.ticket_id, rsvp_count: body.rsvp_count
+				event_id: req.params.event, user_id: currentUser.id, ticket_id: req.body.ticket_id, rsvp_count: req.body.rsvp_count
 			})
 			// Send and email to user
 			// TODO add attachments and refactor
@@ -326,16 +333,18 @@ class EventsController extends Controller {
 				eventName: currentEvent.about,
 				name: currentUser.name,
 				ticketId,
-				ticketCount: body.rsvp_count,
+				ticketCount: req.body.rsvp_count,
 				currentTicket,
 				date: new Date().toDateString(),
 				ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`,
 				icalString
 			}
+			res.status(201).json({
+				message: 'You have successfully registerd for this event'
+			})
 			await new Mail(currentUser, 'Your order from Events254', { template: 'ticket', data }).send()
-			return this.response('You have registered for this event')
 		} catch (error) {
-			return this.response(error, 422)
+			next(error)
 		}
 	}
 }

@@ -33,7 +33,7 @@ const auth = () => {
 									return res.json({ user })
 								})
 									.catch((e) => {
-										return res.status(500).json(e)
+										return next(e)
 									})
 							}
 							// The login was sucessful and session is required
@@ -48,7 +48,7 @@ const auth = () => {
 					return res.status(401).json({ message: 'These credentials do not match our records' }) // The email is wrong
 				})
 				.catch((err) => {
-					return res.status(500).json(err) // An error occoured possibly a database error
+					return next(err) // An error occoured possibly a database error
 				})
 		}
 
@@ -86,7 +86,7 @@ const auth = () => {
 							const user = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'name', 'username', 'email', 'bio', 'created_at', 'updated_at'])
 							return user
 						} catch (e) {
-							return e // TODO handle this error properly
+							return next(e)
 						}
 					})()
 				}
@@ -111,7 +111,7 @@ const auth = () => {
 						.first()
 					return user
 				} catch (e) {
-					return e
+					return next(e)
 				}
 			}
 			return null

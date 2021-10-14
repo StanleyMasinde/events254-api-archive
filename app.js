@@ -55,7 +55,7 @@ app.use(session({
 		sameSite: 'lax',
 		secure: 'auto'
 	},
-	store: process.env.NODE_ENV === 'testing'
+	store: process.env.NODE_ENV === 'development'
 		? null
 		: createSessionStore({
 			type: 'redis'

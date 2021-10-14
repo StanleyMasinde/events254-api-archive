@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.up = function (knex) {
+export function up (knex) {
 	return knex.schema.createTable('event_rsvps', (table) => {
 		table.bigIncrements('id')
 		table.bigInteger('event_id').unsigned()
@@ -22,6 +22,6 @@ exports.up = function (knex) {
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.down = function (knex) {
+export function down (knex) {
 	return knex.schema.dropTableIfExists('event_rsvps')
 }

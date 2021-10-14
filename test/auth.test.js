@@ -55,6 +55,7 @@ describe('Session Authentication tests', () => {
 				email: user.email,
 				password: user.password
 			})
+		console.log(res.body)
 		expect(res.status).equals(200)
 	})
 

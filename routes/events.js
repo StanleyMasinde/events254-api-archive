@@ -1,9 +1,9 @@
-const fs = require('fs')
-const router = require('express').Router()
-const multer = require('multer')
-const EventsController = require('../app/controllers/eventsController')
-const ticketController = require('../app/controllers/ticketController')
-const authenticated = require('../app/middleware/authenticated')
+import { Router } from 'express'
+import multer from 'multer'
+import EventsController from '../app/controllers/eventsController.js'
+import TicketController from '../app/controllers/ticketController.js'
+import authenticated from '../app/middleware/authenticated.js'
+const router = Router()
 
 /**
  * --------------------------------------------------------
@@ -97,7 +97,7 @@ router.put('/:event/publish', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------
  */
 router.get('/:event/tickets', async (req, res, next) => {
-  const { status, message } = await ticketController.allEventTickets(req)
+  const { status, message } = await TicketController.allEventTickets(req)
   res.status(status).json(message)
 })
 
@@ -107,7 +107,7 @@ router.get('/:event/tickets', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/:event/tickets', authenticated(), async (req, res, next) => {
-  const { message, status } = await ticketController.createEventTicket(req)
+  const { message, status } = await TicketController.createEventTicket(req)
   res.status(status).json(message)
 })
 
@@ -117,7 +117,7 @@ router.post('/:event/tickets', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------------
  */
 router.get('/:event/tickets/:ticket', async (req, res, next) => {
-  const { message, status } = await ticketController.showEventTicket(req)
+  const { message, status } = await TicketController.showEventTicket(req)
   res.status(status).json(message)
 })
 
@@ -127,7 +127,7 @@ router.get('/:event/tickets/:ticket', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
-  const { message, status } = await ticketController.upDateEventTicket(req)
+  const { message, status } = await TicketController.upDateEventTicket(req)
   res.status(status).json(message)
 })
 
@@ -136,9 +136,8 @@ router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) =
  * Delete a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.delete('/:event/tickets/:ticket', async (req, res, next) => {
-  const { status, message } = await ticketController.deleteEventTicket(req)
-  res.status(status).json(message)
+router.delete('/:event/tickets/:ticket', (req, res, next) => {
+  TicketController.deleteEventTicket(req, res, next)
 })
 
 /**
@@ -151,4 +150,4 @@ router.post('/:event/register', authenticated(), async (req, res, next) => {
   res.status(status).json(message)
 })
 
-module.exports = router
+export default router

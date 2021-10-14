@@ -1,14 +1,14 @@
-const { DB } = require('mevn-orm')
-const Validator = require('mevn-validator')
-const formatToDateTime = require('../actions/formatToDateTime')
-const getEventOrganiser = require('../actions/getEventOrganiser')
-const slugify = require('../actions/slugify')
-const upload = require('../filesystem/s3')
-const Event = require('../models/event')
-const Group = require('../models/group')
-const canEditEvent = require('../policies/canEditEvent')
-const canManageGroup = require('../policies/canManageGroup')
-const Controller = require('./controller')
+import { DB } from 'mevn-orm'
+import Validator from 'mevn-validator'
+import formatToDateTime from '../actions/formatToDateTime.js'
+import getEventOrganiser from '../actions/getEventOrganiser.js'
+import slugify from '../actions/slugify.js'
+import upload from '../filesystem/s3.js'
+import Event from '../models/event.js'
+import Group from '../models/group.js'
+import canEditEvent from '../policies/canEditEvent.js'
+import canManageGroup from '../policies/canManageGroup.js'
+import Controller from './controller.js'
 
 class GroupController extends Controller {
   /**
@@ -89,7 +89,6 @@ class GroupController extends Controller {
   async show(req, res, next) {
     try {
       const u = await req.user()
-      console.log(u)
       const group = await Group.where({
         slug: req.params.slug
       }).first()
@@ -112,11 +111,13 @@ class GroupController extends Controller {
 
   /**
    * Update information of a given group
-   * @param {Express.Request} request
-   * @returns response
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Group} group
    */
-  async update(request) {
-    const { body, params, file } = request
+  async update(req, res, next) {
+    const { body, params, file } = req
 
     try {
       await this.validate(body)
@@ -134,11 +135,11 @@ class GroupController extends Controller {
       }
       if (group) {
         await group.update(body)
-        return this.response(await Group.find(group.id), 201)
+        return res.status(201).json(group)
       }
-      return this.response('We could not find the group 😢', 404)
+      return res.status(404).json('We could not find the group 😢')
     } catch (error) {
-      return this.response(error, 422)
+      return next(error)
     }
   }
 
@@ -148,7 +149,7 @@ class GroupController extends Controller {
    * @returns response
    */
   async delete(request) {
-    const group = await Group.where({
+    const group = await _where({
       slug: request.params.slug
     }).first()
 
@@ -190,7 +191,7 @@ class GroupController extends Controller {
   async members(request) {
     const slug = request.params.slug
     try {
-      const group = await Group.where({
+      const group = await _where({
         slug
       }).first()
       return this.response(await group.members())
@@ -286,7 +287,7 @@ class GroupController extends Controller {
       }).first()
 
       if (group) {
-        const event = await Event.where({
+        const event = await where({
           id: req.params.event,
           organisable_type: 'Group',
           organisable_id: group.id
@@ -297,7 +298,7 @@ class GroupController extends Controller {
             await event.update({
               endDate: event.startDate
             })
-            event = await Event.find(request.params.event)
+            event = await find(request.params.event)
           }
           event.tickets = await DB('tickets')
             .where('event_id', event.id) || []
@@ -349,7 +350,7 @@ class GroupController extends Controller {
     const user = await request.user()
     const { body, params } = request
     const { event } = params // The the event Id
-    const currentEvent = await Event.find(event) // Load the current event
+    const currentEvent = await find(event) // Load the current event
     currentEvent.organiser = await getEventOrganiser(currentEvent)
     if (canEditEvent(currentEvent, user)) {
       try {
@@ -382,7 +383,7 @@ class GroupController extends Controller {
     // The the event Id
     const { event } = params
     // Load the current event
-    const currentEvent = await Event.find(event)
+    const currentEvent = await find(event)
     // A user can only update his/her own event
     // TODO add this middleware
     // if (await currentEvent.user_id !== user.id) {
@@ -430,4 +431,4 @@ class GroupController extends Controller {
   }
 }
 
-module.exports = new GroupController()
+export default new GroupController()

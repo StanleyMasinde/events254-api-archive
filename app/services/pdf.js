@@ -1,7 +1,7 @@
-const fs = require('fs')
-const PDFDocument = require('pdfkit')
+import { createWriteStream } from 'fs'
+import PDFDocument from 'pdfkit'
 const doc = new PDFDocument()
-const moment = require('moment-timezone')
+import moment from 'moment-timezone'
 
 class PDF {
   /**
@@ -68,10 +68,10 @@ class PDF {
       .text(this.data.currentTicket.price === 0 ? 'Free' : Intl.NumberFormat('en-US', { style: 'currency', currency: 'kes' }).format(this.data.currentTicket.price))
       .moveDown()
       .save()
-    doc.pipe(fs.createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
+    doc.pipe(createWriteStream(`uploads/EV254KE${this.data.ticketId}.pdf`))
     doc.end()
     return doc
   }
 }
 
-module.exports = PDF
+export default PDF

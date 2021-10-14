@@ -1,7 +1,7 @@
-const { Model } = require('mevn-orm')
+import { Model } from 'mevn-orm'
 
 class Admin extends Model {
 
 }
 
-module.exports = Admin
+export default Admin

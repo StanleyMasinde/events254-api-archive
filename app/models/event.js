@@ -1,5 +1,5 @@
-const { Model, DB } = require('mevn-orm')
-const moment = require('moment-timezone')
+import { Model, DB } from 'mevn-orm'
+import tz from 'moment-timezone'
 
 class Event extends Model {
   /**
@@ -18,7 +18,7 @@ class Event extends Model {
    */
   static async landingPage (paginate = 15, page = 1) {
     try {
-      const today = moment.tz('Africa/Nairobi').utc().toISOString()
+      const today = tz('Africa/Nairobi').utc().toISOString()
       const offset = paginate * (page - 1)
       const records = await DB('events').whereRaw('startDate >= ?', today).count('id as recordCount')
       const totalShown = paginate * page
@@ -87,4 +87,4 @@ class Event extends Model {
   }
 }
 
-module.exports = Event
+export default Event

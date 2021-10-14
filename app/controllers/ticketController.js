@@ -1,8 +1,8 @@
-const { DB } = require('mevn-orm')
-const Validator = require('mevn-validator')
-const pluralize = require('pluralize')
-const Ticket = require('../models/ticket')
-const Controller = require('./controller')
+import { DB } from 'mevn-orm'
+import Validator from 'mevn-validator'
+import pluralize from 'pluralize'
+import Ticket from '../models/ticket.js'
+import Controller from './controller.js'
 
 class TicketController extends Controller {
   /**
@@ -74,18 +74,25 @@ class TicketController extends Controller {
 
   /**
      * Delete a ticket
-     * @param {*} request
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @param {import('express').NextFunction} next
+     * @returns {Promise<void>}
      */
-  async deleteEventTicket(request) {
+  async deleteEventTicket(req, res, next) {
     try {
-      const ticket = await Ticket.find(request.params.ticket)
+      const ticket = await Ticket.find(req.params.ticket)
       if (ticket) {
-        ticket.destroy()
-        return this.response('Ticket Deleted')
+        ticket.delete()
+        return res.status(204).json()
       }
-      return this.response('Ticket not found', 404)
+      return res.status(404).json(
+        {
+          message: 'Ticket not found'
+        }
+      )
     } catch (error) {
-      return this.response(error, 500)
+      return next(error)
     }
   }
 
@@ -182,4 +189,4 @@ class TicketController extends Controller {
   }
 }
 
-module.exports = new TicketController()
+export default new TicketController()

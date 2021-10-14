@@ -1,5 +1,5 @@
-const { DB } = require('mevn-orm')
-const Controller = require('./controller')
+import { DB } from 'mevn-orm'
+import Controller from './controller.js'
 
 class SearchController extends Controller {
   /**
@@ -63,4 +63,4 @@ class SearchController extends Controller {
     }
   }
 }
-module.exports = new SearchController()
+export default new SearchController()

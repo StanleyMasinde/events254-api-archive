@@ -1,6 +1,6 @@
-const { compareSync } = require('bcrypt')
-const { DB } = require('mevn-orm')
-const createToken = require('./createToken')
+import { compareSync } from 'bcrypt'
+import { DB } from 'mevn-orm'
+import createToken from './createToken.js'
 
 const auth = () => {
   /**
@@ -151,4 +151,4 @@ const auth = () => {
   }
 }
 
-module.exports = auth()
+export default auth()

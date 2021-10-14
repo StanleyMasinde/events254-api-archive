@@ -1,8 +1,5 @@
-const fs = require('fs')
-const {
-  S3Client,
-  PutObjectCommand
-} = require('@aws-sdk/client-s3')
+import { createReadStream, writeFileSync, unlinkSync } from 'fs'
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
 const REGION = 'eu-west-2'
 // Set the bucket parameters
@@ -19,11 +16,11 @@ const upload = async (file, folder = '/') => {
   const { originalname, filename, path, mimetype } = file
 
   // Read the teporary upload
-  const fileStream = fs.createReadStream(path)
+  const fileStream = createReadStream(path)
 
   // Log any errors that may happen during the read
   fileStream.on('error', function (err) {
-    fs.writeFileSync('error.log', `${new Date().toUTCString()} | FileStream error ${new Error(err).message} \n`, { flag: 'a' })
+    writeFileSync('error.log', `${new Date().toUTCString()} | FileStream error ${new Error(err).message} \n`, { flag: 'a' })
   })
 
   const uploadFolder = `${folder}/${filename}${originalname}`
@@ -43,12 +40,12 @@ const upload = async (file, folder = '/') => {
   try {
     await s3.send(new PutObjectCommand(objectParams))
     // The upload was successful
-    fs.unlinkSync(path)
+    unlinkSync(path)
     return `https://${bucketName}.s3.${REGION}.amazonaws.com/${uploadFolder}`
   } catch (error) {
-    fs.writeFileSync('error.log', `${new Date().toUTCString()} | S3 ${new Error(error).message} \n`, { flag: 'a' })
+    writeFileSync('error.log', `${new Date().toUTCString()} | S3 ${new Error(error).message} \n`, { flag: 'a' })
     return 'https://placeimg.com/640/500/null?30219'
   }
 }
 
-module.exports = upload
+export default upload

@@ -1,4 +1,4 @@
-const { Model, DB } = require('mevn-orm')
+import { Model, DB } from 'mevn-orm'
 
 class Group extends Model {
   /**
@@ -89,4 +89,4 @@ class Group extends Model {
   }
 }
 
-module.exports = Group
+export default Group

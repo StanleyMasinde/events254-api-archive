@@ -3,12 +3,13 @@
   "version": "1.0.3",
   "description": "Events254 main backend service",
   "main": "bin/www",
+  "type": "module",
   "scripts": {
-    "pretest": "NODE_ENV=production knex migrate:latest",
-    "test": "NODE_ENV=production mocha --exit --bail",
+    "pretest": "NODE_ENV=development knex migrate:latest --knexfile knexfile.cjs",
+    "test": "NODE_ENV=development mocha --exit --bail",
     "start": "node bin/www",
     "dev": "DEBUG=express* nodemon bin/www",
-    "migrate": "NODE_ENV=production knex migrate:latest"
+    "migrate": "NODE_ENV=production knex migrate:latest --knexfile knexfile.cjs"
   },
   "keywords": [
     "Events254",

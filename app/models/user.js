@@ -1,5 +1,5 @@
-const { Model, DB } = require('mevn-orm')
-const { hash } = require('bcrypt')
+import { Model, DB } from 'mevn-orm'
+import { hash } from 'bcrypt'
 
 class User extends Model {
   /**
@@ -38,4 +38,4 @@ class User extends Model {
   }
 }
 
-module.exports = User
+export default User

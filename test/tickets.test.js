@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
-const fs = require('fs')
-const chai = require('chai')
-const { expect } = require('chai')
-const chaiHttp = require('chai-http')
-const faker = require('faker')
-chai.use(chaiHttp)
-const application = require('../app')
+import { readFileSync } from 'fs'
+import chai, { use, expect } from 'chai'
+import chaiHttp from 'chai-http'
+import faker from 'faker'
+use(chaiHttp)
+import application from '../app.js'
 const app = chai.request.agent(application).keepOpen()
-const User = require('../app/models/user')
+import User from '../app/models/user.js'
 
 let user = {
   name: faker.name.findName(),
@@ -28,7 +27,7 @@ describe('#Events test with protected routes', () => {
       })
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
+      .attach('image', readFileSync('./public/icon.png'), 'icon.png')
       .field({
         location: faker.address.streetAddress(),
         about: 'Awesome event',
@@ -78,6 +77,6 @@ describe('#Events test with protected routes', () => {
 
   it('Delete a ticket', async () => {
     const res = await app.delete(`/events/${eventId}/tickets/${ticketId}`)
-    expect(res.status).equals(200)
+    expect(res.status).equals(204)
   })
 })

@@ -1,19 +1,20 @@
-const router = require('express').Router()
-const searchController = require('../app/controllers/searchController')
+import { Router } from 'express'
+import SearchController from '../app/controllers/searchController.js'
+const router = Router()
 
 /**
  * Handle the search
  *
  */
 router.get('/', (req, res, next) => {
-  searchController.index(req, res, next)
+  SearchController.index(req, res, next)
 })
 
 /**
  * Filter events by a calendar date
  */
 router.get('/calendar', (req, res, next) => {
-  searchController.calendar(req, res, next)
+  SearchController.calendar(req, res, next)
 })
 
-module.exports = router
+export default router

@@ -4,9 +4,10 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('turn.io:server');
-const http = require('http');
+import app from '../app.js'
+import debug from 'debug';
+import { createServer } from 'http';
+debug('events254');
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

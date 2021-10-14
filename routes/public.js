@@ -1,5 +1,6 @@
-const router = require('express').Router()
-const EventsController = require('../app/controllers/eventsController')
+import { Router } from 'express'
+import EventsController from '../app/controllers/eventsController.js'
+const router = Router()
 /**
  * -------------------------------------------------------------------------------
  * The routes are publicly accessible by anyone without need for authentication.
@@ -29,4 +30,4 @@ router.get('/events/:event', async (req, res, next) => {
   }
 })
 
-module.exports = router
+export default router

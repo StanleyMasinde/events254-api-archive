@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-const fs = require('fs')
-const faker = require('faker')
-const chai = require('chai')
-const { expect } = require('chai')
-const chaiHttp = require('chai-http')
+import { readFileSync } from 'fs'
+import faker from 'faker'
+import chai from 'chai'
+import { expect } from 'chai'
+import chaiHttp from 'chai-http'
 chai.use(chaiHttp)
-const application = require('../app')
+import application from '../app.js'
 const app = chai.request.agent(application).keepOpen()
 
 let user = {
@@ -98,9 +98,9 @@ describe('Authentication with personal API Tokens', () => {
       .post('/auth/register')
       .set('X-requested-with', 'mobile')
       .send(user2)
+
     expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('user')
-    expect(res.body.user).to.haveOwnProperty('token')
+    expect(res.body).to.haveOwnProperty('token')
   })
 
   it('Should return a personal API token on login', async () => {
@@ -112,7 +112,6 @@ describe('Authentication with personal API Tokens', () => {
         password: user2.password
       })
     expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('user')
     expect(res.body.user).to.haveOwnProperty('token')
     token = res.body.user.token
   })
@@ -139,7 +138,7 @@ describe('Authentication with personal API Tokens', () => {
         .set('content-type', 'multipart/form-data')
         .set('X-requested-with', 'mobile')
         .set('Authorization', `Bearer ${token}`)
-        .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
+        .attach('image', readFileSync('./public/icon.png'), 'icon.png')
         .field({
           location: faker.address.streetAddress(),
           about: 'Awesome event',

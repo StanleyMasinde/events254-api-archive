@@ -1,16 +1,16 @@
-const Validator = require('mevn-validator')
-const { DB } = require('mevn-orm')
-const ical = require('ical-generator').default
-const axios = require('axios').default
-const Event = require('../models/event')
-const User = require('../models/user')
-const upload = require('../filesystem/s3')
-const canEditEvent = require('../policies/canEditEvent')
-const Mail = require('../mail/mail')
-const Ticket = require('../models/ticket')
-const formatToDateTime = require('../actions/formatToDateTime')
-const getEventOrganiser = require('../actions/getEventOrganiser')
-const Controller = require('./controller')
+import Validator from 'mevn-validator'
+import { DB } from 'mevn-orm'
+import ical from 'ical-generator'
+import axios from 'axios'
+import Event from '../models/event.js'
+import User from '../models/user.js'
+import upload from '../filesystem/s3.js'
+import canEditEvent from '../policies/canEditEvent.js'
+import Mail from '../mail/mail.js'
+import Ticket from '../models/ticket.js'
+import formatToDateTime from '../actions/formatToDateTime.js'
+import getEventOrganiser from '../actions/getEventOrganiser.js'
+import Controller from './controller.js'
 
 class EventsController extends Controller {
   /**
@@ -105,7 +105,7 @@ class EventsController extends Controller {
         organisable_type
       })
       // Add the organiser
-      return res.json(e)
+      return res.status(201).json(e)
     } catch (error) {
       next(error)
     }
@@ -175,11 +175,14 @@ class EventsController extends Controller {
 
   /**
    * Update an event
-   * @param {Array} request
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {Promise<void>}
    */
-  async update(request) {
-    const { body, params } = request
-    const user = await request.user() // The current user
+  async update(req, res, next) {
+    const { body, params } = req
+    const user = await req.user() // The current user
     const { event } = params // The the event Id
     const currentEvent = await Event.find(event) // Load the current event
     if (canEditEvent(currentEvent, user)) {
@@ -195,13 +198,15 @@ class EventsController extends Controller {
         const { startDate, startTime, endDate, endTime, location, about, description } = body
         const startDateTime = formatToDateTime(startTime, startDate)
         const endDatetime = formatToDateTime(endTime, endDate)
-        const res = await currentEvent.update({ location, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
-        return this.response(res, 201) // Looks good
+        const ev = await currentEvent.update({ location, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
+        return res.status(201).json(ev)
       } catch (error) {
-        return this.response(error, error.status || 422)
+        return next(error)
       }
     }
-    return this.response({ message: 'You don\'t have permission to perform this action' }, 401)
+    return res.status(401).json({
+      error: 'You are not authorized to edit this event'
+    })
   }
 
   /**
@@ -223,7 +228,7 @@ class EventsController extends Controller {
       const currentEvent = await Event.find(event)
       await DB('tickets').where('event_id', currentEvent.id).delete()
       await currentEvent.delete()
-      res.status(204).json({
+      res.status(200).json({
         message: 'Event deleted'
       })
     } catch (error) {
@@ -238,8 +243,7 @@ class EventsController extends Controller {
   async publish(request, response, next) {
     const { params } = request
     const { event } = params
-    const currentEvent = await Event.find(event)
-    console.log(currentEvent);
+    const currentEvent = await find(event)
     if (canEditEvent(currentEvent, await request.user())) {
       try {
         await currentEvent.update({ published: !currentEvent.published })
@@ -329,4 +333,4 @@ class EventsController extends Controller {
   }
 }
 
-module.exports = new EventsController()
+export default new EventsController()

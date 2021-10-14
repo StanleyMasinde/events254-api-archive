@@ -14,4 +14,4 @@ const slugify = (text) => {
     .replace(/-+$/, '')
 }
 
-module.exports = slugify
+export default slugify

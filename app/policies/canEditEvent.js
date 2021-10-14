@@ -5,7 +5,7 @@
  * @param {*} guard The guard to use
  * @returns Boolean
  */
-module.exports = function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
+export default function canEditEvent (event, user, organisableType = 'User', guard = 'users') {
   try {
     if (!user) {
       return false
@@ -17,7 +17,6 @@ module.exports = function canEditEvent (event, user, organisableType = 'User', g
       return false
     }
     const ids = event.organiser.adminIds.map(r => r.user_id)
-    console.log(ids)
     return ids.includes(user.id)
   } catch (error) {
     throw new Error(error)

@@ -1,5 +1,6 @@
-const router = require('express').Router()
-const axios = require('axios').default
+import { Router } from 'express'
+import axios from 'axios'
+const router = Router()
 
 /**
  * Verify a transaction from flutterwave
@@ -16,4 +17,4 @@ router.get('/verify/:transactionId', async (req, res, next) => {
   }
 })
 
-module.exports = router
+export default router

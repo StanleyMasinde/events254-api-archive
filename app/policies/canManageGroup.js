@@ -5,7 +5,7 @@
  * @param {*} guard The guard to use
  * @returns Boolean
  */
-module.exports = function canManageGroup (group, user, guard = 'users') {
+export default function canManageGroup (group, user, guard = 'users') {
   if (!user) {
     return false
   }

@@ -1,5 +1,5 @@
-const { DB } = require('mevn-orm')
-const pluralize = require('pluralize')
+import { DB } from 'mevn-orm'
+import pluralize from 'pluralize'
 /**
    * Get the event organisers
    * @param {import('../models/event')} event
@@ -30,4 +30,4 @@ const getEventOrganiser = async (event = {}) => {
   }
   return organiser
 }
-module.exports = getEventOrganiser
+export default getEventOrganiser

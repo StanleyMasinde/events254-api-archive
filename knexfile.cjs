@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 module.exports = {
 
   development: {
@@ -11,10 +11,10 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-      directory: './backend/database/migrations'
+      directory: './database/migrations'
     },
     seeds: {
-      directory: './backend/database/seeds'
+      directory: './database/seeds'
     }
   },
 

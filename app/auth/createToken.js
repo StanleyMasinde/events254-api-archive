@@ -1,5 +1,5 @@
-const { randomBytes } = require('crypto')
-const { DB } = require('mevn-orm')
+import { randomBytes } from 'crypto'
+import { DB } from 'mevn-orm'
 
 /**
  * ---------------------------------------------------------------
@@ -27,4 +27,4 @@ const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users',
   return token
 }
 
-module.exports = createToken
+export default createToken

@@ -3,4 +3,4 @@ const authenticated = (guard = 'users') => {
     await req.isAuthenticated(guard) ? next() : res.status(401).json('Unauthenticated')
   }
 }
-module.exports = authenticated
+export default authenticated

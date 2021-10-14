@@ -1,11 +1,11 @@
-const { randomBytes } = require('crypto')
-const Validator = require('mevn-validator')
-const { DB } = require('mevn-orm')
-const { hash } = require('bcrypt')
-const Mail = require('../mail/mail')
-const User = require('../models/user')
-const createToken = require('../auth/createToken')
-const Controller = require('./controller')
+import { randomBytes } from 'crypto'
+import Validator from 'mevn-validator'
+import { DB } from 'mevn-orm'
+import { hash } from 'bcrypt'
+import Mail from '../mail/mail.js'
+import User from '../models/user.js'
+import createToken from '../auth/createToken.js'
+import Controller from './controller.js'
 
 class UserController extends Controller {
   /**
@@ -15,10 +15,10 @@ class UserController extends Controller {
   * @param {import('express').NextFunction} next
   * @returns {import('../models/user')} Users
   */
-  async index (req, res, next) {
+  async index(req, res, next) {
     const currentPage = +req.query.page || 1
     const limit = req.query.limit || 500
-    const offset = (currentPage - 1) * limit 
+    const offset = (currentPage - 1) * limit
     try {
       const userCount = await DB('users').count('id as count')
       const users = await DB('users').select('*').limit(limit).offset(offset)
@@ -46,7 +46,7 @@ class UserController extends Controller {
    * @param {Express.Request} request
    * @returns
    */
-  async show ({ params }) {
+  async show({ params }) {
     try {
       const user = await User.find(params.id)
       delete user.password
@@ -59,10 +59,13 @@ class UserController extends Controller {
 
   /**
    * Register a new user
-   * @param {Express.Request} request the express request object
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   * @returns {import('../models/user')} User
    */
-  async register (request) {
-    const { body } = request
+  async register(req, res, next) {
+    const { body } = req
     try {
       // Validate the input
       await new Validator(body, {
@@ -76,9 +79,13 @@ class UserController extends Controller {
       // user exists
       const { email } = body
       const exists = await User.where({ email }).first()
-   
-      if (exists.id) {
-        return this.response({ errors: { email: 'This email is already registerd' } }, 422)
+
+      if (exists) {
+        return res.status(422).json({
+          errors: [{
+            email: 'Email already exists'
+          }]
+        })
       }
 
       // Generate a unique username from the name. ensure it is not taken
@@ -98,18 +105,17 @@ class UserController extends Controller {
       }
       await new Mail(body, 'Welcome to events254', { template: 'welcome', data }).send()
       // Determine if the request requires a token and pass it if so
-      if (request.requiresToken()) {
+      if (req.requiresToken()) {
         const token = await createToken({
           tokenable_id: user.id,
           tokenable_type: 'users'
         })
         user.token = token
-        return this.response({ user })
+        return res.json(user)
       }
-      return this.response(user)
+      return res.json(user)
     } catch (error) {
-      // If error is 422
-      return this.response(error, error.status || 422)
+      next(error)
     }
   }
 
@@ -117,7 +123,7 @@ class UserController extends Controller {
    * Send a password reset Email
    * @param {String} email - The email of the user
    */
-  async sendPasswordResetEmail (email) {
+  async sendPasswordResetEmail(email) {
     try {
       // Validate the input
       await new Validator({ email }, {
@@ -157,7 +163,7 @@ class UserController extends Controller {
    * Reset a use's password
    * @param {*} payload
    */
-  async resetPassword (payload = {}) {
+  async resetPassword(payload = {}) {
     try {
       // Validate payload
       await new Validator(payload, {
@@ -201,4 +207,4 @@ class UserController extends Controller {
   }
 }
 
-module.exports = new UserController()
+export default new UserController()

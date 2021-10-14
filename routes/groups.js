@@ -1,8 +1,9 @@
-const fs = require('fs')
-const router = require('express').Router()
-const multer = require('multer')
-const GroupController = require('../app/controllers/groupController')
-const authenticated = require('../app/middleware/authenticated')
+import { unlinkSync } from 'fs'
+import { Router } from 'express'
+import multer from 'multer'
+import GroupController from '../app/controllers/groupController.js'
+import authenticated from '../app/middleware/authenticated.js'
+const router = Router()
 
 /**
  * -----------------------------------------------------------------
@@ -60,13 +61,7 @@ router.get('/:slug', (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.put('/:slug', multer({ dest: './uploads' }).single('picture'), async (req, res, next) => {
-  try {
-    const { status, message } = await GroupController.update(req)
-    res.status(status).json(message)
-    fs.unlinkSync(req.file.path) // TODO: Make this a resusable function Delete the temp file.
-  } catch (error) {
-    next(error)
-  }
+  GroupController.update(req, res, next)
 })
 
 /**
@@ -159,11 +154,11 @@ router.put('/:slug/events/:event', async (req, res, next) => {
  */
 router.delete('/:slug/events/:event', async (req, res, next) => {
   try {
-    const { status, message } = await GroupController.deleteEvent(req)
+    const { status, message } = await GroupController.delete(req)
     res.status(status).json(message)
   } catch (error) {
     next(error)
   }
 })
 
-module.exports = router
+export default router

@@ -1,4 +1,4 @@
-const moment = require('moment-timezone')
+import moment from 'moment-timezone'
 /**
   * Format the date and time into a datetime field
   * @param {String} time
@@ -27,4 +27,4 @@ const formatToDateTime = (time, date, timezone = 'Africa/Nairobi') => {
   return t
 }
 
-module.exports = formatToDateTime
+export default formatToDateTime

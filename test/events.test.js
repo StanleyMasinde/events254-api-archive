@@ -1,15 +1,14 @@
 /* eslint-disable no-undef */
-const fs = require('fs')
-const chai = require('chai')
-const { expect } = require('chai')
-const chaiHttp = require('chai-http')
-const faker = require('faker')
+import { readFileSync } from 'fs'
+import chai, {expect} from 'chai'
+import chaiHttp from 'chai-http'
+import faker from 'faker'
 chai.use(chaiHttp)
-const application = require('../app')
+import application from '../app.js'
 const app = chai.request.agent(application).keepOpen() // This will keep the request open and so the session
-const User = require('../app/models/user')
-const Event = require('../app/models/event')
-const Ticket = require('../app/models/ticket')
+import User from '../app/models/user.js'
+import Event from '../app/models/event.js'
+import Ticket from '../app/models/ticket.js'
 
 let user = {
   name: faker.name.findName(),
@@ -60,7 +59,7 @@ describe('#Events test with protected routes', () => {
   it('User creates an event', async () => {
     const res = await app.post('/events')
       .set('content-type', 'multipart/form-data')
-      .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
+      .attach('image', readFileSync('./public/icon.png'), 'icon.png')
       .field({
         location: faker.address.streetAddress(),
         about: 'Awesome event',
@@ -111,7 +110,7 @@ describe('#Events test with protected routes', () => {
 
   it('User deletes and event', async () => {
     const res = await app.delete(`/events/${eventId}`)
-    expect(res.body).equals('Deleted')
+    expect(res.body.message).equals('Event deleted')
   })
 })
 

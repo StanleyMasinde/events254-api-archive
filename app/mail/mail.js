@@ -1,7 +1,7 @@
-const nodemailer = require('nodemailer')
-const { pugEngine } = require('nodemailer-pug-engine')
+import { createTransport } from 'nodemailer'
+import { pugEngine } from 'nodemailer-pug-engine'
 
-const mail = nodemailer.createTransport({
+const mail = createTransport({
   streamTransport: process.env.STREAM_MAIL === 'true',
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: process.env.MAIL_PORT || 2525,
@@ -12,7 +12,7 @@ const mail = nodemailer.createTransport({
   }
 })
 mail.use('compile', pugEngine({
-  templateDir: __dirname
+  templateDir: 'app/mail'
 }))
 
 class Mail {
@@ -61,4 +61,4 @@ class Mail {
   }
 }
 
-module.exports = Mail
+export default Mail

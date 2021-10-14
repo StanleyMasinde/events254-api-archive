@@ -1,5 +1,5 @@
-const { Model } = require('mevn-orm')
+import { Model } from 'mevn-orm'
 
 class Ticket extends Model {}
 
-module.exports = Ticket
+export default Ticket

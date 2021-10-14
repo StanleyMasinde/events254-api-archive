@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
-const chai = require('chai')
-const { expect } = require('chai')
-const chaiHttp = require('chai-http')
-chai.use(chaiHttp)
-const application = require('../app')
+import chai, { use, expect } from 'chai'
+import chaiHttp from 'chai-http'
+use(chaiHttp)
+import application from '../app.js'
 
 const app = chai.request.agent(application).keepOpen()
 
@@ -12,7 +11,7 @@ describe('Users tests', () => {
     app.get('/users')
       .then((res) => {
         expect(res.status).equals(200)
-        expect(res.body).to.be.an('array')
+        expect(res.body.data).to.be.an('array')
         done()
       })
       .catch((err) => {

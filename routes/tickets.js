@@ -1,12 +1,13 @@
-const router = require('express').Router()
-const ticketController = require('../app/controllers/ticketController')
+import { Router } from 'express'
+import TicketController from '../app/controllers/ticketController.js'
+const router = Router()
 
 /**
  * Get a ticket using ID
  *
  */
 router.get('/:id', (req, res, next) => {
-  ticketController.getTicket(req, res, next)
+  TicketController.getTicket(req, res, next)
 })
 
-module.exports = router
+export default router

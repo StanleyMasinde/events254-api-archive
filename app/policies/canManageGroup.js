@@ -5,12 +5,12 @@
  * @param {*} guard The guard to use
  * @returns Boolean
  */
-module.exports = function canManageGroup (group, user, guard = 'users') {
-  if (!user) {
-    return false
-  }
-  const organiserIds = group.organisers.map((o) => {
-    return o.id
-  })
-  return organiserIds.includes(user.id)
+export default function canManageGroup (group, user) {
+	if (!user) {
+		return false
+	}
+	const organiserIds = group.organisers.map((o) => {
+		return o.id
+	})
+	return organiserIds.includes(user.id)
 }

@@ -3,12 +3,15 @@
   "version": "1.0.3",
   "description": "Events254 main backend service",
   "main": "bin/www",
+  "type": "module",
   "scripts": {
-    "pretest": "NODE_ENV=production knex migrate:latest",
-    "test": "NODE_ENV=production mocha --exit --bail",
+    "pretest": "NODE_ENV=development knex migrate:latest --knexfile knexfile.cjs",
+    "test": "NODE_ENV=development mocha --exit --bail",
     "start": "node bin/www",
     "dev": "DEBUG=express* nodemon bin/www",
-    "migrate": "NODE_ENV=production knex migrate:latest"
+    "migrate": "NODE_ENV=production knex migrate:latest --knexfile knexfile.cjs",
+    "migrate:rollback": "NODE_ENV=production knex migrate:rollback --knexfile knexfile.cjs",
+    "lint": "eslint ."
   },
   "keywords": [
     "Events254",
@@ -17,7 +20,7 @@
   "author": "Opensource254",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.36.0",
+    "@aws-sdk/client-s3": "^3.36.1",
     "@sentry/node": "^6.13.3",
     "axios": "^0.22.0",
     "bcrypt": "^5.0.1",
@@ -29,7 +32,7 @@
     "express-session": "^1.17.2",
     "ical-generator": "^3.0.1",
     "knex": "^0.95.11",
-    "mevn-orm": "^2.2.12",
+    "mevn-orm": "3.0.0",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.33",
     "morgan": "^1.10.0",
@@ -44,6 +47,9 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
     "faker": "^5.5.3",
     "mocha": "^9.1.2",
     "nodemon": "^2.0.13"

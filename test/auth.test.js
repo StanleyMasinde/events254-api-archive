@@ -1,156 +1,155 @@
 /* eslint-disable no-undef */
-const fs = require('fs')
-const faker = require('faker')
-const chai = require('chai')
-const { expect } = require('chai')
-const chaiHttp = require('chai-http')
+import { readFileSync } from 'fs'
+import faker from 'faker'
+import chai from 'chai'
+import { expect } from 'chai'
+import chaiHttp from 'chai-http'
 chai.use(chaiHttp)
-const application = require('../app')
+import application from '../app.js'
 const app = chai.request.agent(application).keepOpen()
 
 let user = {
-  name: faker.name.findName(),
-  email: faker.internet.email(),
-  password: 'strongpassword'
+	name: faker.name.findName(),
+	email: faker.internet.email(),
+	password: 'strongpassword'
 }
 
 let user2 = {
-  name: faker.name.findName(),
-  email: faker.internet.email(),
-  password: 'strongpassword'
+	name: faker.name.findName(),
+	email: faker.internet.email(),
+	password: 'strongpassword'
 }
 
 describe('Session Authentication tests', () => {
-  it('Register a user', async () => {
-    const res = await app
-      .post('/auth/register')
-      .send(user)
-    expect(res.status).equals(200)
-  })
+	it('Register a user', async () => {
+		const res = await app
+			.post('/auth/register')
+			.send(user)
+		expect(res.status).equals(200)
+	})
 
-  it('Login user with wrong PASSWORD should fail', async () => {
-    const res = await app
-      .post('/auth/login')
-      .send({
-        email: user.email,
-        password: 'wrongpassword'
-      })
-    expect(res.status).equals(401)
-  })
+	it('Login user with wrong PASSWORD should fail', async () => {
+		const res = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'wrongpassword'
+			})
+		expect(res.status).equals(401)
+	})
 
-  it('Login user with wrong EMAIL should fail', async () => {
-    const res = await app
-      .post('/auth/login')
-      .send({
-        email: 'user@mail.com',
-        password: user.password
-      })
-    expect(res.status).equals(401)
-  })
+	it('Login user with wrong EMAIL should fail', async () => {
+		const res = await app
+			.post('/auth/login')
+			.send({
+				email: 'user@mail.com',
+				password: user.password
+			})
+		expect(res.status).equals(401)
+	})
 
-  it('Login user with correct credentials', async () => {
-    const res = await app
-      .post('/auth/login')
-      .send({
-        email: user.email,
-        password: user.password
-      })
-    expect(res.status).equals(200)
-  })
+	it('Login user with correct credentials', async () => {
+		const res = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: user.password
+			})
+		expect(res.status).equals(200)
+	})
 
-  it('Get the current user', async () => {
-    const res = await app.get('/auth/user')
-    expect(res.status).equals(200)
-    expect(res.body).haveOwnProperty('user')
-  })
+	it('Get the current user', async () => {
+		const res = await app.get('/auth/user')
+		expect(res.status).equals(200)
+		expect(res.body).haveOwnProperty('user')
+	})
 
-  it('Logout a user', async () => {
-    const res = await app
-      .post('/auth/logout')
-    expect(res.status).equals(200)
-  })
+	it('Logout a user', async () => {
+		const res = await app
+			.post('/auth/logout')
+		expect(res.status).equals(200)
+	})
 
-  it('Should return 401 when due to no authentication', async () => {
-    const res = await app.get('/auth/user')
-    expect(res.status).equals(401)
-  })
+	it('Should return 401 when due to no authentication', async () => {
+		const res = await app.get('/auth/user')
+		expect(res.status).equals(401)
+	})
 
-  it('Send a password reset notification without email should fail', async () => {
-    const res = await app.post('/auth/password')
-    expect(res.status).equals(422)
-    expect(res.body).to.haveOwnProperty('errors')
-    expect(res.body.errors).to.be.an('Object')
-  })
+	it('Send a password reset notification without email should fail', async () => {
+		const res = await app.post('/auth/password')
+		expect(res.status).equals(422)
+		expect(res.body).to.haveOwnProperty('errors')
+		expect(res.body.errors).to.be.an('Object')
+	})
 
-  it('Send a password reset notification', async () => {
-    const res = await app.post('/auth/password')
-      .send({
-        email: user.email
-      })
-    expect(res.status).equals(200)
-  })
+	it('Send a password reset notification', async () => {
+		const res = await app.post('/auth/password')
+			.send({
+				email: user.email
+			})
+		expect(res.status).equals(200)
+	})
 })
 
 describe('Authentication with personal API Tokens', () => {
-  let token
-  it('Should return a personal API token on registration', async () => {
-    const res = await app
-      .post('/auth/register')
-      .set('X-requested-with', 'mobile')
-      .send(user2)
-    expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('user')
-    expect(res.body.user).to.haveOwnProperty('token')
-  })
+	let token
+	it('Should return a personal API token on registration', async () => {
+		const res = await app
+			.post('/auth/register')
+			.set('X-requested-with', 'mobile')
+			.send(user2)
 
-  it('Should return a personal API token on login', async () => {
-    const res = await app
-      .post('/auth/login')
-      .set('X-requested-with', 'mobile')
-      .send({
-        email: user2.email,
-        password: user2.password
-      })
-    expect(res.status).equals(200)
-    expect(res.body).to.haveOwnProperty('user')
-    expect(res.body.user).to.haveOwnProperty('token')
-    token = res.body.user.token
-  })
+		expect(res.status).equals(200)
+		expect(res.body).to.haveOwnProperty('token')
+	})
 
-  it('Should get the current user using the API token', async () => {
-    const res = await app
-      .get('/auth/user')
-      .set('X-requested-with', 'mobile')
-      .set('Authorization', `Bearer ${token}`)
-    expect(res.status).equals(200)
-  })
+	it('Should return a personal API token on login', async () => {
+		const res = await app
+			.post('/auth/login')
+			.set('X-requested-with', 'mobile')
+			.send({
+				email: user2.email,
+				password: user2.password
+			})
+		expect(res.status).equals(200)
+		expect(res.body.user).to.haveOwnProperty('token')
+		token = res.body.user.token
+	})
 
-  it('Should return 401 when no authorisation/token header', async () => {
-    const res = await app
-      .get('/auth/user')
-      .set('X-requested-with', 'mobile')
-    expect(res.status).equals(401)
-  })
+	it('Should get the current user using the API token', async () => {
+		const res = await app
+			.get('/auth/user')
+			.set('X-requested-with', 'mobile')
+			.set('Authorization', `Bearer ${token}`)
+		expect(res.status).equals(200)
+	})
 
-  it('Create an event using API token', async () => {
-    try {
-      const res = await app
-        .post('/events')
-        .set('content-type', 'multipart/form-data')
-        .set('X-requested-with', 'mobile')
-        .set('Authorization', `Bearer ${token}`)
-        .attach('image', fs.readFileSync('./public/icon.png'), 'icon.png')
-        .field({
-          location: faker.address.streetAddress(),
-          about: 'Awesome event',
-          description: faker.lorem.paragraph(10),
-          startDate: new Date().toISOString().substr(0, 10),
-          startTime: '09:30'
-        })
-      expect(res.status).equals(201)
-      expect(res.body).to.haveOwnProperty('about')
-    } catch (err) {
-      console.log(err)
-    }
-  })
+	it('Should return 401 when no authorisation/token header', async () => {
+		const res = await app
+			.get('/auth/user')
+			.set('X-requested-with', 'mobile')
+		expect(res.status).equals(401)
+	})
+
+	it('Create an event using API token', async () => {
+		try {
+			const res = await app
+				.post('/events')
+				.set('content-type', 'multipart/form-data')
+				.set('X-requested-with', 'mobile')
+				.set('Authorization', `Bearer ${token}`)
+				.attach('image', readFileSync('./public/icon.png'), 'icon.png')
+				.field({
+					location: faker.address.streetAddress(),
+					about: 'Awesome event',
+					description: faker.lorem.paragraph(10),
+					startDate: new Date().toISOString().substr(0, 10),
+					startTime: '09:30'
+				})
+			expect(res.status).equals(201)
+			expect(res.body).to.haveOwnProperty('about')
+		} catch (err) {
+			console.log(err)
+		}
+	})
 })

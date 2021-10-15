@@ -1,9 +1,9 @@
-const fs = require('fs')
-const router = require('express').Router()
-const multer = require('multer')
-const EventsController = require('../app/controllers/eventsController')
-const ticketController = require('../app/controllers/ticketController')
-const authenticated = require('../app/middleware/authenticated')
+import { Router } from 'express'
+import multer from 'multer'
+import EventsController from '../app/controllers/eventsController.js'
+import TicketController from '../app/controllers/ticketController.js'
+import authenticated from '../app/middleware/authenticated.js'
+const router = Router()
 
 /**
  * --------------------------------------------------------
@@ -18,7 +18,7 @@ const authenticated = require('../app/middleware/authenticated')
  * --------------------------------------------------------
  */
 router.get('/', async (req, res, next) => {
-  EventsController.index(req, res, next)
+	EventsController.index(req, res, next)
 })
 /**
  * -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ router.get('/', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-  EventsController.store(req, res, next)
+	EventsController.store(req, res, next)
 })
 
 /**
@@ -38,12 +38,12 @@ router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'),
  * -----------------------------------------------------------------
  */
 router.get('/currentUser', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.currentUserEvents(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.currentUserEvents(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -53,7 +53,7 @@ router.get('/currentUser', authenticated(), async (req, res, next) => {
  * ---------------------------------------------------------------------
  */
 router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-  EventsController.update(req, res, next)
+	EventsController.update(req, res, next)
 })
 
 /**
@@ -65,7 +65,7 @@ router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('ima
  * ----------------------------------------------------------------------------------------------------------
  */
 router.get('/:event', async (req, res, next) => {
-  EventsController.show(req, res, next)
+	EventsController.show(req, res, next)
 })
 /**
  * -------------------------------------------------------------------------
@@ -74,7 +74,7 @@ router.get('/:event', async (req, res, next) => {
  * -------------------------------------------------------------------------
  */
 router.delete('/:event', authenticated(), async (req, res, next) => {
-  EventsController.delete(req, res, next)
+	EventsController.delete(req, res, next)
 })
 
 /**
@@ -83,12 +83,12 @@ router.delete('/:event', authenticated(), async (req, res, next) => {
  * -------------------------------------------------------------------------
  */
 router.put('/:event/publish', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.publish(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.publish(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
@@ -97,8 +97,7 @@ router.put('/:event/publish', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------
  */
 router.get('/:event/tickets', async (req, res, next) => {
-  const { status, message } = await ticketController.allEventTickets(req)
-  res.status(status).json(message)
+	TicketController.allEventTickets(req, res, next)
 })
 
 /**
@@ -107,8 +106,7 @@ router.get('/:event/tickets', async (req, res, next) => {
  * -----------------------------------------------------------------------------
  */
 router.post('/:event/tickets', authenticated(), async (req, res, next) => {
-  const { message, status } = await ticketController.createEventTicket(req)
-  res.status(status).json(message)
+	TicketController.createEventTicket(req, res, next)
 })
 
 /**
@@ -117,8 +115,7 @@ router.post('/:event/tickets', authenticated(), async (req, res, next) => {
  * ----------------------------------------------------------------------------
  */
 router.get('/:event/tickets/:ticket', async (req, res, next) => {
-  const { message, status } = await ticketController.showEventTicket(req)
-  res.status(status).json(message)
+	await TicketController.showEventTicket(req, res, next)
 })
 
 /**
@@ -127,8 +124,7 @@ router.get('/:event/tickets/:ticket', async (req, res, next) => {
  * --------------------------------------------------------------------
  */
 router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
-  const { message, status } = await ticketController.upDateEventTicket(req)
-  res.status(status).json(message)
+	TicketController.upDateEventTicket(req, res, next)
 })
 
 /**
@@ -136,9 +132,8 @@ router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) =
  * Delete a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.delete('/:event/tickets/:ticket', async (req, res, next) => {
-  const { status, message } = await ticketController.deleteEventTicket(req)
-  res.status(status).json(message)
+router.delete('/:event/tickets/:ticket', (req, res, next) => {
+	TicketController.deleteEventTicket(req, res, next)
 })
 
 /**
@@ -147,8 +142,7 @@ router.delete('/:event/tickets/:ticket', async (req, res, next) => {
  * ------------------------------------------------------------------
  */
 router.post('/:event/register', authenticated(), async (req, res, next) => {
-  const { message, status } = await EventsController.registerForEvent(req)
-  res.status(status).json(message)
+	EventsController.registerForEvent(req, res, next)
 })
 
-module.exports = router
+export default router

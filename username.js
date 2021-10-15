@@ -4,30 +4,30 @@
 // The number will start at 1 and increment until the username is available.
 // The username will be saved in the user's profile.
 
-const User = require('./app/models/user');
+import { all, where } from './app/models/user';
 
 (async () => {
-    try {
-        const users = await User.all();
-        users.forEach(async (user) => {
-            if (!user.username) {
-                console.log(`${user.name} has no username`)
-                let username = user.name.split(' ').join('').toLowerCase();
-                let usernameExists = await User.where({ username }).first();
-                if (usernameExists) {
-                    console.log(`${username} is already in use`);
-                    let i = 1;
-                    while (usernameExists) {
-                        username = username + i;
-                        usernameExists = await User.where({ username }).first();
-                        i++;
-                    }
-                }
-                console.log(`${user.name}'s username is ${username}`)
-                await user.update({ username });
-            }
-        })
-    } catch (err) {
-        console.log(err);
-    }
-})();
+	try {
+		const users = await all()
+		users.forEach(async (user) => {
+			if (!user.username) {
+				console.log(`${user.name} has no username`)
+				let username = user.name.split(' ').join('').toLowerCase()
+				let usernameExists = await where({ username }).first()
+				if (usernameExists) {
+					console.log(`${username} is already in use`)
+					let i = 1
+					while (usernameExists) {
+						username = username + i
+						usernameExists = await where({ username }).first()
+						i++
+					}
+				}
+				console.log(`${user.name}'s username is ${username}`)
+				await user.update({ username })
+			}
+		})
+	} catch (err) {
+		console.log(err)
+	}
+})()

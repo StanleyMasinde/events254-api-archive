@@ -1,34 +1,29 @@
-const express = require('express')
-const ticketController = require('../app/controllers/ticketController')
-const usersController = require('../app/controllers/usersController')
-const authenticated = require('../app/middleware/authenticated')
-const router = express.Router()
+import { Router } from 'express'
+import TicketController from '../app/controllers/ticketController.js'
+import UsersController from '../app/controllers/usersController.js'
+import authenticated from '../app/middleware/authenticated.js'
+const router = Router()
 
 /**
  * Register a new user to the application
  */
-router.post('/register', async (req, res, next) => {
-  try {
-    const { status, message } = await usersController.register(req)
-    res.status(status).json(message)
-  } catch (error) {
-    res.json(error)
-  }
+router.post('/register', (req, res, next) => {
+	UsersController.register(req, res, next)
 })
 
 /**
  * Login a user using the local strategy
  */
-router.post('/login', (req, res, next) => {
-  req.attempt()
+router.post('/login', (req) => {
+	req.attempt()
 })
 
 /**
  * End a user's session
  */
-router.post('/logout', function (req, res, next) {
-  req.logOut()
-  res.json({ message: 'Logout' })
+router.post('/logout', function (req, res) {
+	req.logOut()
+	res.json({ message: 'Logout' })
 })
 
 /**
@@ -37,36 +32,36 @@ router.post('/logout', function (req, res, next) {
  * The user receives an email
  */
 router.post('/password', async (req, res, next) => {
-  try {
-    const { message, status } = await usersController.sendPasswordResetEmail(req.body.email)
-    res.status(status)
-      .json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await UsersController.sendPasswordResetEmail(req.body.email)
+		res.status(status)
+			.json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
  * This route is used to update a user's password
  */
 router.post('/password/update', async (req, res, next) => {
-  try {
-    const { message, status } = await usersController.resetPassword(req.body)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await UsersController.resetPassword(req.body)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
 /**
  * Get the current authenticated user
  */
-router.get('/user', authenticated(), async (req, res, next) => {
-  const user = await req.user()
-  if (user) {
-    delete user.password
-  }
-  res.json({ user })
+router.get('/user', authenticated(), async (req, res) => {
+	const user = await req.user()
+	if (user) {
+		delete user.password
+	}
+	res.json({ user })
 })
 
 /**
@@ -76,12 +71,12 @@ router.get('/user', authenticated(), async (req, res, next) => {
  * -----------------------------------------------------------------
  */
 router.get('/tickets', authenticated(), async (req, res, next) => {
-  try {
-    const { message, status } = await ticketController.currentUser(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await TicketController.currentUser(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
-module.exports = router
+export default router

@@ -1,5 +1,6 @@
-const router = require('express').Router()
-const EventsController = require('../app/controllers/eventsController')
+import { Router } from 'express'
+import EventsController from '../app/controllers/eventsController.js'
+const router = Router()
 /**
  * -------------------------------------------------------------------------------
  * The routes are publicly accessible by anyone without need for authentication.
@@ -8,9 +9,8 @@ const EventsController = require('../app/controllers/eventsController')
  * -------------------------------------------------------------------------------
  */
 
-router.get('/events', async (req, res, next) => {
-  const { message, status } = await EventsController.index(req)
-  res.status(status).json(message)
+router.get('/events', (req, res, next) => {
+	EventsController.index(req, res, next)
 })
 /**
  * ----------------------------------------------------------------------------------------------------------
@@ -21,12 +21,12 @@ router.get('/events', async (req, res, next) => {
  * ----------------------------------------------------------------------------------------------------------
  */
 router.get('/events/:event', async (req, res, next) => {
-  try {
-    const { message, status } = await EventsController.show(req)
-    res.status(status).json(message)
-  } catch (error) {
-    next(error)
-  }
+	try {
+		const { message, status } = await EventsController.show(req)
+		res.status(status).json(message)
+	} catch (error) {
+		next(error)
+	}
 })
 
-module.exports = router
+export default router

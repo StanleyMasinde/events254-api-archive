@@ -1,5 +1,5 @@
 import { Model, DB } from 'mevn-orm'
-import tz from 'moment-timezone'
+import moment from 'moment-timezone'
 
 class Event extends Model {
 	/**
@@ -17,20 +17,26 @@ class Event extends Model {
    * @param {Number} offset
    */
 	static async landingPage (paginate = 15, page = 1) {
+		const offset = (page - 1) * paginate
+		const now = moment.tz('Africa/Nairobi').format('YYYY-MM-DD HH:mm:ss')
 		try {
-			const today = tz('Africa/Nairobi').utc().toISOString()
-			const offset = paginate * (page - 1)
-			const records = await DB('events').whereRaw('startDate >= ?', today).count('id as recordCount')
-			const totalShown = paginate * page
-			const remaining = parseInt(records[0].recordCount) - totalShown
-			const lastPage = parseInt(records[0].recordCount / paginate)
+			const eventCount = await DB('events')
+				.where('startDate', '>=', now)
+				.count()
 			const events = await DB('events')
-				.where('startDate', '>=', today)
+				.where('startDate', '>=', now)
+				.orderBy('startDate', 'asc')
 				.limit(paginate)
 				.offset(offset)
-				.orderBy('startDate', 'asc')
 				.select()
-
+			
+			const lastPage = Math.ceil(eventCount[0]['count(*)'] / paginate)
+			// const nextPage = page + 1
+			// const prevPage = page - 1
+			// const hasNextPage = nextPage <= lastPage
+			// const hasPrevPage = prevPage >= 1
+			const remaining = eventCount[0]['count(*)'] - (page * paginate)
+			console.log(events)
 			// Select from tickets where event_id = each event id
 			const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
 

@@ -79,6 +79,8 @@ app.use((req, res) => {
 	})
 })
 
+app.use(Handlers.errorHandler())
+
 // Catch all error routes
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, _next) => {
@@ -94,6 +96,4 @@ app.use((err, req, res, _next) => {
 		error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
 	})
 })
-
-app.use(Handlers.errorHandler())
 export default app

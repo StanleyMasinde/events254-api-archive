@@ -3,6 +3,7 @@ import multer from 'multer'
 import EventsController from '../app/controllers/eventsController.js'
 import TicketController from '../app/controllers/ticketController.js'
 import authenticated from '../app/middleware/authenticated.js'
+import { cache } from '../app/middleware/cache.js'
 const router = Router()
 
 /**
@@ -17,7 +18,7 @@ const router = Router()
  * This route is used to get all events from the database
  * --------------------------------------------------------
  */
-router.get('/', async (req, res, next) => {
+router.get('/', cache(60), async (req, res, next) => {
 	EventsController.index(req, res, next)
 })
 /**

@@ -56,7 +56,7 @@ class Event extends Model {
 				.limit(paginate)
 				.select()
 			const happeningNowEvents = await DB('events')
-				.whereRaw(`startDate = '${now}' AND endDate >= '${now}'`)
+				.whereRaw(`startDate <= '${now}' AND endDate >= '${now}'`)
 				.orderBy('startDate', 'asc')
 				.limit(paginate)
 				.select()

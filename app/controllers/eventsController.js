@@ -23,7 +23,7 @@ class EventsController extends Controller {
 	async index(req, res, next) {
 		try {
 			if(!req.params.paginate) {
-				const events = await Event.all()
+				const events = await DB('events').select('*')
 				return res.status(200).json(events)
 			}
 			const events = await Event.landingPage()

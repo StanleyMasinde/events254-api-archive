@@ -21,12 +21,13 @@ class EventsController extends Controller {
    * @param {import('express').NextFunction} next
    */
 	async index(req, res, next) {
+		let events
 		try {
-			if(!req.params.paginate) {
-				const events = await DB('events').select('*')
+			if(!req.query.paginate){
+				events = await DB('events').select('*')
 				return res.status(200).json(events)
 			}
-			const events = await Event.landingPage()
+			events = await Event.landingPage()
 			res.json(events)
 		} catch (err) {
 			next(err)

@@ -70,13 +70,8 @@ router.get('/user', authenticated(), async (req, res) => {
  * The user can be fecthed via session or access token
  * -----------------------------------------------------------------
  */
-router.get('/tickets', authenticated(), async (req, res, next) => {
-	try {
-		const { message, status } = await TicketController.currentUser(req)
-		res.status(status).json(message)
-	} catch (error) {
-		next(error)
-	}
+router.get('/tickets', authenticated(), (req, res, next) => {
+	TicketController.currentUser(req, res, next)
 })
 
 export default router

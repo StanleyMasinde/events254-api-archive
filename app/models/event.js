@@ -16,36 +16,48 @@ class Event extends Model {
    * @param {Number} paginate
    * @param {Number} offset
    */
-	static async landingPage (paginate = 15, page = 1) {
+	static async landingPage (paginate = 5, page = 1) {
 		const offset = (page - 1) * paginate
 		const now = moment.tz('Africa/Nairobi').format('YYYY-MM-DD HH:mm:ss')
+		const endOfWeek = moment.tz('Africa/Nairobi').endOf('week').format('YYYY-MM-DD HH:mm:ss')
+		const endOfMonth = moment.tz('Africa/Nairobi').endOf('month').format('YYYY-MM-DD HH:mm:ss')
 		try {
-			const eventCount = await DB('events')
-				.where('startDate', '>=', now)
-				.count()
-			const events = await DB('events')
+			const upcomingEvents = await DB('events')
 				.where('startDate', '>=', now)
 				.orderBy('startDate', 'asc')
 				.limit(paginate)
 				.offset(offset)
 				.select()
+			const happeningThisWeek = await DB('events')
+				.whereRaw(`startDate <= '${now}' AND endDate >= '${endOfWeek}'`)
+				.orderBy('startDate', 'asc')
+				.limit(paginate)
+				.select()
+			const happeningThisMonth = await DB('events')
+				.whereRaw(`startDate <= '${now}' AND endDate >= '${endOfMonth}'`)
+				.orderBy('startDate', 'asc')
+				.limit(paginate)
+				.select()
+			const freeEvents = await DB('tickets')
+				.whereRaw(`tickets.price = 0 AND events.startDate >= '${now}'`)
+				.join('events', 'events.id', 'tickets.event_id')
+				.orderBy('startDate', 'asc')
+				.limit(paginate)
+			const onlineEvents = await DB('events')
+				.whereRaw(`online_link IS NOT NULL AND startDate >= '${now}'`)
+				.orderBy('startDate', 'asc')
+				.limit(paginate)
+	
 			
-			const lastPage = Math.ceil(eventCount[0]['count(*)'] / paginate)
-			// const nextPage = page + 1
-			// const prevPage = page - 1
-			// const hasNextPage = nextPage <= lastPage
-			// const hasPrevPage = prevPage >= 1
-			const remaining = eventCount[0]['count(*)'] - (page * paginate)
-			console.log(events)
 			// Select from tickets where event_id = each event id
-			const tickets = await DB('tickets').select('*').where('event_id', 'IN', events.map(e => e.id))
+			const upcomingEventsTickets = await DB('tickets').select('*').where('event_id', 'IN', upcomingEvents.map(e => e.id))
+			const happeningThisWeekTickets = await DB('tickets').select('*').where('event_id', 'IN', happeningThisWeek.map(e => e.id))
+			const happeningThisMonthTickets = await DB('tickets').select('*').where('event_id', 'IN', happeningThisMonth.map(e => e.id))
 
-			events.forEach((event) => {
-				// Get the tickets for each event
-				const ticketsForEvent = tickets.filter(ticket => ticket.event_id === event.id)
-				// Boolean to determine if the event is sold out
+
+			upcomingEvents.forEach((event) => {
+				const ticketsForEvent = upcomingEventsTickets.filter(ticket => ticket.event_id === event.id)
 				event.soldOut = ticketsForEvent.length === 0
-				// Get the lowest price for each event
 
 				if (event.soldOut) {
 					event.lowestPrice = 0
@@ -57,7 +69,6 @@ class Event extends Model {
 						}
 						return prev
 					}).price
-					// Get the highest price for each event
 					event.highestPrice = ticketsForEvent.reduce((prev, current) => {
 						if (prev.price < current.price) {
 							return current
@@ -65,7 +76,6 @@ class Event extends Model {
 						return prev
 					}).price
 				}
-				// Boolean to determine if event is free
 				event.isFree = event.lowestPrice === 0
 				if (!event.location) {
 					event.isOnline = true
@@ -84,9 +94,153 @@ class Event extends Model {
 					}
 				}
 			})
+
+			happeningThisWeek.forEach((event) => {
+				const ticketsForEvent = happeningThisWeekTickets.filter(ticket => ticket.event_id === event.id)
+				event.soldOut = ticketsForEvent.length === 0
+
+				if (event.soldOut) {
+					event.lowestPrice = 0
+					event.highestPrice = 0
+				} else {
+					event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price > current.price) {
+							return current
+						}
+						return prev
+					}).price
+					event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price < current.price) {
+							return current
+						}
+						return prev
+					}).price
+				}
+				event.isFree = event.lowestPrice === 0
+				if (!event.location) {
+					event.isOnline = true
+				} else {
+					event.isOnline = false
+				}
+				if (!event.endDate) {
+					event.isAllDay = true
+					event.endDate = event.startDate
+				}
+				for (const key in event) {
+					if (Object.hasOwnProperty.call(event, key)) {
+						if (event[key] == null) {
+							event[key] = 'N/A'
+						}
+					}
+				}
+			})
+
+			happeningThisMonth.forEach((event) => {
+				const ticketsForEvent = happeningThisMonthTickets.filter(ticket => ticket.event_id === event.id)
+				event.soldOut = ticketsForEvent.length === 0
+
+				if (event.soldOut) {
+					event.lowestPrice = 0
+					event.highestPrice = 0
+				} else {
+					event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price > current.price) {
+							return current
+						}
+						return prev
+					}).price
+					event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price < current.price) {
+							return current
+						}
+						return prev
+					}).price
+				}
+				event.isFree = event.lowestPrice === 0
+				if (!event.location) {
+					event.isOnline = true
+				} else {
+					event.isOnline = false
+				}
+				if (!event.endDate) {
+					event.isAllDay = true
+					event.endDate = event.startDate
+				}
+				for (const key in event) {
+					if (Object.hasOwnProperty.call(event, key)) {
+						if (event[key] == null) {
+							event[key] = 'N/A'
+						}
+					}
+				}
+			})
+
+			freeEvents.forEach((event) => {
+				event.soldOut = false
+				event.lowestPrice = 0
+				event.highestPrice = 0
+				event.isFree = true
+				if (!event.location) {
+					event.isOnline = true
+				} else {
+					event.isOnline = false
+				}
+				if (!event.endDate) {
+					event.isAllDay = true
+					event.endDate = event.startDate
+				}
+				for (const key in event) {
+					if (Object.hasOwnProperty.call(event, key)) {
+						if (event[key] == null) {
+							event[key] = 'N/A'
+						}
+					}
+				}
+			})
+
+			onlineEvents.forEach((event) => {
+				event.soldOut = false
+				event.lowestPrice = 0
+				event.highestPrice = 0
+				event.isFree = true
+				event.isOnline = true
+				if (!event.endDate) {
+					event.isAllDay = true
+					event.endDate = event.startDate
+				}
+				for (const key in event) {
+					if (Object.hasOwnProperty.call(event, key)) {
+						if (event[key] == null) {
+							event[key] = 'N/A'
+						}
+					}
+				}
+			})
+
+
 			return {
-				events, lastPage, remaining
+				upcomingEvents: {
+					name: 'Upcoming events',
+					events: upcomingEvents
+				},
+				happeningThisWeek: {
+					name: 'This week',
+					events: happeningThisWeek
+				},
+				happeningThisMonth: {
+					name: 'This month',
+					events: happeningThisMonth
+				},
+				freeEvents: {
+					name: 'Free events',
+					events: freeEvents
+				},
+				onlineEvents: {
+					name: 'Online events',
+					events: onlineEvents
+				}
 			}
+		
 		} catch (error) {
 			throw new Error(error)
 		}

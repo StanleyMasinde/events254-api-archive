@@ -23,38 +23,10 @@ class EventsController extends Controller {
 	async index(req, res, next) {
 		// TODO add pagination
 		try {
-			let events = []
-			if (req.query.paginate) {
-				const eventsObject = await Event.landingPage(req.query.paginate, req.query.page)
-				const currentPage = req.query.page || 1
-				events = eventsObject.events
-				let lastPageUrl
-				let nextPageUrl
-				if (eventsObject.lastPage === 0) {
-					lastPageUrl = null
-				} else {
-					lastPageUrl = `/events/?paginate=${req.query.paginate}&page=${eventsObject.lastPage}`
-				}
-
-				if (eventsObject.remaining <= 0) {
-					nextPageUrl = null
-				} else {
-					nextPageUrl = `/events/?paginate=${req.query.paginate}&page=${parseInt(currentPage) + 1}`
-				}
-
-				return res.json({
-					currentPage,
-					nextPageUrl,
-					lastPageUrl,
-					remaining: eventsObject.remaining, // TODO for debugging only
-					events
-				})
-			} else {
-				events = await DB('events').limit(1000)
-			}
-			return res.json(events)
-		} catch (error) {
-			next(error)
+			const events = await Event.landingPage()
+			res.json(events)
+		} catch (err) {
+			next(err)
 		}
 	}
 

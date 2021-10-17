@@ -55,6 +55,11 @@ class Event extends Model {
 				.orderBy('startDate', 'asc')
 				.limit(paginate)
 				.select()
+			const happeningNowEvents = await DB('events')
+				.whereRaw(`startDate = '${now}' AND endDate >= '${now}'`)
+				.orderBy('startDate', 'asc')
+				.limit(paginate)
+				.select()
 			
 	
 			
@@ -63,6 +68,7 @@ class Event extends Model {
 			const happeningThisWeekTickets = await DB('tickets').select('*').where('event_id', 'IN', happeningThisWeek.map(e => e.id))
 			const happeningThisMonthTickets = await DB('tickets').select('*').where('event_id', 'IN', happeningThisMonth.map(e => e.id))
 			const nextMonthEventsTickets = await DB('tickets').select('*').where('event_id', 'IN', nextMonthEvents.map(e => e.id))
+			const happeningNowEventsTickets = await DB('tickets').select('*').where('event_id', 'IN', happeningNowEvents.map(e => e.id))
 
 
 			upcomingEvents.forEach((event) => {
@@ -267,11 +273,50 @@ class Event extends Model {
 				}
 			})
 
+			happeningNowEvents.forEach((event) => {
+				const ticketsForEvent = happeningNowEventsTickets.filter(ticket => ticket.event_id === event.id)
+				event.soldOut = ticketsForEvent.length === 0
 
-				
+				if (event.soldOut) {
+					event.lowestPrice = 0
+					event.highestPrice = 0
+				} else {
+					event.lowestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price > current.price) {
+							return current
+						}
+						return prev
+					}).price
+					event.highestPrice = ticketsForEvent.reduce((prev, current) => {
+						if (prev.price < current.price) {
+							return current
+						}
+						return prev
+					}).price
+				}
+				event.isFree = event.lowestPrice === 0
+				if (!event.location) {
+					event = 'N/A'
+				} 
+				if (!event.endDate) {
+					event.isAllDay = true
+					event.endDate = event.startDate
+				}
+				for (const key in event) {
+					if (Object.hasOwnProperty.call(event, key)) {
+						if (event[key] == null) {
+							event[key] = 'N/A'
+						}
+					}
+				}
+			})
 
 
 			return {
+				happeningNowEvents: {
+					name: 'Happening Now',
+					events: happeningNowEvents
+				},
 				upcomingEvents: {
 					name: 'Upcoming events',
 					events: upcomingEvents

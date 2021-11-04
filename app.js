@@ -17,7 +17,9 @@ import eventsRouter from './routes/events.js'
 import searchRouter from './routes/search.js'
 import ticketRouter from './routes/tickets.js'
 import paymentsRouter from './routes/payments.js'
+import newsFeedRouter from './routes/newsfeed.js'
 import auth from './app/auth/auth.js'
+
 
 const app = express()
 
@@ -70,6 +72,7 @@ app.use('/events', eventsRouter)
 app.use('/search', searchRouter)
 app.use('/tickets', ticketRouter)
 app.use('/payments', paymentsRouter)
+app.use('/feed', newsFeedRouter)
 app.use('/p', publicRouter)
 
 // Catch all 404 routes

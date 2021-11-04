@@ -16,7 +16,7 @@ class Event extends Model {
    * @param {Number} paginate
    * @param {Number} offset
    */
-	static async landingPage (paginate = 5, page = 1) {
+	static async landingPage (paginate = 10, page = 1) {
 		const offset = (page - 1) * paginate
 		const now = moment.tz('Africa/Nairobi').format('YYYY-MM-DD HH:mm:ss')
 		const endOfWeek = moment.tz('Africa/Nairobi').endOf('week').format('YYYY-MM-DD HH:mm:ss')

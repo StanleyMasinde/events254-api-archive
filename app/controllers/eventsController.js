@@ -21,25 +21,20 @@ class EventsController extends Controller {
    * @param {import('express').NextFunction} next
    */
 	async index(req, res, next) {
-		let events
 		try {
-			if(!req.query.paginate){
-				events = await DB('events').select('*')
-				return res.status(200).json(events)
-			}
-			events = await Event.landingPage()
-			res.json(events)
+			const events = await DB('events').select('*')
+			return res.status(200).json(events)
 		} catch (err) {
 			next(err)
 		}
 	}
 
 	/**
-     * Store a new event in the database
-     * @param {import('express').Request} req
-     * @param {import('express').Response} res
-     * @param {import('express').NextFunction} next
-     */
+	 * Store a new event in the database
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 */
 	async store(req, res, next) {
 		const { body, file } = req
 		const user = await req.user()
@@ -112,7 +107,7 @@ class EventsController extends Controller {
 			e.tickets = await DB('tickets')
 				.where('event_id', e.id) || []
 
-      
+
 			e.isFree = e.tickets[0] == null
 			e.allDay = new Date(e.startDate).getHours() === new Date(e.endDate).getHours()
 			e.inProgress = new Date(e.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()

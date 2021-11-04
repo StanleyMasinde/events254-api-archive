@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
-const faker = require('faker')
-const slugify = require('../../app/actions/slugify')
+import { random, company, image, lorem, address } from 'faker'
+import slugify from '../../app/actions/slugify'
 const rows = []
 const organisers = []
 const members = []
@@ -11,28 +11,28 @@ for (let i = 1; i < 101; i++) {
 }
 for (let index = 1; index < 5001; index++) {
 	organisers.push({
-		group_id: faker.random.arrayElement(ids),
-		user_id: faker.random.arrayElement(ids)
+		group_id: random.arrayElement(ids),
+		user_id: random.arrayElement(ids)
 	})
 	members.push({
-		user_id: faker.random.arrayElement(ids),
-		group_id: faker.random.arrayElement(ids)
+		user_id: random.arrayElement(ids),
+		group_id: random.arrayElement(ids)
 	})
 }
 for (let index = 0; index < 5000; index++) {
-	const name = `${faker.company.companyName()}, ${faker.company.catchPhrase()}`
+	const name = `${company.companyName()}, ${company.catchPhrase()}`
 	rows.push({
-		pictureUrl: faker.image.imageUrl(700, null, 'business', false, true),
+		pictureUrl: image.imageUrl(700, null, 'business', false, true),
 		name,
 		slug: slugify(name),
-		description: faker.lorem.paragraphs(3),
-		country: faker.address.country(),
-		city: faker.address.city(),
+		description: lorem.paragraphs(3),
+		country: address.country(),
+		city: address.city(),
 		visibility: 'public',
 		timezone: 'Africa/Nairobi'
 	})
 }
-exports.seed = function (knex) {
+export function seed (knex) {
 	// Del
 	return knex('groups').insert(rows).then(() => {
 		return knex('group_organisers').insert(organisers).then(() => {

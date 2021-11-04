@@ -1,5 +1,5 @@
-const faker = require('faker')
-exports.seed = function (knex) {
+import { lorem, date as _date, image as _image, address, internet, random, commerce } from 'faker'
+export function seed (knex) {
 	const events = []
 	const tickets = []
 	const organisableIds = []
@@ -8,26 +8,26 @@ exports.seed = function (knex) {
 	}
 
 	for (let row = 0; row < 5000; row++) {
-		const about = faker.lorem.sentence()
-		const date = faker.date.future(0.03)
+		const about = lorem.sentence()
+		const date = _date.future(0.03)
 		// Create events
 		events.push({
-			image: faker.image.imageUrl(null, 500, null, true, true),
-			location: faker.address.streetAddress(),
-			online_link: faker.internet.url(),
+			image: _image.imageUrl(null, 500, null, true, true),
+			location: address.streetAddress(),
+			online_link: internet.url(),
 			about: about.charAt(0).toLocaleUpperCase() + about.slice(1),
-			description: faker.lorem.paragraphs(10),
+			description: lorem.paragraphs(10),
 			startDate: date,
-			endDate: faker.date.future(0.001, date),
-			organisable_id: faker.random.arrayElement(organisableIds),
-			organisable_type: faker.random.arrayElement(['User', 'Group'])
+			endDate: _date.future(0.001, date),
+			organisable_id: random.arrayElement(organisableIds),
+			organisable_type: random.arrayElement(['User', 'Group'])
 		})
 		// Create tickets
 		tickets.push({
 			event_id: row + 1,
-			price: faker.commerce.price(1000, 10000),
+			price: commerce.price(1000, 10000),
 			limit: 0,
-			type: faker.random.arrayElement(['VIP', 'Regular', 'General'])
+			type: random.arrayElement(['VIP', 'Regular', 'General'])
 		})
 	}
 	// Deletes ALL existing entries

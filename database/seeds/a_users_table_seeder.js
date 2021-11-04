@@ -1,20 +1,16 @@
-const faker = require('faker')
+import { company, name as _name, internet } from 'faker'
 
 const rows = []
 for (let index = 0; index < 500; index++) {
-	const bio = faker.company.catchPhrase()
+	const bio = company.catchPhrase()
 	rows.push({
-		name: faker.name.findName(),
-		email: faker.internet.exampleEmail(),
-		password: faker.internet.password(8),
+		name: _name.findName(),
+		email: internet.exampleEmail(),
+		password: internet.password(8),
 		bio
 	})
 }
-exports.seed = function (knex) {
+export function seed (knex) {
 	// Deletes ALL existing entries
-	return knex('users').del()
-		.then(function () {
-			// Inserts seed entries
-			return knex('users').insert(rows)
-		})
+	return knex('users').insert(rows)
 }

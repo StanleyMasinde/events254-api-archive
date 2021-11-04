@@ -9,7 +9,7 @@
     "test": "NODE_ENV=development mocha --exit --bail",
     "start": "node bin/www",
     "dev": "DEBUG=express* nodemon bin/www",
-    "migrate": "NODE_ENV=production knex migrate:latest --knexfile knexfile.cjs",
+    "migrate": "NODE_ENV=production knex migrate:latest --esm --knexfile knexfile.cjs",
     "migrate:rollback": "NODE_ENV=production knex migrate:rollback --knexfile knexfile.cjs",
     "lint": "eslint ."
   },

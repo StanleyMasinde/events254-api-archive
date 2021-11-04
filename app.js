@@ -19,6 +19,7 @@ import ticketRouter from './routes/tickets.js'
 import paymentsRouter from './routes/payments.js'
 import newsFeedRouter from './routes/newsfeed.js'
 import auth from './app/auth/auth.js'
+import apikey from './app/middleware/apikey.js'
 
 
 const app = express()
@@ -45,6 +46,7 @@ app.use(Handlers.tracingHandler())
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(apikey())
 
 app.use(session({
 	rolling: true,

@@ -47,6 +47,7 @@ router.get('/', async (req, res, next) => {
 		onlineEvents = await DB('events')
 			.select(DB.raw('events.id, events.about as name, SUBSTRING(events.description, 1, 100) as description, \'events\' as linkPrefix, events.startDate, events.endDate, TIMEDIFF(events.startDate, events.endDate) as duration, events.image'))
 			.where('online_link', '!=', '')
+			.andWhere('startDate', '>', moment().format('YYYY-MM-DD HH:mm:ss'))
 			.orderByRaw('RAND()')
 			.limit(10)
 

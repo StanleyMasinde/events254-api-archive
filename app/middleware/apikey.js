@@ -2,6 +2,11 @@ import { DB } from 'mevn-orm'
 
 export default () => {
 	return async (req, res, next) => {
+		if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+			return next()
+		}
+
+		
 		const apiKey = req.headers['x-api-key']
 		if (!apiKey) {
 			return res.status(400).json({
@@ -10,7 +15,7 @@ export default () => {
 			})
 		}
 
-        
+
 		try {
 			const key = await DB('api_keys').where({
 				key: apiKey

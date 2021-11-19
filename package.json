@@ -2,7 +2,7 @@
   "name": "events254",
   "version": "1.2.1",
   "description": "Events254 main backend service",
-  "main": "bin/www",
+  "main": "bin/www.js",
   "type": "module",
   "scripts": {
     "pretest": "NODE_ENV=development knex migrate:latest --knexfile knexfile.cjs",
@@ -57,12 +57,12 @@
   "directories": {
     "test": "test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/opensource254/events254.git"
-  },
+  "repository": "git+https://github.com/opensource254/events254.git",
   "bugs": {
     "url": "https://github.com/opensource254/events254/issues"
   },
-  "homepage": "https://github.com/opensource254/events254#readme"
+  "homepage": "https://github.com/opensource254/events254#readme",
+  "bin": {
+    "events254": "www.js"
+  }
 }

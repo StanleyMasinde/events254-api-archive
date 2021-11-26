@@ -41,7 +41,7 @@
     "mysql2": "^2.3.2",
     "nodemailer": "^6.7.1",
     "nodemailer-pug-engine": "^2.0.1",
-    "redis": "^3.1.2",
+    "redis": "^4.0.0",
     "sessionstore": "^0.4.8"
   },
   "devDependencies": {

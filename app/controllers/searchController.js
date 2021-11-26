@@ -14,7 +14,7 @@ class SearchController extends Controller {
 		const usersTable = DB('users')
 		try {
 			const res = await DB.
-				raw('SELECT id, about,startDate,image,location  FROM events WHERE MATCH(about, description) AGAINST(? IN NATURAL LANGUAGE MODE)', [query])
+				raw('SELECT id, about,startDate,image,location  FROM events WHERE MATCH(about, description) AGAINST(? WITH QUERY EXPANSION) LIMIT 15', [query])
 			const events = res[0]
 
 			const groups = await groupsTable.where('name', 'like', `%${query}%`)
@@ -49,7 +49,7 @@ class SearchController extends Controller {
 		}
 
 		try {
-			const events = await DB.raw('SELECT `id`, `about`, `startDate`, `endDate`, `location`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ? AND YEAR(startDate) = ?', [month, year])
+			const events = await DB.raw('SELECT `id`, `about`, `startDate`, `endDate`, `location`, TIMEDIFF(endDate, startDate) AS duration FROM events WHERE MONTH(startDate) = ? AND YEAR(startDate) = ? LIMIT 50', [month, year])
 			events[0].map(event => {
 				if (!event.endDate) {
 					event.endDate = event.startDate

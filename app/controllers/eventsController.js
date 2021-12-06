@@ -22,7 +22,7 @@ class EventsController extends Controller {
    */
 	async index(req, res, next) {
 		try {
-			const events = await DB('events').select('*')
+			const events = await DB('events').orderBy('created_at', 'desc').limit(20).select()
 			return res.status(200).json(events)
 		} catch (err) {
 			next(err)
@@ -76,6 +76,7 @@ class EventsController extends Controller {
 				organisable_type
 			})
 			// Add the organiser
+			
 			return res.status(201).json(e)
 		} catch (error) {
 			next(error)

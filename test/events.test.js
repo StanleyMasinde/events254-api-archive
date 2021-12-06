@@ -162,6 +162,25 @@ describe('Event routes that do not require authentication', () => {
 		const res = await app.get('/events')
 		expect(res.status).equals(200)
 		expect(res.body).to.be.an('array')
+		// expect(res.body.length).equals(20)
+	})
+
+
+	it('Should get a single event', async () => {
+		const res = await app.get(`/events/${newEventId}`)
+		expect(res.status).equals(200)
+		expect(res.body).to.be.an('object')
+	})
+
+	it('Should get the news feed', async () => {
+		const res = await app.get('/feed')
+
+		// eslint-disable-next-line no-unused-vars
+		Object.entries(res.body).forEach(([key, value]) => {
+			expect(value).to.be.an('object')
+		})
+		expect(res.status).equals(200)
+		expect(res.body).to.be.an('object')
 	})
 
 	// it('Get a specified event', async () => {

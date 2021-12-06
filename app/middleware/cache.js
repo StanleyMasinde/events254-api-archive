@@ -32,3 +32,19 @@ export const cache  = (duration = 5) => {
 		})
 	}
 }
+
+/**
+ * Clear the request cache
+ * leave the session intact
+ * @returns 
+ */
+export const clearCache = () => {
+	return (req, res, next) => {
+		const { originalUrl } = req
+		const { method } = req
+		const url = originalUrl
+		
+		redisClient.del(`${method}:${url}`)
+		next()
+	}
+}

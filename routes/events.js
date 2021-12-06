@@ -3,7 +3,7 @@ import multer from 'multer'
 import EventsController from '../app/controllers/eventsController.js'
 import TicketController from '../app/controllers/ticketController.js'
 import authenticated from '../app/middleware/authenticated.js'
-import { cache } from '../app/middleware/cache.js'
+import { cache, clearCache } from '../app/middleware/cache.js'
 const router = Router()
 
 /**
@@ -28,7 +28,7 @@ router.get('/', cache(60), async (req, res, next) => {
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
+router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), clearCache(), (req, res, next) => {
 	EventsController.store(req, res, next)
 })
 

@@ -31,11 +31,7 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "ical-generator": "^3.1.1",
-<<<<<<< HEAD
     "knex": "^0.95.15",
-=======
-    "knex": "^0.95.12",
->>>>>>> 4477579ffbf1d5cdd483a16ae29b44a9be006c4b
     "mevn-orm": "3.0.0",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.34",

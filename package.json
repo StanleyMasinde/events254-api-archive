@@ -20,7 +20,7 @@
   "author": "Opensource254",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.46.0",
+    "@aws-sdk/client-s3": "^3.49.0",
     "@sentry/node": "^6.16.1",
     "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
@@ -32,7 +32,7 @@
     "express-session": "^1.17.2",
     "ical-generator": "^3.1.1",
     "knex": "^0.95.15",
-    "mevn-orm": "3.0.0",
+    "mevn-orm": "^2.3.3",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.34",
     "morgan": "^1.10.0",
@@ -47,7 +47,7 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.6.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "faker": "^5.5.3",

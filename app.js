@@ -37,7 +37,8 @@ init({
 		new Integrations.Http({ tracing: false }),
 		new _Integrations.Express({ app })
 	],
-	tracesSampleRate: 1.0
+	tracesSampleRate: 1.0,
+	release: process.env.npm_package_version,
 })
 
 app.use(Handlers.requestHandler())

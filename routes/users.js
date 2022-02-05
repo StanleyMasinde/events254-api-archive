@@ -19,4 +19,6 @@ router.get('/:id', async (req, res, next) => {
 	}
 })
 
+router.post('/update', UsersController.updateProfile)
+
 export default router

@@ -205,6 +205,33 @@ class UserController extends Controller {
 			return this.response(error, error.status || 422)
 		}
 	}
+
+	/**
+	 * Update a user's profile
+	 * 
+	 * @param {import('express').Request} req
+	 * @param {import('express').Response} res
+	 * @param {import('express').NextFunction} next
+	 * @returns {Promise<void>}
+	 */
+	async updateProfile(req, res, next) {
+		try {
+			// Validate the input
+			await new Validator(req.body, {
+				name: 'required|string',
+				bio: 'string'
+			}).validate()
+			// Update the user
+			const user = await req.user()
+			console.log(user)
+			const u = await User.find(user.id)
+			await u.update(req.body)
+			// Return a response to the user
+			res.json(user)
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 export default new UserController()

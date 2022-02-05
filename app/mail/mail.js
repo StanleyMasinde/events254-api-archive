@@ -5,12 +5,14 @@ const mail = createTransport({
 	streamTransport: process.env.STREAM_MAIL === 'true',
 	host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
 	port: process.env.MAIL_PORT || 2525,
-	secure: true,
+	secure: process.env.MAIL_SECURE === 'true',
 	auth: {
 		user: process.env.MAIL_USERNAME || '',
 		pass: process.env.MAIL_PASSWORD || ''
-	}
+	},
 })
+
+
 mail.use('compile', pugEngine({
 	templateDir: 'app/mail'
 }))
@@ -55,6 +57,7 @@ class Mail {
 			})
 
 		} catch (error) {
+			console.log(error);
 			error.status = 500
 			throw error
 		}

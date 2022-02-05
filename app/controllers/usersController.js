@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto'
+import { randomBytes, randomUUID } from 'crypto'
 import Validator from 'mevn-validator'
 import { DB } from 'mevn-orm'
 import { hash } from 'bcrypt'
@@ -89,12 +89,8 @@ class UserController extends Controller {
 			}
 
 			// Generate a unique username from the name. ensure it is not taken
-			let username = body.name.replace(/\s/g, '').toLowerCase()
-			let i = 1
-			while (await User.where({ username }).first().id) {
-				username = body.name.replace(/\s/g, '').toLowerCase() + i
-				i++
-			}
+			let username = body.name.replace(/\s/g, '').toLowerCase()  + '-' + randomUUID()
+			
 
 			body.username = username
 			body.bio = 'No bio yet'

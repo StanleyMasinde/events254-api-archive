@@ -32,7 +32,7 @@ app.use(cors({
 
 init({
 	dsn: 'https://d88004dc1b994722b6152a3d89af37e4@o954334.ingest.sentry.io/5986920',
-	environment: 'production',
+	environment: process.env.NODE_ENV,
 	integrations: [
 		new Integrations.Http({ tracing: false }),
 		new _Integrations.Express({ app })

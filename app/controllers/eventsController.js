@@ -222,9 +222,7 @@ class EventsController extends Controller {
 		if (canEditEvent(currentEvent, await req.user())) {
 			try {
 				await currentEvent.update({ published: !currentEvent.published })
-				return res.status(201).json({
-					message: 'Event published'
-				})
+				return res.status(201).json(currentEvent)
 			} catch (error) {
 				return next(error)
 			}

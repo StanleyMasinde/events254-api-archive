@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Installing dependencies with yarn"
-yarn
+npm install
 
 echo "Restarting the process"
-pm2 restart ecosystem.config.js
+pm2 restart ecosystem.config.cjs

@@ -31,15 +31,7 @@ router.post('/logout', function (req, res) {
  * This route is used to request a new password
  * The user receives an email
  */
-router.post('/password', async (req, res, next) => {
-	try {
-		const { message, status } = await UsersController.sendPasswordResetEmail(req.body.email)
-		res.status(status)
-			.json(message)
-	} catch (error) {
-		next(error)
-	}
-})
+router.post('/password', UsersController.sendPasswordResetEmail)
 
 /**
  * This route is used to update a user's password

@@ -1,3 +1,4 @@
+import {writeFile} from 'fs/promises'
 import dotenv from 'dotenv'
 import express, { json, urlencoded } from 'express'
 import session from 'express-session'
@@ -89,7 +90,8 @@ app.use(Handlers.errorHandler())
 
 // Catch all error routes
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, _next) => {
+app.use( async(err, req, res, _next) => {
+	console.log(err)
 	const env = process.env.NODE_ENV
 	if (env === 'development' || env === 'testing' || process.env.DEBUG) {
 		return res.status(err.status || 500).json({
@@ -98,6 +100,7 @@ app.use((err, req, res, _next) => {
 		})
 	}
 
+	await writeFile(`./logs/error-${new Date().toISOString()}.log`, err.stack)
 	return res.status(err.status || 500).json({
 		error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
 	})

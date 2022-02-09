@@ -117,9 +117,12 @@ class UserController extends Controller {
 
 	/**
    * Send a password reset Email
-   * @param {String} email - The email of the user
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
-	async sendPasswordResetEmail(email) {
+	async sendPasswordResetEmail(req, res, next) {
+		const { email } = req.body
 		try {
 			// Validate the input
 			await new Validator({ email }, {
@@ -145,13 +148,17 @@ class UserController extends Controller {
 					name: user.name,
 					url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
 				}
-				await new Mail(user, 'Password Reset Notification', { template: 'resetPassword', data }).send()
 				// Return a response to the user
-				return this.response('Please check your email for a password reset link')
+				res.json('Please check your email for a password reset link')
+				await new Mail(user, 'Password Reset Notification', { template: 'resetPassword', data }).send()
+				return
 			}
-			return this.response('We could not find a user associated with this email', 422)
+			return res.status(422).json('Sorry, we could not find that email address in our system')
 		} catch (error) {
-			return this.response(error, error.status || 422)
+			if ('errors' in error) {
+				return res.status(422).json(error)
+			}
+			next(error)
 		}
 	}
 

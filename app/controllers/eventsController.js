@@ -298,7 +298,14 @@ class EventsController extends Controller {
 					}
 				]
 			})
+
+			let attachments = []
 			const icalString = icsData.toString()
+			attachments.push({
+				filename: 'event.ics',
+				content: new Buffer.from(icalString),
+				contentType: 'text/calendar'
+			})
 			const data = {
 				eventName: currentEvent.about,
 				name: currentUser.name,
@@ -307,12 +314,12 @@ class EventsController extends Controller {
 				currentTicket,
 				date: new Date().toDateString(),
 				ticketUrl: `${process.env.APP_URL}/tickets/${ticketId}`,
-				icalString
 			}
 			res.status(201).json({
-				message: 'You have successfully registerd for this event'
+				message: 'You have successfully registerd for this event',
+				ticketId,
 			})
-			await new Mail(currentUser, 'Your order from Events254', { template: 'ticket', data }).send()
+			await new Mail(currentUser, 'Your order from Events254', { template: 'ticket', data, attachments }).send()
 		} catch (error) {
 			next(error)
 		}

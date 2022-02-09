@@ -24,12 +24,13 @@ class Mail {
    * @param {String} subject - the subject of the email
    * @param {Object} Options - The email params
    */
-	constructor(recipient, subject, options = { template: null, data: null }) {
+	constructor(recipient, subject, options = { template: null, data: null, attachments: [] }) {
 		this.sender = '"Events254" <notifications@events254.co.ke>'
 		this.recipient = recipient
 		this.subject = subject
 		this.template = options.template
 		this.data = options.data
+		this.attachments = options.attachments
 	}
 
 	/**
@@ -52,8 +53,8 @@ class Mail {
 				to: this.recipient.email,
 				subject: this.subject,
 				template: this.template,
-				context: this.data,
 				ctx: this.data,
+				attachments: this.attachments
 			})
 
 		} catch (error) {

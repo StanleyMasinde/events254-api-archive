@@ -11,6 +11,7 @@ import Ticket from '../models/ticket.js'
 import formatToDateTime from '../actions/formatToDateTime.js'
 import getEventOrganiser from '../actions/getEventOrganiser.js'
 import Controller from './controller.js'
+import moment from 'moment-timezone'
 
 class EventsController extends Controller {
 	/**
@@ -76,7 +77,7 @@ class EventsController extends Controller {
 				organisable_type
 			})
 			// Add the organiser
-			
+
 			return res.status(201).json(e)
 		} catch (error) {
 			next(error)
@@ -286,15 +287,34 @@ class EventsController extends Controller {
 			})
 			// Send and email to user
 			// TODO add attachments and refactor
+			// Remove html tags from the event description
+			const eventDescription = currentEvent.description.replace(/<(?:.|\n)*?>/gm, '')
 			const icsData = ical({
 				name: currentEvent.about,
+				description: eventDescription,
+				timezone: 'UTC',
 				events: [
 					{
 						start: currentEvent.startDate,
 						end: currentEvent.endDate,
 						summary: currentEvent.about,
 						location: currentEvent.location,
-						url: currentEvent.online_link
+						description: eventDescription,
+						url: currentEvent.online_link || `${req.app.locals.config.webClientUrl}/events/${currentEvent.id}`,
+						allDay: moment(currentEvent.startDate).format('HH:mm') === '00:00' && moment(currentEvent.endDate).diff(currentEvent.startDate, 'days') === 1,
+						attendees: [
+							{
+								name: currentUser.name,
+								email: currentUser.email
+							}
+						],
+						alarms: [
+							{
+								trigger: -30,
+								description: `${currentEvent.about} is starting soon`,
+								type: 'display'
+							}
+						]
 					}
 				]
 			})

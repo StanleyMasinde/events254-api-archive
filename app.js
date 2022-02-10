@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { createSessionStore } from 'sessionstore'
 dotenv.config()
+import config from './config/app.js'
+
 
 
 import { init, Integrations, Handlers } from '@sentry/node'
@@ -24,6 +26,7 @@ import apikey from './app/middleware/apikey.js'
 
 
 const app = express()
+app.locals.config = config
 
 app.use(cors({
 	origin: process.env.CORS_ORIGIN || true,

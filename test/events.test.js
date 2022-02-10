@@ -24,10 +24,20 @@ let event = {
 	location: faker.address.streetAddress(),
 }
 
+let onlineEvent = {
+	about: faker.lorem.sentence(),
+	description: faker.lorem.paragraph(),
+	startDate: faker.date.future(),
+	endDate: faker.date.future(),
+	online_link: faker.internet.url(),
+}
+
 
 let eventId
+let onlineEventId
 let newEventId
 let ticketId
+let onlineTicketId
 
 describe('#Events test with protected routes', () => {
 	// Login a user to perform these requests. All requests in this describe block will share cookies
@@ -35,6 +45,7 @@ describe('#Events test with protected routes', () => {
 		try {
 			await User.register(user)
 			let newEvent = await Event.create(event)
+			let newOnlineEvent = await Event.create(onlineEvent)
 			let ticket = await Ticket.create({
 				event_id: newEvent.id,
 				price: faker.commerce.price(),
@@ -42,8 +53,17 @@ describe('#Events test with protected routes', () => {
 				limit: faker.datatype.number(),
 				type: 'Regular'
 			})
+			let onlineTicket = await Ticket.create({
+				event_id: newOnlineEvent.id,
+				price: faker.commerce.price(),
+				currency: 'KES',
+				limit: faker.datatype.number(),
+				type: 'Regular'
+			})
 			newEventId = newEvent.id
 			ticketId = ticket.id
+			onlineEventId = newOnlineEvent.id
+			onlineTicketId = onlineTicket.id
 			const res = await app
 				.post('/auth/login')
 				.send({
@@ -137,6 +157,15 @@ describe('#Event registration', () => {
 		const res = await app.post(`/events/${newEventId}/register`)
 			.send({
 				ticket_id: ticketId,
+				rsvp_count: 1
+			})
+		expect(res.body.message).equals('You have successfully registerd for this event')
+	})
+
+	it('Register for online event', async () => {
+		const res = await app.post(`/events/${onlineEventId}/register`)
+			.send({
+				ticket_id: onlineTicketId,
 				rsvp_count: 1
 			})
 		expect(res.body.message).equals('You have successfully registerd for this event')

@@ -91,6 +91,22 @@ describe('#Events test with protected routes', () => {
 		expect(res.status).equals(201)
 	})
 
+
+	it('User creates an event with categories',  async () => {
+		const res = await app.post('/events')
+			.set('content-type', 'multipart/form-data')
+			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
+			.field({
+				location: faker.address.streetAddress(),
+				about: 'Awesome event',
+				description: faker.lorem.paragraph(10),
+				startDate: new Date().toISOString().substr(0, 10),
+				startTime: '09:30',
+				categories: 'Outdoor,Music, Food'
+			})
+		expect(res.status).equals(201)
+	})
+
 	it('Get current user\'s events', async () => {
 		const res = await app.get('/events/currentUser')
 		expect(res.status).equals(200)

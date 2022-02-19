@@ -78,6 +78,18 @@ class EventsController extends Controller {
 			})
 			// Add the organiser
 
+			if (req.body.categories) {
+				const cats = req.body.categories.split(',')
+				cats.forEach(async (category) => {
+					const exists = await DB('categories').where({ name: 'category' }).first()
+					if (!exists) {
+						const c = await DB('categories').insert({ name: category })
+						await DB('category_event').insert({ event_id: e.id, category_id: c[0] })
+					}
+					await DB('category_event').insert({ event_id: e.id, category_id: exists.id })
+				})
+			}
+
 			return res.status(201).json(e)
 		} catch (error) {
 			next(error)

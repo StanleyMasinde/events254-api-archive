@@ -35,7 +35,7 @@ let onlineEvent = {
 
 let category = {
 	name: faker.random.arrayElement(['Music', 'Sports', 'Arts', 'Food', 'Business', 'Health', 'Education', 'Fashion', 'Travel', 'Others']),
-	description: faker.lorem.paragraph(),
+	description: faker.lorem.sentence(),
 	photo_url: faker.image.imageUrl()
 }
 

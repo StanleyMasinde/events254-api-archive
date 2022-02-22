@@ -134,7 +134,7 @@ describe('Authentication with personal API Tokens', () => {
 
 	it('Create an event using API token', async () => {
 		try {
-			cat = await Category.create({
+			const cat = await Category.create({
 				name: faker.random.arrayElement(['Music', 'Sports', 'Arts', 'Food', 'Business', 'Health', 'Education', 'Fashion', 'Travel', 'Others']),
 				description: faker.lorem.sentence(),
 				photo_url: faker.image.imageUrl()

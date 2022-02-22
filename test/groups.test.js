@@ -55,7 +55,7 @@ describe('Groups', () => {
 			expect(res.body).to.haveOwnProperty('name', name)
 			expect(res.body).to.haveOwnProperty('slug', slug)
 		} catch (err) {
-			console.log(err)
+			throw new Error(err)
 		}
 	})
 

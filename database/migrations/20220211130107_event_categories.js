@@ -7,6 +7,7 @@ export function up(knex) {
 		table.increments('id').primary()
 		table.string('name').notNullable()
 		table.string('description')
+		table.string('photo_url')
 		table.timestamps(true, true)
 	})
 }

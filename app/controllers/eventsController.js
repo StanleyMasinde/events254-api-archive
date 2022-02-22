@@ -44,7 +44,8 @@ class EventsController extends Controller {
 				about: 'required',
 				description: 'required',
 				startDate: 'required',
-				startTime: 'required'
+				startTime: 'required',
+				category_id: 'required',
 			})
 				.validate()
 
@@ -58,7 +59,7 @@ class EventsController extends Controller {
 
 			// The data is valid
 			// eslint-disable-next-line camelcase
-			const { startDate, startTime, endDate, endTime, location, online_link, about, description } = body
+			const { startDate, startTime, endDate, endTime, location, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
 			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
 			// eslint-disable-next-line camelcase
@@ -74,24 +75,14 @@ class EventsController extends Controller {
 				startDate: startDateTime,
 				endDate: endDateTime,
 				organisable_id,
-				organisable_type
+				organisable_type,
+				category_id
 			})
-			// Add the organiser
-
-			if (req.body.categories) {
-				const cats = req.body.categories.split(',')
-				cats.forEach(async (category) => {
-					const exists = await DB('categories').where({ name: 'category' }).first()
-					if (!exists) {
-						const c = await DB('categories').insert({ name: category })
-						await DB('category_event').insert({ event_id: e.id, category_id: c[0] })
-					}
-					await DB('category_event').insert({ event_id: e.id, category_id: exists.id })
-				})
-			}
-
 			return res.status(201).json(e)
 		} catch (error) {
+			if (error.errors) {
+				return res.status(422).json(error.errors)
+			}
 			next(error)
 		}
 	}
@@ -255,7 +246,6 @@ class EventsController extends Controller {
 			const events = await new User(user).events()
 			return this.response(events)
 		} catch (error) {
-			console.log(error)
 			return this.response(error, 500)
 		}
 	}

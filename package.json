@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.50.0",
-    "@sentry/node": "^6.17.9",
+    "@sentry/node": "^6.18.2",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",

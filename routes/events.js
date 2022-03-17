@@ -18,9 +18,7 @@ const router = Router()
  * This route is used to get all events from the database
  * --------------------------------------------------------
  */
-router.get('/', cache(60), async (req, res, next) => {
-	EventsController.index(req, res, next)
-})
+router.get('/', cache(60),EventsController.index)
 /**
  * -----------------------------------------------------------------------------
  * Create a new event in the system
@@ -28,9 +26,7 @@ router.get('/', cache(60), async (req, res, next) => {
  * The file is deleted after the requiest to prevent accumlation of junk files
  * -----------------------------------------------------------------------------
  */
-router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), clearCache(), (req, res, next) => {
-	EventsController.store(req, res, next)
-})
+	.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), clearCache(), EventsController.store)
 
 /**
  * -----------------------------------------------------------------
@@ -38,14 +34,7 @@ router.post('/', authenticated(), multer({ dest: './uploads' }).single('image'),
  * The user can be fecthed via session or access token
  * -----------------------------------------------------------------
  */
-router.get('/currentUser', authenticated(), async (req, res, next) => {
-	try {
-		const { message, status } = await EventsController.currentUserEvents(req)
-		res.status(status).json(message)
-	} catch (error) {
-		next(error)
-	}
-})
+	.get('/currentUser', authenticated(), EventsController.currentUserEvents)
 
 /**
  * ---------------------------------------------------------------------
@@ -53,9 +42,7 @@ router.get('/currentUser', authenticated(), async (req, res, next) => {
  * The same rules a the event creation route above
  * ---------------------------------------------------------------------
  */
-router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), (req, res, next) => {
-	EventsController.update(req, res, next)
-})
+	.put('/:event', authenticated(), multer({ dest: './uploads' }).single('image'), clearCache(), EventsController.update)
 
 /**
  * ----------------------------------------------------------------------------------------------------------
@@ -65,78 +52,63 @@ router.put('/:event', authenticated(), multer({ dest: './uploads' }).single('ima
  * the event
  * ----------------------------------------------------------------------------------------------------------
  */
-router.get('/:event', async (req, res, next) => {
-	EventsController.show(req, res, next)
-})
+	.get('/:event', EventsController.show)
 /**
  * -------------------------------------------------------------------------
  * Delete a given event from the database. A response code 200 is returned
  * on success
  * -------------------------------------------------------------------------
  */
-router.delete('/:event', authenticated(), async (req, res, next) => {
-	EventsController.delete(req, res, next)
-})
+	.delete('/:event', authenticated(), EventsController.delete)
 
 /**
  * -------------------------------------------------------------------------
  * Publish and unpublish an event. A response code 200 is returned on success
  * -------------------------------------------------------------------------
  */
-router.put('/:event/publish', authenticated(), EventsController.publish)
+	.put('/:event/publish', authenticated(), EventsController.publish)
 
 /**
  * ----------------------------------------------------------------------
  * This route returns the tickets associated with a given event
  * ----------------------------------------------------------------------
  */
-router.get('/:event/tickets', async (req, res, next) => {
-	TicketController.allEventTickets(req, res, next)
-})
+	.get('/:event/tickets', TicketController.allEventTickets)
+
 
 /**
  * -----------------------------------------------------------------------------
  * Add a ticket to an event. An event can have multiple tickets e.g VIP, Regular
  * -----------------------------------------------------------------------------
  */
-router.post('/:event/tickets', authenticated(), async (req, res, next) => {
-	TicketController.createEventTicket(req, res, next)
-})
+	.post('/:event/tickets', authenticated(), TicketController.createEventTicket)
 
 /**
  * ----------------------------------------------------------------------------
  * Get a ticket associated with a given event by it's database ID
  * ----------------------------------------------------------------------------
  */
-router.get('/:event/tickets/:ticket', async (req, res, next) => {
-	await TicketController.showEventTicket(req, res, next)
-})
+	.get('/:event/tickets/:ticket', TicketController.showEventTicket)
 
 /**
  * -------------------------------------------------------------------
  * Modifiy a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.put('/:events/tickets/:ticket', authenticated(), async (req, res, next) => {
-	TicketController.upDateEventTicket(req, res, next)
-})
+	.put('/:events/tickets/:ticket', authenticated(), TicketController.upDateEventTicket)
 
 /**
  * -------------------------------------------------------------------
  * Delete a ticket assiciated with an event
  * --------------------------------------------------------------------
  */
-router.delete('/:event/tickets/:ticket', (req, res, next) => {
-	TicketController.deleteEventTicket(req, res, next)
-})
+	.delete('/:event/tickets/:ticket', authenticated(), TicketController.deleteEventTicket)
 
 /**
  * -------------------------------------------------------------------
  * Register for an event
  * ------------------------------------------------------------------
  */
-router.post('/:event/register', authenticated(), async (req, res, next) => {
-	EventsController.registerForEvent(req, res, next)
-})
+	.post('/:event/register', authenticated(), EventsController.registerForEvent)
 
 export default router

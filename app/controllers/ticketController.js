@@ -15,7 +15,8 @@ class TicketController extends Controller {
 	async allEventTickets(req, res, next) {
 		const { params } = req
 		try {
-			const events = await this.connection().where({ event_id: params.event })
+			const events = await DB('tickets')
+				.where({ event_id: params.event })
 			return res.status(200).json(events)
 		} catch (error) {
 			return next(error)
@@ -83,7 +84,8 @@ class TicketController extends Controller {
 			await ticket.update({
 				price, limit, type
 			})
-			res.json(await this.connection().where({ id: req.params.ticket }).first()) // TODO fix this spaghetti
+			res.json(await DB('tickets')
+				.where({ id: req.params.ticket }).first()) // TODO fix this spaghetti
 		} catch (error) {
 			next(error)
 		}

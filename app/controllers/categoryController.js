@@ -78,7 +78,8 @@ class CategoryController extends Controller
 					message: 'Category not found'
 				})
 			}
-			const updatedCategory = await category.update(body)
+			await category.update(body)
+			const updatedCategory = await Category.find(req.params.id)
 			return res.status(200).json(updatedCategory)
 		} catch (error) {
 			return next(error)

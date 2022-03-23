@@ -6,6 +6,7 @@ import Mail from '../mail/mail.js'
 import User from '../models/user.js'
 import createToken from '../auth/createToken.js'
 import Controller from './controller.js'
+import { readFile } from 'fs/promises'
 
 class UserController extends Controller {
 	/**
@@ -89,15 +90,23 @@ class UserController extends Controller {
 			}
 
 			// Generate a unique username from the name. ensure it is not taken
-			let username = body.name.replace(/\s/g, '').toLowerCase()  + '-' + randomUUID()
-			
+			let username = body.name.replace(/\s/g, '').toLowerCase() + '-' + randomUUID()
+
 
 			body.username = username
 			body.bio = 'No bio yet'
 
 			const user = await User.register(body) // TODO This now returns a Model
 			const data = {
-				name: body.name
+				name: body.name,
+				email: body.email,
+				text: `
+				   Your Events254 account has been created. You can login with the following credentials:
+				   Email: ${body.email}
+				   Password: the password you provided.
+				   Go to https://events254.co.ke/login to login.
+				   Thank you for using Events254.
+				   `
 			}
 			await new Mail(body, 'Welcome to events254', { template: 'welcome', data }).send()
 			// Determine if the request requires a token and pass it if so
@@ -144,9 +153,21 @@ class UserController extends Controller {
 					created_at: new Date()
 				})
 				// Send the token to the user
+				const requestOs = req.headers['user-agent']
+				const operatingSystem = requestOs.split('/')[0]
+				const browserName = requestOs.split('/')[1]
+				const url = `${process.env.WEB_CLIENT_URL}/password/update?email=${email}&token=${token}`
+				const textMailTemplate = await readFile('./app/mail/resetPassword.txt', 'utf8')
+				const text = textMailTemplate.replace('#{name}', user.name)
+					.replace('#{url}', url)
+					.replace('#{operatingSystem}', operatingSystem)
+					.replace('#{browserName}', browserName)
 				const data = {
 					name: user.name,
-					url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
+					url,
+					operatingSystem,
+					browserName,
+					text
 				}
 				// Return a response to the user
 				res.json('Please check your email for a password reset link')

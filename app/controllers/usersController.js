@@ -6,6 +6,7 @@ import Mail from '../mail/mail.js'
 import User from '../models/user.js'
 import createToken from '../auth/createToken.js'
 import Controller from './controller.js'
+import { readFile } from 'fs/promises'
 
 class UserController extends Controller {
 	/**
@@ -152,9 +153,21 @@ class UserController extends Controller {
 					created_at: new Date()
 				})
 				// Send the token to the user
+				const requestOs = req.headers['user-agent']
+				const operatingSystem = requestOs.split('/')[0]
+				const browserName = requestOs.split('/')[1]
+				const url = `${process.env.WEB_CLIENT_URL}/password/update?email=${email}&token=${token}`
+				const textMailTemplate = await readFile('./app/mail/resetPassword.txt', 'utf8')
+				const text = textMailTemplate.replace('#{name}', user.name)
+					.replace('#{url}', url)
+					.replace('#{operatingSystem}', operatingSystem)
+					.replace('#{browserName}', browserName)
 				const data = {
 					name: user.name,
-					url: `${process.env.APP_URL}/password/update?email=${email}&token=${token}`
+					url,
+					operatingSystem,
+					browserName,
+					text
 				}
 				// Return a response to the user
 				res.json('Please check your email for a password reset link')

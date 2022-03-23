@@ -104,7 +104,6 @@ class GroupController extends Controller {
 			}
 			return res.status(404).json('We could not find the group 😢')
 		} catch (error) {
-			console.log(error)
 			next(error)
 		}
 	}

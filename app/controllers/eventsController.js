@@ -44,7 +44,8 @@ class EventsController extends Controller {
 				about: 'required',
 				description: 'required',
 				startDate: 'required',
-				startTime: 'required'
+				startTime: 'required',
+				category_id: 'required',
 			})
 				.validate()
 
@@ -58,7 +59,7 @@ class EventsController extends Controller {
 
 			// The data is valid
 			// eslint-disable-next-line camelcase
-			const { startDate, startTime, endDate, endTime, location, online_link, about, description } = body
+			const { startDate, startTime, endDate, endTime, location, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
 			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
 			// eslint-disable-next-line camelcase
@@ -74,12 +75,14 @@ class EventsController extends Controller {
 				startDate: startDateTime,
 				endDate: endDateTime,
 				organisable_id,
-				organisable_type
+				organisable_type,
+				category_id
 			})
-			// Add the organiser
-
 			return res.status(201).json(e)
 		} catch (error) {
+			if (error.errors) {
+				return res.status(422).json({ errors: error.errors })
+			}
 			next(error)
 		}
 	}
@@ -235,16 +238,18 @@ class EventsController extends Controller {
 
 	/**
    * Get the events for the current user
-   * @param {Express.Request} request
+   * @param {import('express').Request} req Express request object
+   * @param {import('express').Response} res Express response object
+   * @param {import('express').NextFunction} next Express next function
+   * @returns {Promise<object>} The events for the current user
    */
-	async currentUserEvents(request) {
+	async currentUserEvents(req, res, next) {
 		try {
-			const user = await request.user()
+			const user = await req.user()
 			const events = await new User(user).events()
-			return this.response(events)
+			return res.json(events)
 		} catch (error) {
-			console.log(error)
-			return this.response(error, 500)
+			next(error)
 		}
 	}
 

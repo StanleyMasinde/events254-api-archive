@@ -21,6 +21,7 @@ import searchRouter from './routes/search.js'
 import ticketRouter from './routes/tickets.js'
 import paymentsRouter from './routes/payments.js'
 import newsFeedRouter from './routes/newsfeed.js'
+import CategoryRouter from './routes/categories.js'
 import auth from './app/auth/auth.js'
 import apikey from './app/middleware/apikey.js'
 
@@ -79,6 +80,7 @@ app.use('/events', eventsRouter)
 app.use('/search', searchRouter)
 app.use('/tickets', ticketRouter)
 app.use('/payments', paymentsRouter)
+app.use('/categories', CategoryRouter)
 app.use('/feed', newsFeedRouter)
 app.use('/p', publicRouter)
 
@@ -94,7 +96,6 @@ app.use(Handlers.errorHandler())
 // Catch all error routes
 // eslint-disable-next-line no-unused-vars
 app.use( async(err, req, res, _next) => {
-	console.log(err)
 	const env = process.env.NODE_ENV
 	if (env === 'development' || env === 'testing' || process.env.DEBUG) {
 		return res.status(err.status || 500).json({

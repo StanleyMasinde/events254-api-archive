@@ -6,6 +6,7 @@ import { expect } from 'chai'
 import chaiHttp from 'chai-http'
 chai.use(chaiHttp)
 import application from '../app.js'
+import Category from '../app/models/category.js'
 const app = chai.request.agent(application).keepOpen()
 
 let user = {
@@ -133,6 +134,12 @@ describe('Authentication with personal API Tokens', () => {
 
 	it('Create an event using API token', async () => {
 		try {
+			const cat = await Category.create({
+				name: faker.random.arrayElement(['Music', 'Sports', 'Arts', 'Food', 'Business', 'Health', 'Education', 'Fashion', 'Travel', 'Others']),
+				description: faker.lorem.sentence(),
+				photo_url: faker.image.imageUrl()
+			})
+
 			const res = await app
 				.post('/events')
 				.set('content-type', 'multipart/form-data')
@@ -144,12 +151,13 @@ describe('Authentication with personal API Tokens', () => {
 					about: 'Awesome event',
 					description: faker.lorem.paragraph(10),
 					startDate: new Date().toISOString().substr(0, 10),
-					startTime: '09:30'
+					startTime: '09:30',
+					category_id: cat.id,
 				})
 			expect(res.status).equals(201)
 			expect(res.body).to.haveOwnProperty('about')
 		} catch (err) {
-			console.log(err)
+			throw new Error(err)
 		}
 	})
 })

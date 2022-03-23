@@ -7,35 +7,48 @@ use(chaiHttp)
 import application from '../app.js'
 const app = chai.request.agent(application).keepOpen()
 import User from '../app/models/user.js'
+import Category from '../app/models/category.js'
 
 let user = {
 	name: faker.name.findName(),
 	email: faker.internet.email(),
 	password: 'strongpassword'
 }
+
+let category = {
+	name: faker.random.arrayElement(['Music', 'Sports', 'Arts', 'Food', 'Business', 'Health', 'Education', 'Fashion', 'Travel', 'Others']),
+	description: faker.lorem.sentence(),
+	photo_url: faker.image.imageUrl()
+}
 let ticketId
 let eventId
 
 describe('#Events test with protected routes', () => {
 	before(async () => {
-		await User.register(user)
-		await app
-			.post('/auth/login')
-			.send({
-				email: user.email,
-				password: 'strongpassword'
-			})
-		const res = await app.post('/events')
-			.set('content-type', 'multipart/form-data')
-			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
-			.field({
-				location: faker.address.streetAddress(),
-				about: 'Awesome event',
-				description: faker.lorem.paragraph(10),
-				startDate: new Date().toISOString().substr(0, 10),
-				startTime: '09:30'
-			})
-		eventId = res.body.id
+		try {
+			await User.register(user)
+			const cat = await Category.create(category)
+			await app
+				.post('/auth/login')
+				.send({
+					email: user.email,
+					password: 'strongpassword'
+				})
+			const res = await app.post('/events')
+				.set('content-type', 'multipart/form-data')
+				.attach('image', readFileSync('./public/icon.png'), 'icon.png')
+				.field({
+					location: faker.address.streetAddress(),
+					about: 'Awesome event',
+					description: faker.lorem.paragraph(10),
+					startDate: new Date().toISOString().substr(0, 10),
+					startTime: '09:30',
+					category_id: cat.id
+				})
+			eventId = res.body.id
+		} catch (err) {
+			throw new Error(err)
+		}
 	})
 
 	it('Create a ticket', async () => {

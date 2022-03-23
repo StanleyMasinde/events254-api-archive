@@ -226,7 +226,6 @@ class UserController extends Controller {
 			}).validate()
 			// Update the user
 			const user = await req.user()
-			console.log(user)
 			const u = await User.find(user.id)
 			await u.update(req.body)
 			// Return a response to the user

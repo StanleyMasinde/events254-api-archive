@@ -9,6 +9,7 @@ const app = chai.request.agent(application).keepOpen() // This will keep the req
 import User from '../app/models/user.js'
 import Event from '../app/models/event.js'
 import Ticket from '../app/models/ticket.js'
+import Category from '../app/models/category.js'
 
 let user = {
 	name: faker.name.findName(),
@@ -18,7 +19,7 @@ let user = {
 
 let event = {
 	about: faker.lorem.sentence(),
-	description: faker.lorem.paragraph(),
+	description: faker.lorem.sentence(),
 	startDate: faker.date.future(),
 	endDate: faker.date.future(),
 	location: faker.address.streetAddress(),
@@ -26,10 +27,16 @@ let event = {
 
 let onlineEvent = {
 	about: faker.lorem.sentence(),
-	description: faker.lorem.paragraph(),
+	description: faker.lorem.sentence(),
 	startDate: faker.date.future(),
 	endDate: faker.date.future(),
 	online_link: faker.internet.url(),
+}
+
+let category = {
+	name: faker.random.arrayElement(['Music', 'Sports', 'Arts', 'Food', 'Business', 'Health', 'Education', 'Fashion', 'Travel', 'Others']),
+	description: faker.lorem.sentence(),
+	photo_url: faker.image.imageUrl()
 }
 
 
@@ -44,16 +51,19 @@ describe('#Events test with protected routes', () => {
 	before(async () => {
 		try {
 			await User.register(user)
-			let newEvent = await Event.create(event)
-			let newOnlineEvent = await Event.create(onlineEvent)
-			let ticket = await Ticket.create({
+			const cat = await Category.create(category)
+			event.category_id = cat.id
+			onlineEvent.category_id = cat.id
+			const newEvent = await Event.create(event)
+			const newOnlineEvent = await Event.create(onlineEvent)
+			const ticket = await Ticket.create({
 				event_id: newEvent.id,
 				price: faker.commerce.price(),
 				currency: 'KES',
 				limit: faker.datatype.number(),
 				type: 'Regular'
 			})
-			let onlineTicket = await Ticket.create({
+			const onlineTicket = await Ticket.create({
 				event_id: newOnlineEvent.id,
 				price: faker.commerce.price(),
 				currency: 'KES',
@@ -72,7 +82,7 @@ describe('#Events test with protected routes', () => {
 				})
 			expect(res.body).to.have.property('email')
 		} catch (err) {
-			console.log(err)
+			throw new Error(err)
 		}
 	})
 
@@ -85,11 +95,13 @@ describe('#Events test with protected routes', () => {
 				about: 'Awesome event',
 				description: faker.lorem.paragraph(10),
 				startDate: new Date().toISOString().substr(0, 10),
-				startTime: '09:30'
+				startTime: '09:30',
+				category_id: event.category_id
 			})
 		eventId = res.body.id
 		expect(res.status).equals(201)
 	})
+
 
 	it('Get current user\'s events', async () => {
 		const res = await app.get('/events/currentUser')
@@ -104,7 +116,7 @@ describe('#Events test with protected routes', () => {
 				location: faker.address.streetAddress(true),
 				about: 'Events254 launch party',
 				description: faker.lorem.paragraph(10),
-				startDate: new Date().toISOString().substr(0, 10),
+				startDate: new Date().toISOString().substring(0, 10),
 				startTime: '10:45'
 			})
 		expect(res.status).equals(201)
@@ -211,15 +223,4 @@ describe('Event routes that do not require authentication', () => {
 		expect(res.status).equals(200)
 		expect(res.body).to.be.an('object')
 	})
-
-	// it('Get a specified event', async () => {
-	//   try {
-	//     const res = await app.get(`/events/${newEventId}`)
-	//     console.log(res.body)
-	//     expect(res.status).equals(200)
-	//     expect(res.body).to.have.property('about')
-	//   } catch (err) {
-	//     console.log(err)
-	//   }
-	// })
 })

@@ -89,15 +89,23 @@ class UserController extends Controller {
 			}
 
 			// Generate a unique username from the name. ensure it is not taken
-			let username = body.name.replace(/\s/g, '').toLowerCase()  + '-' + randomUUID()
-			
+			let username = body.name.replace(/\s/g, '').toLowerCase() + '-' + randomUUID()
+
 
 			body.username = username
 			body.bio = 'No bio yet'
 
 			const user = await User.register(body) // TODO This now returns a Model
 			const data = {
-				name: body.name
+				name: body.name,
+				email: body.email,
+				text: `
+				   Your Events254 account has been created. You can login with the following credentials:
+				   Email: ${body.email}
+				   Password: the password you provided.
+				   Go to https://events254.co.ke/login to login.
+				   Thank you for using Events254.
+				   `
 			}
 			await new Mail(body, 'Welcome to events254', { template: 'welcome', data }).send()
 			// Determine if the request requires a token and pass it if so

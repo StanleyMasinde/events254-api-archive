@@ -53,6 +53,7 @@ class Mail {
 				to: this.recipient.email,
 				subject: this.subject,
 				template: this.template,
+				text: this.data.text,
 				ctx: this.data,
 				attachments: this.attachments
 			})

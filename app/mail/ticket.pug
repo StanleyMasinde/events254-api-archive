@@ -1,56 +1,152 @@
-extends ./layouts/ticket.pug
-block content
+head
+  title Your order from Events254
+  link(href='https://fonts.googleapis.com/css?family=Montserrat:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css')
+  style(type='text/css').
+    a {
+    color: #ff6601;
+    }
+  //if gte mso 9
+    xml
+      o:officedocumentsettings
+        o:allowpng
+          o:pixelsperinch 96
+table(width='100%' border='0' cellspacing='0' cellpadding='15')
   tr
-    td.email-body(width='100%' cellpadding='0' cellspacing='0')
-      table.email-body_inner(align='center' width='570' cellpadding='0' cellspacing='0' role='presentation')
-        // Body content
+    td(width='100%' align='center' style='background-color: #f4f5f7;')
+      table(border='0' cellpadding='0' cellspacing='0' style='border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; overflow: hidden; min-width: 290px; max-width: 600px;')
         tr
-          td.content-cell
-            .f-fallback
-              h1 Hi #{name}, see you at #{eventName}
-              p
-                | Thanks for using Events254. This email is the order confirmation for No payment is due.
-              table.purchase(width='100%' cellpadding='0' cellspacing='0' role='presentation')
-                tr
-                  td
-                    h3  #EV254KE#{ticketId}
-                  td
-                    h3.align-right #{date}
-                tr
-                  td(colspan='2')
-                    table.purchase_content(width='100%' cellpadding='0' cellspacing='0')
-                      tr
-                        th.purchase_heading(align='left')
-                          p.f-fallback Ticket type
-                        th.purchase_heading(align='right')
-                          p.f-fallback Amount
-                      tr
-                        td.purchase_item(width='80%')
-                          span.f-fallback #{currentTicket.type}
-                        td.align-right(width='20%')
-                          span.f-fallback #{Intl.NumberFormat().format(currentTicket.price)}
-                      tr
-                        td.purchase_footer(width='80%' valign='middle')
-                          p.f-fallback.purchase_total.purchase_total--label Total
-                        td.purchase_footer(width='20%' valign='middle')
-                          p.f-fallback.purchase_total #{Intl.NumberFormat().format(currentTicket.price)}
-                | Cheers,
-                br
-                | The Events254 Team
-              // Action
-              table.body-action(align='center' width='100%' cellpadding='0' cellspacing='0' role='presentation')
-                tr
-                  td(align='center')
-                    table(width='100%' border='0' cellspacing='0' cellpadding='0' role='presentation')
-                      tr
-                        td(align='center')
-                          a.f-fallback.button.button--blue(href=ticketUrl target='_blank') See your ticket
-              table.body-sub(role='presentation')
-                tr
-                  td
-                    p.f-fallback.sub
-                      | Need a printable copy for your ticket? You can 
-                      a(href=ticketUrl) See your ticket
-                      | .
-
-//- TODO add QR code and PDF
+          td
+        tr
+          td(style='width: 600px; height: 100px; vertical-align: middle; border-bottom: 0px solid #ff6601;\
+          background-color: #813400;  border-top-right-radius: 10px; border-top-left-radius: 10px;background-size: cover;')
+            table(border='0' cellpadding='0' cellspacing='10' width='100%' style='width: 100%;')
+              tr
+                td(style='vertical-align: middle; text-align: center; text-align: center;')
+                  div(style='display: inline-block;')
+                    a(href='https://events254.co.ke' style='text-align: center; display: block;')
+                      img(src='https://res.cloudinary.com/streetcoder/image/upload/v1622115318/events254/icon_v52vzr.png' alt='Events254' border='0' height='100')
+        tr
+          td
+            table(width='100%' border='0' cellpadding='0' cellspacing='0')
+              tr
+                td(style='background-color: #fff; padding: 30px;')
+                  div
+                    div(style='padding: 10px 0 30px; text-align: center; font-size: 22px; font-weight: 800; color: #000;')
+                      | Congrats, #{name}!
+                    div(style='font-size: 15px; line-height: 24px;')
+                      | You have booked #{ticketCount} ticket(s) for 
+                      strong
+                        | #{eventName} (#{currentEvent.organiser.name})
+                      br
+                      strong Order #EV254#{ticketId}
+        tr
+          td
+            table(width='100%' border='0' cellpadding='0' cellspacing='0')
+              tr
+                td(style='background-color: #fff; padding: 0px 30px 30px 30px;')
+                  table(width='100%' cellpadding='5' cellspacing='0' border='0')
+                    tr
+                      td(width='40' align='center' valign='top')
+                        img(src='https://res.cloudinary.com/streetcoder/image/upload/v1648071473/icon_date_qvws7d.png' width='38' border='0')
+                      td
+                        div(style='padding-top: 4px; font-weight: 800; font-size: 19px;')
+                          | Date &amp; Time
+                        div(style='padding-bottom: 10px; font-size: 16px;')
+                          | #{currentEvent.humanStartDate}
+                    tr
+                      td(width='40' align='center' valign='top')
+                        img(src='https://res.cloudinary.com/streetcoder/image/upload/v1648071516/icon_address_sqqvtw.png' width='26' border='0')
+                    
+                      td
+                        div(style='padding-top: 4px; font-weight: 800; font-size: 19px;')
+                          | Address
+                        div(style='padding-bottom: 10px; font-size: 16px;')
+                          a(
+                            style='color: #ff6601;'
+                            href='http://maps.google.com?q=' + currentEvent.location)
+                            | #{currentEvent.location ? currentEvent.location : currentEvent.online_link}
+                  div(style='text-align: center; padding: 30px 0 20px;')
+                    div(style='text-transform: uppercase; font-weight: 800; font-size: 19px')
+                      | Here is your ticket
+                    div(style='padding: 10px 0 30px;')
+                      a(href='https://events254.co.ke/tickets/' + ticketId)
+                        img(src='https://res.cloudinary.com/streetcoder/image/upload/v1648077816/events254/4288_qpbkp3.jpg' width='278' border='0')
+                    a(href='https://events254.co.ke/tickets/' + ticketId style='color: #ffffff; background-color: #ff6601; border-radius: 3px; padding: 14px 28px; font-size: 12px; font-weight: bold; text-decoration: none !important;') Download
+        tr
+          td(style='padding: 10px 0 20px;')
+            table(width='100%' border='0' cellpadding='0' cellspacing='0')
+              tr
+                td(align='center' style='background-color: #fff; padding: 30px 0; font-size: 30px; font-weight: 800; color: #ff6601;')
+                  | About this event
+              tr
+                td(style='background-color: #fff; padding: 30px;')
+                  table(width='100%' border='0' cellpadding='0' cellspacing='0')
+                    tr
+                      td(style='padding: 15px 15px 30px 15px; background-color: #ffffff;border-radius: 4px; overflow: hidden;')
+                        table(width='100%' cellpadding='0' cellspacing='0' border='0')
+                          tr
+                            td(align='left' valign='middle' style='padding: 10px; text-align: left; vertical-align: middle')
+                              a(href='https://events254.co.ke/'+currentEvent.id style='text-decoration: none;')
+                                img(border='0' width='100' height='100' style='border-radius: 50%;' src=currentEvent.image)
+                            td(align='left' valign='middle' style='text-align: left; vertical-align: middle; padding: 10px; width: 100%;')
+                              table(width='100%' border='0' cellpadding='0' cellspacing='0')
+                                tr
+                                  td(style='font-size: 11px; text-transform: uppercase; color: #172b4d; font-family: Arial, sans-serif !important;')
+                                    span(style="font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif !important;\
+                                    ") | #{currentEvent.humanStartDate}
+                                tr
+                                  td(style='padding: 8px 0 8px; font-size: 24px; line-height: 28px; font-weight: 700; color: #172b4d; font-family: Arial, sans-serif !important;')
+                                    span(style="font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif !important;\
+                                    ") #{currentEvent.about}
+                          tr
+                            td(colspan='2' align='left' style='padding: 10px; text-align: center;; line-height: 20px; font-size: 15px; color: #172b4d; text-align: left; font-family: Arial, sans-serif !important;')
+                              span(style="font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif !important;\
+                              ")
+                                | #{eventDescription}
+                          tr
+                            td(colspan='2' align='center' style='padding-top: 10px; text-align: center; text-align: center;')
+                              table(border='0' cellpadding='0' cellspacing='0' align='center')
+                                tr
+                                  td(align='center' style='background-color: #ff6601; border-radius: 10px; ; font-family: Arial, sans-serif !important;')
+                                    a(href='https://events254.co.ke/events/' + currentEvent.id style="color: #ffffff; border-radius: 3px; cursor: pointer; padding: 14px 28px; font-size: 12px; text-decoration: none !important; display: inline-block; margin: 0; font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif !important;\
+                                    ")
+                                      | Read more
+        tr
+          td(style='padding: 0 0 20px;')
+            table(width='100%' border='0' cellpadding='0' cellspacing='0')
+              tr
+                td(style='padding: 25px 0 20px; background-color: #fff;')
+                  table(width='100%' border='0' cellpadding='0' cellspacing='0')
+                    tr
+                      td(style='padding-bottom: 10px; text-align: center; font-size: 13px; color: #7e8890;')
+                        em Supported by:
+                    tr
+                      td(align='center')
+                        table(border='0' cellpadding='0' cellspacing='20' style='margin: 0 auto;')
+                          tr
+                            td(valign='middle')
+                              a(href='http://atlassian.com' rel='nofollow' target='_blank')
+                                img(alt='Atlassian' align='center' src='https://res.cloudinary.com/streetcoder/image/upload/v1622115318/events254/icon_v52vzr.png' style='width: 100%; max-width: 220px' width='220')
+        tr
+          td
+            table(width='100%' border='0' cellpadding='0' cellspacing='0')
+              tr
+                td(align='center' style='padding: 15px 0 15px; color: #5e6c84;')
+                  table(width='100%' border='0' cellpadding='0' cellspacing='0')
+                    tr
+                      td(style='text-align: center; padding: 10px 30px 0; color: #5e6c84; line-height: 20px; font-size: 13px;')
+                        a(href='https://www.events254.co.ke/privacy' style='text-decoration: none; color: #5e6c84;')
+                          | Privacy
+                          | Policy
+                        |  &bull; 
+                        a(href='https://events254.co.ke/contact' style='text-decoration: none; color: #5e6c84;') Contact Us
+                        |                                                     &bull; 
+                        a(href='https://twitter.com/events254ke' style='text-decoration: none; color: #5e6c84;')
+                          | Follow on
+                          | Twitter
+                        br
+                        |                                                     Copyright 2022 &copy; Events254.co.ke
+                    tr
+                      td(style='padding-top: 30px; text-align: center;')
+                        a(href='https://ace.atlassian.com')
+                          img(height='70' src='https://res.cloudinary.com/streetcoder/image/upload/v1622115318/events254/icon_v52vzr.png' border='0')

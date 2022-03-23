@@ -28,6 +28,14 @@ const getEventOrganiser = async (event = {}) => {
 		organiser.type = 'group'
 		organiser.adminIds = await DB('group_organisers').where('group_id', '=', organiser.id).select('user_id')
 	}
+	if (!organiser.name) {
+		organiser.name = 'Unknown'
+	}
+	if (!organiser.email) {
+		organiser.email = 'info@events254.co.ke'
+	}
+
 	return organiser
+
 }
 export default getEventOrganiser

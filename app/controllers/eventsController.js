@@ -290,6 +290,8 @@ class EventsController extends Controller {
 			const ticketId = await DB('event_rsvps').insert({
 				event_id: req.params.event, user_id: currentUser.id, ticket_id: req.body.ticket_id, rsvp_count: req.body.rsvp_count
 			})
+			currentEvent.humanStartDate = moment(currentEvent.startDate).tz('Africa/Nairobi').format('LLLL')
+			currentEvent.organiser = await getEventOrganiser(currentEvent)
 			// Send and email to user
 			// TODO add attachments and refactor
 			// Remove html tags from the event description
@@ -309,13 +311,22 @@ class EventsController extends Controller {
 						allDay: moment(currentEvent.startDate).format('HH:mm') === '00:00' && moment(currentEvent.endDate).diff(currentEvent.startDate, 'days') === 1,
 						attendees: [
 							{
-								name: currentUser.name,
-								email: currentUser.email
+								name: currentUser.name || currentUser.name,
+								email: currentUser.email || currentUser.email
 							}
 						],
+						organizer: {
+							name: currentEvent.organiser.name ? currentEvent.organiser.name : 'Events254',
+							email: currentEvent.organiser.email ? currentEvent.organiser.email : 'info@events254.co.ke'
+						},
 						alarms: [
 							{
 								trigger: -30,
+								description: `${currentEvent.about} is starting soon`,
+								type: 'display'
+							},
+							{
+								trigger: -60,
 								description: `${currentEvent.about} is starting soon`,
 								type: 'display'
 							}
@@ -333,6 +344,8 @@ class EventsController extends Controller {
 			})
 			const data = {
 				eventName: currentEvent.about,
+				eventDescription,
+				currentEvent,
 				name: currentUser.name,
 				ticketId,
 				ticketCount: req.body.rsvp_count,

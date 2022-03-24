@@ -7,7 +7,9 @@ import chaiHttp from 'chai-http'
 chai.use(chaiHttp)
 import application from '../app.js'
 import Category from '../app/models/category.js'
-const app = chai.request.agent(application).keepOpen()
+const app = chai.request
+	.agent(application)
+	.keepOpen()
 
 let user = {
 	name: faker.name.findName(),
@@ -84,7 +86,9 @@ describe('Session Authentication tests', () => {
 	})
 
 	it('Send a password reset notification', async () => {
-		const res = await app.post('/auth/password')
+		const res = await app
+			.post('/auth/password')
+			.set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36')
 			.send({
 				email: user.email
 			})

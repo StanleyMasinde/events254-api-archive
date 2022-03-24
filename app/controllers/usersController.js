@@ -153,10 +153,10 @@ class UserController extends Controller {
 					created_at: new Date()
 				})
 				// Send the token to the user
-				const requestOs = req.headers['user-agent']
-				const operatingSystem = requestOs.split('/')[0]
-				const browserName = requestOs.split('/')[1]
-				const url = `${process.env.WEB_CLIENT_URL}/password/update?email=${email}&token=${token}`
+				const userAgent = req.headers['user-agent']
+				const operatingSystem = userAgent.split(')')[0].replace('(', '').split(';')[1]
+				const browserName = userAgent.split(')')[2].trim().split(' ')[0]
+				const url = `${req.app.locals.config.webClientUrl}/password/update?email=${email}&token=${token}`
 				const textMailTemplate = await readFile('./app/mail/resetPassword.txt', 'utf8')
 				const text = textMailTemplate.replace('#{name}', user.name)
 					.replace('#{url}', url)

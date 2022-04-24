@@ -11,7 +11,8 @@
     "dev": "DEBUG=express* nodemon bin/www",
     "migrate": "NODE_ENV=production knex migrate:latest --esm --knexfile knexfile.cjs",
     "migrate:rollback": "NODE_ENV=production knex migrate:rollback --knexfile knexfile.cjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky install"
   },
   "keywords": [
     "Events254",
@@ -51,6 +52,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "faker": "^5.5.3",
+    "husky": "^7.0.4",
     "mocha": "^9.2.2",
     "nodemon": "^2.0.15"
   },

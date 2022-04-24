@@ -25,13 +25,18 @@ jobs:
       uses: supercharge/redis-github-action@1.4.0
       with:
         redis-version: ${{ matrix.redis-version }}
-    - run: sudo systemctl start mysql.service
-    - run: sudo mysql -e 'DROP DATABASE IF EXISTS events254_test;' -proot
-    - run: sudo mysql -e 'CREATE DATABASE events254_test;' -proot
-    - run: cp .env.example .env
-    - run: npm ci
-    - run: echo "Linting 👀"
-    - run: npm run lint
-    - run: echo "Testing 🚀"
-    - run: npm test
+    - name: Start Mysql
+      run: sudo systemctl start mysql.service
+    
+    - name: Create Database
+      run: |
+         sudo mysql -e 'DROP DATABASE IF EXISTS events254_test;' -proot
+         sudo mysql -e 'CREATE DATABASE events254_test;' -proot
+         cp .env.example .env
+    - name: Install dependencies
+      run: npm ci
+    - name: Linting 👀
+      run: npm run lint
+    - name: Testing 🚀
+      run: npm test
     

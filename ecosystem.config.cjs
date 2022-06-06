@@ -1,6 +1,6 @@
 module.exports = {
 	apps: [{
-		name: 'Events254',
+		name: 'api.events254.co.ke',
 		script: 'npm',
 		args: '-- run start',
 		watch: false,

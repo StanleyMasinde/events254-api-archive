@@ -84,6 +84,9 @@ app.use('/categories', CategoryRouter)
 app.use('/feed', newsFeedRouter)
 app.use('/p', publicRouter)
 
+app.get('/ping', (req, res) => {
+	res.send('pong')
+})
 // Catch all 404 routes
 app.use((req, res) => {
 	res.status(404).json({

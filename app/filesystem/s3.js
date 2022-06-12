@@ -3,7 +3,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 
 const REGION = 'eu-west-2'
 // Set the bucket parameters
-const bucketName = 'events254'
+const bucketName = 'evnts254'
 
 // Create an S3 client service object
 const s3 = new S3Client({ region: REGION })

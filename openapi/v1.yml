@@ -35,10 +35,10 @@ components:
     loginRequest:
       type: object
       required:
-        - username
+        - email
         - password
       properties:
-        username:
+        email:
           type: string
           description: This can be the username or email
         password:
@@ -159,7 +159,6 @@ components:
           type: string
           format: time
           description: The time the event is starting in 2hrs e.g 09:00, 23:00
-          default: 00:00
         startDate:
           type: string
           format: date
@@ -168,7 +167,6 @@ components:
           type: string
           format: time
           description: The time the event is ending ins 24hrs format e.g 23:00
-          default: 00:00
         endDate:
           type: string
           format: date
@@ -812,7 +810,7 @@ paths:
 
         "401":
           description: Unauthenticated/Unauthorized
-  /events/eventId/tickets/ticketId:
+  /events/{eventId}/tickets/{ticketId}:
     get:
       description: Get a ticket by id
       operationId: Get ticket

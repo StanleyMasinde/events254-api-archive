@@ -11,9 +11,9 @@ const auth = () => {
    */
 	return function (req, res, next) {
 		/**
-       * Attempt to login a user with the given credentials
-       * @param {String} guard The current user table
-       */
+	   * Attempt to login a user with the given credentials
+	   * @param {String} guard The current user table
+	   */
 		req.attempt = function (guard = 'users') {
 			const { email, password } = this.body
 			DB.table(guard)
@@ -53,9 +53,9 @@ const auth = () => {
 		}
 
 		/**
-       * Login a user using the database ID
-       * @param {number} id
-       */
+	   * Login a user using the database ID
+	   * @param {number} id
+	   */
 		req.logIn = (id) => {
 			DB.table(this.guard())
 				.where({ id })
@@ -63,17 +63,17 @@ const auth = () => {
 		}
 
 		/**
-     * Get the current user
-     * @param {String} guard the guard to use default is users
-     * @returns {Array}
-     */
+	 * Get the current user
+	 * @param {String} guard the guard to use default is users
+	 * @returns {Array}
+	 */
 		req.user = async (guard = 'users') => {
 			/**
-       * -------------------------------------------------------
-       * The request requires a token hence no session is set
-       * We lookup for the exsistence of the token and use the token
-       * to get the owner
-       */
+	   * -------------------------------------------------------
+	   * The request requires a token hence no session is set
+	   * We lookup for the exsistence of the token and use the token
+	   * to get the owner
+	   */
 			if (req.requiresToken()) {
 				if (req.header('Authorization')) {
 					// eslint-disable-next-line func-call-spacing
@@ -94,12 +94,12 @@ const auth = () => {
 			}
 
 			/**
-       * -----------------------------------------------
-       * The request requires a session so we get
-       * the userId from the session and use it to fetch
-       * The user from the Database
-       * ------------------------------------------------
-       */
+	   * -----------------------------------------------
+	   * The request requires a session so we get
+	   * the userId from the session and use it to fetch
+	   * The user from the Database
+	   * ------------------------------------------------
+	   */
 			if (req.session.auth) { // If the Auth Object is set in session
 				const { userId } = req.session.auth
 				if (!userId) {
@@ -118,29 +118,30 @@ const auth = () => {
 		}
 
 		/**
-     * Destroy a user's sessions
-     */
+	 * Destroy a user's sessions
+	 */
 		req.logOut = () => {
 			req.session.auth = {}
 		}
 
 		/**
-     * Check if request is authenticated
-     * @param {String} guard
-     * @returns {Boolean}
-     */
+	 * Check if request is authenticated
+	 * @param {String} guard
+	 * @returns {Boolean}
+	 */
 		req.isAuthenticated = async (guard = 'users') => {
 			return await req.user(guard)
 		}
 
 		/**
-     * Determine weather the current request requires toke
-     * @returns {Boolean}
-     */
+	 * Determine weather the current request requires toke
+	 * @returns {Boolean}
+	 */
 		req.requiresToken = () => {
 			const header = req.header('X-requested-with')
 			if (header) { // We first check for the header before the value
-				if (header === 'mobile') { // We can use multiple like true, 1 etc for now let us use mobile
+				const allowed = ['mobile', 'pwa', 'nosession']
+				if (allowed.includes(header)) { // We can use multiple like true, 1 etc for now let us use mobile
 					return true
 				}
 				return false // The value might have been set by mistake

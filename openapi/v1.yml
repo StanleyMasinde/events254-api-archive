@@ -222,6 +222,7 @@ components:
     event:
       type: object
       required:
+        - id
         - image
         - about
         - description
@@ -242,6 +243,9 @@ components:
         - created_at
         - updated_at
       properties:
+        id:
+          type: string
+          description: The unique identifier of the event
         image:
           type: string
           description: The url of the image
@@ -264,9 +268,7 @@ components:
           format: int64
         organiser:
           type: object
-          properties:
-            schema:
-              $ref: "#/components/schemas/eventOrganiser"
+          $ref: "#/components/schemas/eventOrganiser"
         tickets:
           type: array
           items:
@@ -674,6 +676,10 @@ paths:
       responses:
         "200":
           description: The event was found
+          content:
+            application/json:
+                schema: 
+                  $ref: '#/components/schemas/event'
     put:
       description: Update a given event
       operationId: update event

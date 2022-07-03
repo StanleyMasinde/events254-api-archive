@@ -420,7 +420,41 @@ components:
             data:
               type: array
               items:
-                $ref: "#/components/schemas/event"
+                $ref: "#/components/schemas/feedObject"
+    feedObject:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - linkPrefix
+      properties:
+        id:
+          type: string
+          description: The unique identifier
+        name:
+          type: string
+          description: This can be the title
+        description:
+          type: string
+          description: The description
+        linkPrefix:
+          type: string
+          description: Used to identify the feed item type e.g event or group
+        startDate:
+          type: string
+          format: date-time
+          description: Start datetime
+        endDate:
+          type: string
+          format: date-time
+          description: End date-time
+        duration:
+          type: string
+          description: The duration if the item is an event
+        image:
+          type: string
+          description: Image url
     validationErrors:
       type: object
       properties:
@@ -678,8 +712,8 @@ paths:
           description: The event was found
           content:
             application/json:
-                schema: 
-                  $ref: '#/components/schemas/event'
+              schema:
+                $ref: "#/components/schemas/event"
     put:
       description: Update a given event
       operationId: update event

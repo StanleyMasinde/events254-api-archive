@@ -39,7 +39,7 @@
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.7.3",
+    "nodemailer": "^6.7.7",
     "nodemailer-pug-engine": "^2.0.1",
     "redis": "^3.1.2",
     "sessionstore": "^0.4.8"

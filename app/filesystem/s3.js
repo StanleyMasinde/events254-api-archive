@@ -21,6 +21,7 @@ const upload = async (file, folder = '/') => {
 	// Log any errors that may happen during the read
 	fileStream.on('error', function (err) {
 		writeFileSync('error.log', `${new Date().toUTCString()} | FileStream error ${new Error(err).message} \n`, { flag: 'a' })
+		throw new Error(err)
 	})
 
 	const uploadFolder = `${folder}/${filename}${originalname}`

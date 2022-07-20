@@ -1,6 +1,6 @@
 {
   "name": "events254",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Events254 main backend service",
   "main": "bin/www.js",
   "type": "module",

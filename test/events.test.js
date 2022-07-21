@@ -93,7 +93,7 @@ describe('#Events test with protected routes', () => {
 			.field({
 				location: faker.address.streetAddress(),
 				about: 'Awesome event',
-				description: faker.lorem.paragraph(10),
+				description: faker.lorem.paragraph(10) + 'Some emoji? 😂😎',
 				startDate: new Date().toISOString().substr(0, 10),
 				startTime: '09:30',
 				category_id: event.category_id

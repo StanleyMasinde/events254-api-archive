@@ -345,6 +345,24 @@ components:
           type: string
           description: The type of ticket e.g Regular
           default: General admission
+    createTicketRequest:
+      type: object
+      required:
+        - price
+        - limit
+        - type
+      properties:
+        price:
+          type: number
+          format: float
+          description: The price of the current ticket
+        type:
+          type: string
+          description: The ticket type e.g VIP, Regular
+        limit:
+          type: integer
+          format: int64
+          description: The maximum number of tickets of this type
     eventOrganiser:
       type: object
       required:
@@ -373,12 +391,8 @@ components:
       type: object
       required:
         - ticket_id
-        - event_id
       properties:
         ticket_id:
-          type: integer
-          format: int64
-        event_id:
           type: integer
           format: int64
     TicketOrderResponse:
@@ -643,7 +657,7 @@ paths:
           description: Server Error
   /auth/password/update:
     post:
-      operationId: update passoword
+      operationId: update password
       description: Update a users password
       requestBody:
         required: true
@@ -672,11 +686,30 @@ paths:
       description: Get the current authenticated user
       responses:
         "200":
-          description: Ok responses
+          description: Ok response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/user"
+        "401":
+          description: Not authenticated
+        "500":
+          description: Server Error
+  /auth/tickets:
+    get:
+      security:
+        - bearerAuth: []
+      operationId: get current users tickets
+      description: Get the tickets for the current user
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ticket"
         "401":
           description: Not authenticated
         "500":
@@ -844,6 +877,12 @@ paths:
           schema:
             type: integer
             format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createTicketRequest"
       responses:
         "201":
           description: updated

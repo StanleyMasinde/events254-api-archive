@@ -1,4 +1,4 @@
-import {writeFile} from 'fs/promises'
+import { writeFile } from 'fs/promises'
 import dotenv from 'dotenv'
 import express, { json, urlencoded } from 'express'
 import session from 'express-session'
@@ -46,8 +46,11 @@ init({
 	release: process.env.npm_package_version,
 })
 
-app.use(Handlers.requestHandler())
-app.use(Handlers.tracingHandler())
+const env = process.env.NODE_ENV
+if (env == 'production') {
+	app.use(Handlers.requestHandler())
+	app.use(Handlers.tracingHandler())
+}
 
 app.use(json())
 app.use(urlencoded({ extended: false }))
@@ -94,11 +97,13 @@ app.use((req, res) => {
 	})
 })
 
-app.use(Handlers.errorHandler())
+if (env == 'production') {
+	app.use(Handlers.errorHandler())
+}
 
 // Catch all error routes
 // eslint-disable-next-line no-unused-vars
-app.use( async(err, req, res, _next) => {
+app.use(async (err, req, res, _next) => {
 	const env = process.env.NODE_ENV
 	if (env === 'development' || env === 'testing' || process.env.DEBUG) {
 		return res.status(err.status || 500).json({

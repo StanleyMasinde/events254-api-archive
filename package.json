@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "pretest": "NODE_ENV=development knex migrate:latest --knexfile knexfile.cjs",
-    "test": "NODE_ENV=development mocha --exit --bail",
+    "test": "NODE_ENV=development mocha --exit --bail --timeout 12000",
     "start": "node bin/www",
     "dev": "DEBUG=express* nodemon bin/www",
     "migrate": "NODE_ENV=production knex migrate:latest --esm --knexfile knexfile.cjs",

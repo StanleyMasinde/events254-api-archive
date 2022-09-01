@@ -354,7 +354,7 @@ components:
         - endDate
         - ticketId
         - userId
-        - tikcetCount
+        - ticketCount
         - ticketType
         - ticketPrice
         - currency
@@ -383,7 +383,7 @@ components:
           type: integer
           format: int64
           description: The unique id of the user that owns the ticket
-        tikcetCount:
+        ticketCount:
           type: integer
           format: int64
           description: The number of tickets/slots purchased

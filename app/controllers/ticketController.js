@@ -158,7 +158,8 @@ class TicketController extends Controller {
 					'events.about AS eventName',
 					'events.organisable_type as organisableType',
 					'events.organisable_id as organisableId',
-					'events.startDate AS eventDate',
+					'events.startDate AS eventDate', // TODO: change this to start date
+					'events.endDate AS endDate',
 					'events.location AS eventLocation',
 					'event_rsvps.id AS ticketId',
 					'event_rsvps.user_id AS userId',

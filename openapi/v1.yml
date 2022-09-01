@@ -351,6 +351,7 @@ components:
         - image
         - eventName
         - eventDate
+        - endDate
         - ticketId
         - userId
         - tikcetCount
@@ -368,6 +369,9 @@ components:
         eventDate:
           type: string
           description: When the event is starting
+        endDate:
+           type: string
+           description: The end date of the event
         eventLocation:
           type: string
           description: Where the event will take place can be blank

@@ -774,7 +774,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ticket"
+                  $ref: "#/components/schemas/userTicket"
         "401":
           description: Not authenticated
         "500":

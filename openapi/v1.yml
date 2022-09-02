@@ -460,8 +460,12 @@ components:
       type: object
       required:
         - ticket_id
+        - rsvp_count
       properties:
         ticket_id:
+          type: integer
+          format: int64
+        rsvp_count:
           type: integer
           format: int64
     TicketOrderResponse:

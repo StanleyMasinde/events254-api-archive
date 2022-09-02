@@ -314,6 +314,30 @@ components:
         online_link:
           type: string
           description: The link to the event if the event is virtual
+        currentUserTicket:
+          type: object
+          description: The ticket of the current user if they've purchased one
+          required:
+            - id
+            - price
+            - rsvp_count
+            - type
+          properties:
+            id:
+             type: integer
+             format: int64
+             description: The unique identifier of the pass/ticket
+            price:
+             type: integer
+             format: float
+             description: The amount they paid for the tikcet
+            rsvp_count:
+              type: integer
+              format: int64
+              description: The number of tickets owned
+            type:
+              type: string
+              description: The ticket class e.g VIP
         created_at:
           type: string
           format: date-time

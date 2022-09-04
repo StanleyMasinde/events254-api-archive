@@ -80,10 +80,13 @@ const auth = () => {
 					const token = req.header('Authorization').split(' ')[1]
 					// eslint-disable-next-line no-unexpected-multiline
 					return (async function () {
+						if (!token) {
+							return null
+						}
 						try {
 							const tk = await DB.table('personal_access_tokens')
 								.where({ token, tokenable_type: guard }).first()
-							if(!tk) {
+							if (!tk) {
 								return null
 							}
 							const user = await DB.table(guard).where({ id: tk.tokenable_id }).first(['id', 'name', 'username', 'email', 'bio', 'created_at', 'updated_at'])

@@ -23,12 +23,6 @@ router.get('/', cache(), async (req, res, next) => {
 			.orderByRaw('RAND()')
 			.limit(20)
 
-		// Get all 10 groups in random order
-		suggestedGroups = await DB('groups')
-			.select(DB.raw('slug as id, \'groups\' as linkPrefix, name, SUBSTRING(description, 1, 100) as description, pictureUrl as image'))
-			.orderByRaw('RAND()')
-			.limit(20)
-
 		// Get all upcoming events in random order
 		upcomingEvents = await DB('events')
 			.select(DB.raw('events.id, events.about as name, SUBSTRING(events.description, 1, 100) as description, \'events\' as linkPrefix, events.startDate, events.endDate, TIMEDIFF(events.startDate, events.endDate) as duration, events.image'))
@@ -67,10 +61,6 @@ router.get('/', cache(), async (req, res, next) => {
 			happeningNow: {
 				name: 'Happening Now',
 				data: happeningNow
-			},
-			suggestedGroups: {
-				name: 'Suggested Groups',
-				data: suggestedGroups
 			},
 			upcomingEvents: {
 				name: 'Upcoming Events',

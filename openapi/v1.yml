@@ -507,12 +507,31 @@ components:
       type: object
       required:
         - events
-        - people
+        - users
       properties:
         events:
           type: array
           items:
-            $ref: "#/components/schemas/event"
+            type: object
+            required:
+              - id
+              - startDare
+              - about
+            properties:
+              id: 
+                type: number
+                format: int64
+                description: The unique event id
+              image:
+                type: string
+                description: The event poster url
+              location:
+                type: string
+                description: The event location
+              startDate:
+                type: string
+                format: date-time
+                example: "2022-08-25T06:30:01.000Z"
         people:
           type: array
           items:

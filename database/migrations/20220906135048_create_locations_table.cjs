@@ -3,7 +3,7 @@
  * @param {import('knex').Knex} knex
  */
 exports.up = function (knex) {
-	return knex.schema.createTable('event_locations', table => {
+	return knex.schema.createTable('locations', table => {
 		table.increments('id').unsigned()
 		table.string('name').notNullable()
 		table.string('formatted_address')
@@ -17,5 +17,5 @@ exports.up = function (knex) {
  * @param {import('knex').Knex} knex
  */
 exports.down = function (knex) {
-	return knex.schema.dropTable('event_locations')
+	return knex.schema.dropTable('locations')
 }

@@ -7,7 +7,6 @@ const router = Router()
 
 router.get('/', cache(), async (req, res, next) => {
 	let sponsoredEvents = []
-	let suggestedGroups = []
 	let happeningNow = []
 	let upcomingEvents = []
 	// let userLocation = req.query.location
@@ -20,12 +19,6 @@ router.get('/', cache(), async (req, res, next) => {
 			.select(DB.raw('events.id, events.about as name, SUBSTRING(events.description, 1, 100) as description, \'events\' as linkPrefix, events.startDate, events.endDate, TIMEDIFF(events.startDate, events.endDate) as duration, events.image'))
 			.where('startDate', '<', moment().format('YYYY-MM-DD HH:mm:ss'))
 			.where('endDate', '>', moment().format('YYYY-MM-DD HH:mm:ss'))
-			.orderByRaw('RAND()')
-			.limit(20)
-
-		// Get all 10 groups in random order
-		suggestedGroups = await DB('groups')
-			.select(DB.raw('slug as id, \'groups\' as linkPrefix, name, SUBSTRING(description, 1, 100) as description, pictureUrl as image'))
 			.orderByRaw('RAND()')
 			.limit(20)
 
@@ -67,10 +60,6 @@ router.get('/', cache(), async (req, res, next) => {
 			happeningNow: {
 				name: 'Happening Now',
 				data: happeningNow
-			},
-			suggestedGroups: {
-				name: 'Suggested Groups',
-				data: suggestedGroups
 			},
 			upcomingEvents: {
 				name: 'Upcoming Events',

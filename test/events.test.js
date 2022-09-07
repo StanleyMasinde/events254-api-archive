@@ -92,6 +92,9 @@ describe('#Events test with protected routes', () => {
 			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
 			.field({
 				location: faker.address.streetAddress(),
+				location_name: 'Nairobi national park',
+				formatted_address: 'Tom Mboya street, Nairobi',
+				location_coordinates: '32.88, 1.778', 
 				about: 'Awesome event',
 				description: faker.lorem.paragraph(10) + 'Some emoji? 😂😎',
 				startDate: new Date().toISOString().substr(0, 10),

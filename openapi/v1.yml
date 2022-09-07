@@ -149,9 +149,15 @@ components:
           type: string
           format: binary
           description: The event poster image.
-        location:
+        location_name:
           type: string
-          description: The event address if the event is an in-person event
+          description: The name of the location
+        formatted_address: 
+          type: string
+          description: The formatted address you get from google places api
+        location_coordinates:
+          type: string
+          description: The coordinates separated by a comma
         online_link:
           type: string
           description: The online event link if the event is a virtual event

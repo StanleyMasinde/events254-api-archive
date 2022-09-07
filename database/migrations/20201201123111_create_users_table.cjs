@@ -4,7 +4,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function up (knex) {
+exports.up = (knex) => {
 	return knex.schema.createTable('users', (table) => {
 		table.bigIncrements('id')
 		table.string('name')
@@ -21,6 +21,6 @@ export function up (knex) {
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function down (knex) {
+exports.down = (knex) => {
 	return knex.schema.dropTableIfExists('users')
 }

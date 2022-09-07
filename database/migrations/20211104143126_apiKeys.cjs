@@ -2,7 +2,7 @@
  * Run the migrations.
  * @param {import('knex').Knex} knex
  */
-export function up (knex) {
+exports.up = (knex) => {
 	return knex.schema.createTable('api_keys', table => {
 		table.increments('id').primary()
 		table.string('key').notNullable()
@@ -16,6 +16,6 @@ export function up (knex) {
  * Reverse the migrations.
  * @param {import('knex').Knex} knex
  */
-export function down (knex) {
+exports.down = (knex) => {
 	return knex.schema.dropTable('api_keys')
 }

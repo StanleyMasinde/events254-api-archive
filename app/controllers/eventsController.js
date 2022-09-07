@@ -74,12 +74,18 @@ class EventsController extends Controller {
 					location_coordinates: 'required'
 				}).validate()
 				const [lat, lng] = location_coordinates.split(',')
-				location_id = await DB('locations')
-					.insert({
-						name: location_name,
-						formatted_address,
-						coordinates: DB.raw(`POINT(${lat}, ${lng})`)
-					})
+				// Check if exists
+				const exists = await DB('locations').where({ name: location_name }).first()
+				if (exists) {
+					location_id = exists.id
+				} else {
+					location_id = await DB('locations')
+						.insert({
+							name: location_name,
+							formatted_address,
+							coordinates: DB.raw(`POINT(${lat}, ${lng})`)
+						})
+				}
 			}
 			const e = await Event.create({
 				image,

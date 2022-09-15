@@ -59,7 +59,7 @@ class EventsController extends Controller {
 
 			// The data is valid
 			// eslint-disable-next-line camelcase
-			const { startDate, startTime, endDate, endTime, location, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
+			const { startDate, startTime, frequency, repeat_count, endDate, endTime, location, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
 			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
 			// eslint-disable-next-line camelcase
@@ -95,6 +95,8 @@ class EventsController extends Controller {
 				description,
 				startDate: startDateTime,
 				endDate: endDateTime,
+				frequency,
+				repeat_count,
 				organisable_id,
 				organisable_type,
 				category_id

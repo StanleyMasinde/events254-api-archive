@@ -105,6 +105,27 @@ describe('#Events test with protected routes', () => {
 		expect(res.status).equals(201)
 	})
 
+	it('User creates an event with frequency', async () => {
+		const res = await app.post('/events')
+			.set('content-type', 'multipart/form-data')
+			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
+			.field({
+				location: faker.address.streetAddress(),
+				location_name: 'The club',
+				formatted_address: 'Ring rd parklands',
+				location_coordinates: '32.88, 1.778', 
+				about: 'Awesome event',
+				description: faker.lorem.paragraph(10) + 'Some emoji? 😂😎',
+				startDate: new Date().toISOString().substr(0, 10), // TODO: Hey what do we use?
+				startTime: '09:30',
+				frequency: 'weekly',
+				repeat_count: 0,
+				category_id: event.category_id
+			})
+		expect(res.body.frequency).equals('weekly')
+		expect(res.status).equals(201)
+	})
+
 
 	it('Get current user\'s events', async () => {
 		const res = await app.get('/events/currentUser')

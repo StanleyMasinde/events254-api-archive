@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.up = (knex) => {
+export function up (knex) {
 	return knex.schema.createTable('groups', (table) => {
 		table.bigIncrements('id')
 		table.string('pictureUrl')
@@ -27,6 +27,6 @@ exports.up = (knex) => {
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.down = (knex) => {
+export function down (knex) {
 	return knex.schema.dropTableIfExists('groups')
 }

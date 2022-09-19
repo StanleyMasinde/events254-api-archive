@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.up = (knex) => {
+export function up (knex) {
 	return knex.schema.createTable('password_resets', (table) => {
 		table.string('email').index()
 		table.string('token')
@@ -16,6 +16,6 @@ exports.up = (knex) => {
  * @param {import('knex')} knex
  * @returns Promise
  */
-exports.down = (knex) => {
+export function down (knex) {
 	return knex.schema.dropTableIfExists('password_resets')
 }

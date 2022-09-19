@@ -194,10 +194,10 @@ class EventsController extends Controller {
 					startTime: 'required'
 				}).validate()
 				// eslint-disable-next-line camelcase
-				const { startDate, startTime, endDate, endTime, location, about, description } = body
+				const { startDate, startTime, frequency, repeat_count, endDate, endTime, location, about, description } = body
 				const startDateTime = formatToDateTime(startTime, startDate)
 				const endDatetime = formatToDateTime(endTime, endDate)
-				const ev = await currentEvent.update({ location, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
+				const ev = await currentEvent.update({ location, frequency, repeat_count, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
 				return res.status(201).json(ev)
 			} catch (error) {
 				return next(error)

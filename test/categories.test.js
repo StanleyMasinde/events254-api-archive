@@ -53,6 +53,9 @@ describe('#Event category test', () => {
 					endDate: new Date().toISOString().substring(0, 10),
 					endTime: '19:00',
 					location: faker.address.streetAddress(true),
+					location_name: 'Nairobi national park',
+					formatted_address: 'Tom Mboya street, Nairobi',
+					location_coordinates: '32.88, 1.778', 
 					category_id: categoryId
 				})
 			expect(res.status).to.equal(201)

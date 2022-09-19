@@ -49,53 +49,52 @@ init({
 const env = process.env.NODE_ENV
 if (env == 'production') {
 	app.use(Handlers.requestHandler())
-	app.use(Handlers.tracingHandler())
+		.use(Handlers.tracingHandler())
 }
 
 app.use(json())
-app.use(urlencoded({ extended: false }))
-app.use(cookieParser())
-app.get('/ping', (req, res) => {
-	res.send('pong')
-})
-app.use(apikey())
-
-app.use(session({
-	rolling: true,
-	secret: 'super-secret-cookie',
-	resave: false,
-	saveUninitialized: true,
-	name: 'events254_session',
-	cookie: {
-		maxAge: 365 * 24 * 60 * 60 * 1000,
-		sameSite: 'lax',
-		secure: 'auto'
-	},
-	store: process.env.NODE_ENV === 'development'
-		? null
-		: createSessionStore({
-			type: 'redis'
-		})
-}))
-app.use(auth)
-
-app.use('/users', usersRouter)
-app.use('/groups', groupsRouter)
-app.use('/auth', authRouter)
-app.use('/events', eventsRouter)
-app.use('/search', searchRouter)
-app.use('/tickets', ticketRouter)
-app.use('/payments', paymentsRouter)
-app.use('/categories', CategoryRouter)
-app.use('/feed', newsFeedRouter)
-app.use('/p', publicRouter)
-
-// Catch all 404 routes
-app.use((req, res) => {
-	res.status(404).json({
-		error: 'Sorry, the requested resource does not live here 😢'
+	.use(urlencoded({ extended: false }))
+	.use(cookieParser())
+	.get('/ping', (req, res) => {
+		res.send('pong')
 	})
-})
+	.use(apikey())
+
+	.use(session({
+		rolling: true,
+		secret: 'super-secret-cookie',
+		resave: false,
+		saveUninitialized: true,
+		name: 'events254_session',
+		cookie: {
+			maxAge: 365 * 24 * 60 * 60 * 1000,
+			sameSite: 'lax',
+			secure: 'auto'
+		},
+		store: process.env.NODE_ENV === 'development'
+			? null
+			: createSessionStore({
+				type: 'redis'
+			})
+	}))
+	.use(auth)
+	.use('/users', usersRouter)
+	.use('/groups', groupsRouter)
+	.use('/auth', authRouter)
+	.use('/events', eventsRouter)
+	.use('/search', searchRouter)
+	.use('/tickets', ticketRouter)
+	.use('/payments', paymentsRouter)
+	.use('/categories', CategoryRouter)
+	.use('/feed', newsFeedRouter)
+	.use('/p', publicRouter)
+
+	// Catch all 404 routes
+	.use((req, res) => {
+		res.status(404).json({
+			error: 'Sorry, the requested resource does not live here 😢'
+		})
+	})
 
 if (env == 'production') {
 	app.use(Handlers.errorHandler())

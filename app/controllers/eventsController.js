@@ -59,21 +59,44 @@ class EventsController extends Controller {
 
 			// The data is valid
 			// eslint-disable-next-line camelcase
-			const { startDate, startTime, endDate, endTime, location, online_link, about, description, category_id } = body
+			const { startDate, startTime, frequency, repeat_count, endDate, endTime, location, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
 			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
 			// eslint-disable-next-line camelcase
 			const organisable_id = user.id // The authenticated user's ID
 			// eslint-disable-next-line camelcase
 			const organisable_type = 'User' // The organiser's Model can be group or user
+			let location_id
+			if (location) {
+				await new Validator(body, {
+					location_name: 'required',
+					formatted_address: 'required',
+					location_coordinates: 'required'
+				}).validate()
+				const [lat, lng] = location_coordinates.split(',')
+				// Check if exists
+				const exists = await DB('locations').where({ name: location_name }).first()
+				if (exists) {
+					location_id = exists.id
+				} else {
+					location_id = await DB('locations')
+						.insert({
+							name: location_name,
+							formatted_address,
+							coordinates: DB.raw(`POINT(${lat}, ${lng})`)
+						})
+				}
+			}
 			const e = await Event.create({
 				image,
-				location,
+				location_id,
 				online_link,
 				about,
 				description,
 				startDate: startDateTime,
 				endDate: endDateTime,
+				frequency,
+				repeat_count,
 				organisable_id,
 				organisable_type,
 				category_id
@@ -171,10 +194,10 @@ class EventsController extends Controller {
 					startTime: 'required'
 				}).validate()
 				// eslint-disable-next-line camelcase
-				const { startDate, startTime, endDate, endTime, location, about, description } = body
+				const { startDate, startTime, frequency, repeat_count, endDate, endTime, location, about, description } = body
 				const startDateTime = formatToDateTime(startTime, startDate)
 				const endDatetime = formatToDateTime(endTime, endDate)
-				const ev = await currentEvent.update({ location, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
+				const ev = await currentEvent.update({ location, frequency, repeat_count, about, description, startDate: startDateTime, endDate: endDatetime }) // Payload is valid
 				return res.status(201).json(ev)
 			} catch (error) {
 				return next(error)

@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function up (knex) {
+exports.up = (knex) => {
 	return knex.schema.createTable('personal_access_tokens', (table) => {
 		table.bigIncrements('id')
 		table.string('tokenable_type')
@@ -21,6 +21,6 @@ export function up (knex) {
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function down (knex) {
+exports.down = (knex) => {
 	return knex.schema.dropTableIfExists('personal_access_tokens')
 }

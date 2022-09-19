@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns
  */
-export function up (knex) {
+exports.up = (knex) => {
 	return knex.schema.createTable('events', (table) => {
 		table.bigIncrements('id')
 		table.string('image')
@@ -32,6 +32,6 @@ export function up (knex) {
  * @param {import('knex')} knex
  * @returns
  */
-export function down (knex) {
+exports.down = (knex) => {
 	return knex.schema.dropTableIfExists('events')
 }

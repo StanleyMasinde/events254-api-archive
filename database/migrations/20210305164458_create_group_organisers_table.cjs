@@ -3,7 +3,7 @@
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function up (knex) {
+exports.up = (knex) => {
 	return knex.schema.createTable('group_organisers', (table) => {
 		table.bigIncrements('id')
 		table.bigInteger('group_id').unsigned()
@@ -20,6 +20,6 @@ export function up (knex) {
  * @param {import('knex')} knex
  * @returns Promise
  */
-export function down (knex) {
+exports.down = (knex) => {
 	return knex.schema.dropTableIfExists('group_organisers')
 }

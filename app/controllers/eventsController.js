@@ -59,7 +59,7 @@ class EventsController extends Controller {
 
 			// The data is valid
 			// eslint-disable-next-line camelcase
-			const { startDate, startTime, frequency, repeat_count, endDate, endTime, location, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
+			const { startDate, startTime, frequency, repeat_count, endDate, endTime, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
 			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
 			// eslint-disable-next-line camelcase
@@ -67,7 +67,7 @@ class EventsController extends Controller {
 			// eslint-disable-next-line camelcase
 			const organisable_type = 'User' // The organiser's Model can be group or user
 			let location_id
-			if (location) {
+			if (location_name) {
 				await new Validator(body, {
 					location_name: 'required',
 					formatted_address: 'required',

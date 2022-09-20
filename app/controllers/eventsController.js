@@ -161,7 +161,7 @@ class EventsController extends Controller {
 			}
 			delete e.organisable_id; delete e.organisable_type
 			if (e.location_id) {
-				e.address = await DB('locations').where({ id: e.location_id }).select(['name', 'formatted_address'])
+				e.address = await DB('locations').where({ id: e.location_id }).select(['name', 'formatted_address']).first()
 			}
 			if (!e.online_link) {
 				e.online_link = 'N/A'

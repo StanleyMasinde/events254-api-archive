@@ -120,6 +120,9 @@ class UserController extends Controller {
 			}
 			return res.json(user)
 		} catch (error) {
+			if(error.errors) {
+				return res.status(422).json(error.errors)
+			}
 			next(error)
 		}
 	}

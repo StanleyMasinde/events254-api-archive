@@ -152,7 +152,7 @@ components:
         location_name:
           type: string
           description: The name of the location
-        formatted_address: 
+        formatted_address:
           type: string
           description: The formatted address you get from google places api
         location_coordinates:
@@ -316,7 +316,21 @@ components:
           description: Show if the current user has persmissions to manage the current event.
         location:
           type: string
-          description: The physical Location of the event
+          description: The physical Location of the event. Use address
+          deprecated: true
+        address:
+          type: object
+          description: The address of the event
+          required:
+            - name
+            - formatted_address
+          properties:
+            name:
+              type: string
+              description: The name of the venue
+            formatted_address:
+              type: string
+              description: The formatted address
         online_link:
           type: string
           description: The link to the event if the event is virtual
@@ -330,13 +344,13 @@ components:
             - type
           properties:
             id:
-             type: integer
-             format: int64
-             description: The unique identifier of the pass/ticket
+              type: integer
+              format: int64
+              description: The unique identifier of the pass/ticket
             price:
-             type: integer
-             format: float
-             description: The amount they paid for the tikcet
+              type: integer
+              format: float
+              description: The amount they paid for the tikcet
             rsvp_count:
               type: integer
               format: int64
@@ -400,8 +414,8 @@ components:
           type: string
           description: When the event is starting
         endDate:
-           type: string
-           description: The end date of the event
+          type: string
+          description: The end date of the event
         eventLocation:
           type: string
           description: Where the event will take place can be blank
@@ -524,7 +538,7 @@ components:
               - startDare
               - about
             properties:
-              id: 
+              id:
                 type: number
                 format: int64
                 description: The unique event id

@@ -160,8 +160,8 @@ class EventsController extends Controller {
 					.first('event_rsvps.id', 'event_rsvps.rsvp_count', 'tickets.type', 'tickets.price') || null
 			}
 			delete e.organisable_id; delete e.organisable_type
-			if (!e.location) {
-				e.location = 'N/A'
+			if (e.location_id) {
+				e.address = await DB('locations').where({ id: e.location_id }).select(['name', 'formatted_address'])
 			}
 			if (!e.online_link) {
 				e.online_link = 'N/A'

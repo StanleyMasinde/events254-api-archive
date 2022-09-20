@@ -173,9 +173,8 @@ class UserController extends Controller {
 					text
 				}
 				// Return a response to the user
-				res.json('Please check your email for a password reset link')
 				await new Mail(user, 'Password Reset Notification', { template: 'resetPassword', data }).send()
-				return
+				return res.json('Please check your email for a password reset link')
 			}
 			return res.status(422).json('Sorry, we could not find that email address in our system')
 		} catch (error) {

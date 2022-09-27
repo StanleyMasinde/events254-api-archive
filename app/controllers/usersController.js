@@ -120,6 +120,9 @@ class UserController extends Controller {
 			}
 			return res.json(user)
 		} catch (error) {
+			if(error.errors) {
+				return res.status(422).json(error.errors)
+			}
 			next(error)
 		}
 	}
@@ -154,8 +157,8 @@ class UserController extends Controller {
 				})
 				// Send the token to the user
 				const userAgent = req.headers['user-agent']
-				const operatingSystem = userAgent.split(')')[0].replace('(', '').split(';')[1]
-				const browserName = userAgent.split(')')[2].trim().split(' ')[0]
+				const operatingSystem = userAgent.split(')')[0]?.replace('(', '')?.split(';')[1]
+				const browserName = userAgent.split(')')[2]?.trim()?.split(' ')[0]
 				const url = `${req.app.locals.config.webClientUrl}/password/update?email=${email}&token=${token}`
 				const textMailTemplate = await readFile('./app/mail/resetPassword.txt', 'utf8')
 				const text = textMailTemplate.replace('#{name}', user.name)
@@ -170,9 +173,8 @@ class UserController extends Controller {
 					text
 				}
 				// Return a response to the user
-				res.json('Please check your email for a password reset link')
 				await new Mail(user, 'Password Reset Notification', { template: 'resetPassword', data }).send()
-				return
+				return res.json('Please check your email for a password reset link')
 			}
 			return res.status(422).json('Sorry, we could not find that email address in our system')
 		} catch (error) {

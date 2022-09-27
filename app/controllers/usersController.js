@@ -51,6 +51,8 @@ class UserController extends Controller {
 		try {
 			const user = await User.find(params.id)
 			delete user.password
+			delete user.email
+			delete user.updated_at
 			user.events = await user.events()
 			return this.response(user)
 		} catch (error) {

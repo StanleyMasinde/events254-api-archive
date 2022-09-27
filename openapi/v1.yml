@@ -32,6 +32,31 @@ components:
         bio:
           type: string
           description: The user's short introduction
+    userProfile:
+      description: The object you get when getting user by Id
+      required:
+        - name
+        - username
+        - created_at
+        - events
+      properties:
+        name:
+          type: string
+          description: The name of the user
+        username:
+          type: string
+          description: The username of the user
+        bio:
+          type: string
+          description: The bio of the user
+        created_at:
+          type: string
+          format: date-time
+          description: When the user was registered
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/event"
     loginRequest:
       type: object
       required:
@@ -123,7 +148,7 @@ components:
       required:
         - email
         - token
-        - passoword
+        - password
       properties:
         email:
           type: string
@@ -132,7 +157,7 @@ components:
         token:
           type: string
           description: The token sent to the email
-        passoword:
+        password:
           type: string
           format: passoword
           description: The new password for the user
@@ -668,7 +693,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/user"
+                $ref: "#/components/schemas/userProfile"
         "400":
           description: Unauthenticated/Unauthorized
   /users/update:

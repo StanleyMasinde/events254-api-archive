@@ -148,7 +148,7 @@ components:
       required:
         - email
         - token
-        - passoword
+        - password
       properties:
         email:
           type: string
@@ -157,7 +157,7 @@ components:
         token:
           type: string
           description: The token sent to the email
-        passoword:
+        password:
           type: string
           format: passoword
           description: The new password for the user

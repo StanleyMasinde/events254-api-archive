@@ -1,4 +1,4 @@
-(https://github.com/opensource254/events254/actions/workflows/nodejs.yml)
+[![Node.js CI](https://github.com/opensource254/events254/actions/workflows/ci.yml/badge.svg)](https://github.com/opensource254/events254/actions/workflows/ci.yml)
 # Events254
 > Events application for Kenya
 

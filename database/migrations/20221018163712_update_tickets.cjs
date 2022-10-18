@@ -5,7 +5,9 @@
  */
 exports.up = function (knex) {
 	return knex.schema.alterTable('tickets', (table) => {
-		table.dateTime('availability').comment('When the ticket sales end')
+		table.dateTime('availability')
+			.defaultTo(knex.raw('NOW()'))
+			.comment('When the ticket sales end')
 		table.string('url').comment('The URL of the ticket')
 	})
 }

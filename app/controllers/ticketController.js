@@ -32,12 +32,22 @@ class TicketController extends Controller {
 	 */
 	async createEventTicket(req, res, next) {
 		const { params, body } = req
+		try {
+			await new Validator(body, {
+				'price': 'required',
+				'type': 'required',
+				'event_id': 'required',
+			}).validate()
+		} catch (error) {
+			return res.status(422).json(error)
+		}
+
 		const { event } = params // Get the event ID
-		const { price, limit, type } = body
+		const { price, limit, type, availability, url } = body
 
 		try {
 			const ticket = await Ticket.create({
-				price, limit, type, event_id: event
+				price, limit, type, event_id: event, availability, url
 			})
 			return res.status(201).json(ticket)
 		} catch (error) {

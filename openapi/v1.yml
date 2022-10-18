@@ -2,7 +2,7 @@ openapi: "3.0.2"
 info:
   title: Events254
   description: Events254 internal API
-  version: "1.0"
+  version: "1.1.0"
 servers:
   - url: https://api.events254.co.ke
     description: Production servers
@@ -20,6 +20,30 @@ components:
         - email
         - password
       properties:
+        name:
+          type: string
+          description: The name of the user
+        email:
+          type: string
+          description: The email of the user
+        username:
+          type: string
+          description: The username of the user
+        bio:
+          type: string
+          description: The user's short introduction
+    searchUser:
+      type: object
+      required:
+        - id
+        - name
+        - username
+        - email
+        - password
+      properties:
+        id: 
+          type: string
+          description: the unique id of the user
         name:
           type: string
           description: The name of the user
@@ -398,6 +422,7 @@ components:
         - currency
         - limit
         - type
+        - availability
       properties:
         id:
           type: integer
@@ -414,6 +439,13 @@ components:
           type: string
           description: The type of ticket e.g Regular
           default: General admission
+        availability:
+          type: string
+          format: date-time
+          description: When the ticket sales ends
+        url:
+          type: string
+          description: The url for the ticket sales. This version does  not support ticket sales
     userTicket:
       type: object
       required:
@@ -501,6 +533,13 @@ components:
           type: integer
           format: int64
           description: The maximum number of tickets of this type
+        availability:
+          type: string
+          format: date-time
+          description: When the ticket sales end
+        url:
+          type: string
+          description: The URL of the ticket
     eventOrganiser:
       type: object
       required:
@@ -584,7 +623,7 @@ components:
         users:
           type: array
           items:
-            $ref: "#/components/schemas/user"
+            $ref: "#/components/schemas/searchUser"
     calendarResults:
       type: array
       items:

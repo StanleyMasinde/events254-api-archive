@@ -57,6 +57,7 @@ describe('#Events test with protected routes', () => {
 	it('Create a ticket', async () => {
 		const res = await app.post(`/events/${eventId}/tickets`)
 			.send({
+				type: 'Early bird',
 				price: faker.commerce.price(1000, 9999),
 				limit: 1,
 				description: faker.random.arrayElement(['VIP', 'Regular', 'General'])

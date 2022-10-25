@@ -12,6 +12,7 @@ import config from './config/app.js'
 
 import { init, Integrations, Handlers } from '@sentry/node'
 import { Integrations as _Integrations } from '@sentry/tracing'
+import uploadRouter from './routes/upload.js'
 import publicRouter from './routes/public.js'
 import usersRouter from './routes/users.js'
 import groupsRouter from './routes/groups.js'
@@ -78,6 +79,7 @@ app.use(json())
 			})
 	}))
 	.use(auth)
+	.use('/upload', uploadRouter)
 	.use('/users', usersRouter)
 	.use('/groups', groupsRouter)
 	.use('/auth', authRouter)

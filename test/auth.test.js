@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { readFileSync } from 'fs'
 import faker from 'faker'
 import chai from 'chai'
 import { expect } from 'chai'
@@ -146,11 +145,9 @@ describe('Authentication with personal API Tokens', () => {
 
 			const res = await app
 				.post('/events')
-				.set('content-type', 'multipart/form-data')
 				.set('X-requested-with', 'mobile')
 				.set('Authorization', `Bearer ${token}`)
-				.attach('image', readFileSync('./public/icon.png'), 'icon.png')
-				.field({
+				.send({
 					location: faker.address.streetAddress(),
 					location_name: 'Nairobi national park',
 					formatted_address: 'Tom Mboya street, Nairobi',

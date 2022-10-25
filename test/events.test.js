@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { readFileSync } from 'fs'
 import chai, {expect} from 'chai'
 import chaiHttp from 'chai-http'
 import faker from 'faker'
@@ -88,9 +87,7 @@ describe('#Events test with protected routes', () => {
 
 	it('User creates an event', async () => {
 		const res = await app.post('/events')
-			.set('content-type', 'multipart/form-data')
-			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
-			.field({
+			.send({
 				location: faker.address.streetAddress(),
 				location_name: 'Nairobi national park',
 				formatted_address: 'Tom Mboya street, Nairobi',
@@ -107,9 +104,7 @@ describe('#Events test with protected routes', () => {
 
 	it('User creates an event with frequency', async () => {
 		const res = await app.post('/events')
-			.set('content-type', 'multipart/form-data')
-			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
-			.field({
+			.send({
 				location: faker.address.streetAddress(),
 				location_name: 'The club',
 				formatted_address: 'Ring rd parklands',

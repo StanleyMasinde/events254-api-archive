@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-import { readFileSync } from 'fs'
 import chai, { use, expect } from 'chai'
 import chaiHttp from 'chai-http'
 import faker from 'faker'
@@ -8,6 +7,7 @@ import application from '../app.js'
 const app = chai.request.agent(application).keepOpen()
 import User from '../app/models/user.js'
 import Category from '../app/models/category.js'
+import moment from 'moment-timezone'
 
 let user = {
 	name: faker.name.findName(),
@@ -35,9 +35,7 @@ describe('#Events test with protected routes', () => {
 					password: 'strongpassword'
 				})
 			const res = await app.post('/events')
-				.set('content-type', 'multipart/form-data')
-				.attach('image', readFileSync('./public/icon.png'), 'icon.png')
-				.field({
+				.send({
 					location: faker.address.streetAddress(),
 					location_name: 'Nairobi national park',
 					formatted_address: 'Tom Mboya street, Nairobi',
@@ -60,7 +58,8 @@ describe('#Events test with protected routes', () => {
 				type: 'Early bird',
 				price: faker.commerce.price(1000, 9999),
 				limit: 1,
-				description: faker.random.arrayElement(['VIP', 'Regular', 'General'])
+				description: faker.random.arrayElement(['VIP', 'Regular', 'General']),
+				availability: moment().format('YYYY-MM-DD')
 			})
 		expect(res.status).equals(201)
 		ticketId = res.body.id

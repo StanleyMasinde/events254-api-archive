@@ -41,7 +41,7 @@ components:
         - email
         - password
       properties:
-        id: 
+        id:
           type: string
           description: the unique id of the user
         name:
@@ -194,9 +194,8 @@ components:
         - startTime
         - category_id
       properties:
-        image:
+        posterUrl:
           type: string
-          format: binary
           description: The event poster image.
         location_name:
           type: string
@@ -927,7 +926,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: "#/components/schemas/createEventRequest"
       responses:
@@ -1238,3 +1237,31 @@ paths:
                 $ref: "#/components/schemas/userTicket"
         "401":
           description: Unauthenticated/Unauthorized
+  /upload:
+    get:
+      description: "Upload a new file and get the url"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - fileURL
+                properties:
+                  fileURL:
+                    type: string
+                    description: The absolute URL of the file

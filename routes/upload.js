@@ -8,7 +8,7 @@ router
 
 
 // Upload file to S3 and retur its URL
-	.post('/', multer({ dest: './uploads' }).single('image'), async (req, res, next) => {
+	.post('/', multer({ dest: './uploads' }).single('file'), async (req, res, next) => {
 		const { file } = req
 
 		try {

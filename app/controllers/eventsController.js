@@ -4,7 +4,6 @@ import ical from 'ical-generator'
 import axios from 'axios'
 import Event from '../models/event.js'
 import User from '../models/user.js'
-import upload from '../filesystem/s3.js'
 import canEditEvent from '../policies/canEditEvent.js'
 import Mail from '../mail/mail.js'
 import Ticket from '../models/ticket.js'
@@ -37,7 +36,7 @@ class EventsController extends Controller {
 	 * @param {import('express').NextFunction} next
 	 */
 	async store(req, res, next) {
-		const { body, file } = req
+		const { body } = req
 		const user = await req.user()
 		try {
 			await new Validator(body, {
@@ -49,12 +48,12 @@ class EventsController extends Controller {
 			})
 				.validate()
 
-			let image
-			if (file) {
-				image = await upload(file, 'event-posters')
+			let posterUrl
+			if (body.posterUrl) {
+				posterUrl = body.posterUrl
 			} else {
 				const { data } = await axios.get(`https://api.unsplash.com/search/photos?page=1&query=${body.about}&client_id=pOTyoPLsz5ef-yfgY549ovpcsN4Lv622n_MYA4H9Tj8&per_page=1&orientation=landscape`)
-				image = data.results[0].urls.regular ? data.results[0].urls.regular : 'https://placeimg.com/640/500/null?30219'
+				posterUrl = data.results[0].urls.regular ? data.results[0].urls.regular : 'https://placeimg.com/640/500/null?30219'
 			}
 
 			// The data is valid
@@ -88,7 +87,7 @@ class EventsController extends Controller {
 				}
 			}
 			const e = await Event.create({
-				image,
+				image: posterUrl,
 				location_id,
 				online_link,
 				about,

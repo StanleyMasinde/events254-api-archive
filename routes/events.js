@@ -26,7 +26,7 @@ router.get('/', cache(60), EventsController.index)
 	 * The file is deleted after the requiest to prevent accumlation of junk files
 	 * -----------------------------------------------------------------------------
 	 */
-	.post('/', authenticated(), multer({ dest: './uploads' }).single('image'), clearCache(), EventsController.store)
+	.post('/', authenticated(), clearCache(), EventsController.store)
 
 	/**
 	 * -----------------------------------------------------------------

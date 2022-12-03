@@ -73,6 +73,9 @@ class GroupController extends Controller {
 			group.organisers.map(o => delete o.password) // TODO this should happend at the model level
 			return res.status(201).json(group)
 		} catch (error) {
+			if(error.errors) {
+				return res.status(422).json(error)
+			}
 			next(error)
 		}
 	}

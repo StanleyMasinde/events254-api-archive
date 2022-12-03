@@ -111,7 +111,6 @@ app.use(async (err, req, res, _next) => {
 		})
 	}
 
-	await writeFile(`./logs/error-${new Date().toISOString()}.log`, err)
 	return res.status(err.status || 500).json({
 		error: 'Sorry, something went wrong 😢. Our team has been notified and is working on it.'
 	})

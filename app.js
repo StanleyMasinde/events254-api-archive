@@ -1,4 +1,3 @@
-import { writeFile } from 'fs/promises'
 import dotenv from 'dotenv'
 import express, { json, urlencoded } from 'express'
 import session from 'express-session'

@@ -36,35 +36,33 @@ describe('#Event category test', () => {
 
 
 	it('Users should be able to create an event with a category', async () => {
-		try {
-			await app
-				.post('/auth/login')
-				.send({
-					email: user.email,
-					password: 'strongpassword'
-				})
-			const res = await app
-				.post('/events')
-				.send({
-					about: faker.random.arrayElement(['Third annual music festival', 'Dance party', 'Blankets party', 'Fashion show', 'Business meeting', 'Health conference', 'Education conference', 'Fashion show', 'Travel conference', 'Others']),
-					description: faker.lorem.sentence(),
-					startDate: new Date().toISOString().substring(0, 10),
-					startTime: '12:00',
-					endDate: new Date().toISOString().substring(0, 10),
-					endTime: '19:00',
-					location: faker.address.streetAddress(true),
-					location_name: 'Nairobi national park',
-					formatted_address: 'Tom Mboya street, Nairobi',
-					location_coordinates: '32.88, 1.778', 
-					category_id: categoryId
-				})
-			expect(res.status).to.equal(201)
-			expect(res.body).to.have.property('about')
-			expect(res.body).to.have.property('description')
-			expect(res.body).to.have.property('category_id')
-		} catch (error) {
-			throw new Error(error)
-		}
+		
+		const auth = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app
+			.post('/events')
+			.set({'Authorization': `Bearer ${auth.body.user.token}`})
+			.send({
+				about: faker.random.arrayElement(['Third annual music festival', 'Dance party', 'Blankets party', 'Fashion show', 'Business meeting', 'Health conference', 'Education conference', 'Fashion show', 'Travel conference', 'Others']),
+				description: faker.lorem.sentence(),
+				startDate: new Date().toISOString().substring(0, 10),
+				startTime: '12:00',
+				endDate: new Date().toISOString().substring(0, 10),
+				endTime: '19:00',
+				location: faker.address.streetAddress(true),
+				location_name: 'Nairobi national park',
+				formatted_address: 'Tom Mboya street, Nairobi',
+				location_coordinates: '32.88, 1.778', 
+				category_id: categoryId
+			})
+		expect(res.status).to.equal(201)
+		expect(res.body).to.have.property('about')
+		expect(res.body).to.have.property('description')
+		expect(res.body).to.have.property('category_id')
 	})
 
 

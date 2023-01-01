@@ -112,14 +112,11 @@ class UserController extends Controller {
 			}
 			await new Mail(body, 'Welcome to events254', { template: 'welcome', data }).send()
 			// Determine if the request requires a token and pass it if so
-			if (req.requiresToken()) {
-				const token = await createToken({
-					tokenable_id: user.id,
-					tokenable_type: 'users'
-				})
-				user.token = token
-				return res.json(user)
-			}
+			const token = await createToken({
+				tokenable_id: user.id,
+				tokenable_type: 'users'
+			})
+			user.token = token
 			return res.json(user)
 		} catch (error) {
 			if(error.errors) {

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { readFileSync } from 'fs'
-import chai, {expect} from 'chai'
+import chai, { expect } from 'chai'
 import chaiHttp from 'chai-http'
 import faker from 'faker'
 chai.use(chaiHttp)
@@ -80,21 +80,27 @@ describe('#Events test with protected routes', () => {
 					email: user.email,
 					password: 'strongpassword'
 				})
-			expect(res.body).to.have.property('email')
+			expect(res.body.user).to.have.property('token')
 		} catch (err) {
 			throw new Error(err)
 		}
 	})
 
 	it('User creates an event', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.post('/events')
-			.set('content-type', 'multipart/form-data')
+			.set({ 'content-type': 'multipart/form-data', 'Authorization': `Bearer ${authUser.body.user.token}` })
 			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
 			.field({
 				location: faker.address.streetAddress(),
 				location_name: 'Nairobi national park',
 				formatted_address: 'Tom Mboya street, Nairobi',
-				location_coordinates: '32.88, 1.778', 
+				location_coordinates: '32.88, 1.778',
 				about: 'Awesome event',
 				description: faker.lorem.paragraph(10) + 'Some emoji? 😂😎',
 				startDate: new Date().toISOString().substr(0, 10),
@@ -106,14 +112,20 @@ describe('#Events test with protected routes', () => {
 	})
 
 	it('User creates an event with frequency', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.post('/events')
-			.set('content-type', 'multipart/form-data')
+			.set({ 'content-type': 'multipart/form-data', 'Authorization': `Bearer ${authUser.body.user.token}` })
 			.attach('image', readFileSync('./public/icon.png'), 'icon.png')
 			.field({
 				location: faker.address.streetAddress(),
 				location_name: 'The club',
 				formatted_address: 'Ring rd parklands',
-				location_coordinates: '32.88, 1.778', 
+				location_coordinates: '32.88, 1.778',
 				about: 'Awesome event',
 				description: faker.lorem.paragraph(10) + 'Some emoji? 😂😎',
 				startDate: new Date().toISOString().substr(0, 10), // TODO: Hey what do we use?
@@ -128,14 +140,29 @@ describe('#Events test with protected routes', () => {
 
 
 	it('Get current user\'s events', async () => {
-		const res = await app.get('/events/currentUser')
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app
+			.get('/events/currentUser')
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.status).equals(200)
 		expect(res.body).to.be.an('Array')
 	})
 
 	it('Update an event', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app
 			.put(`/events/${eventId}`)
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 			.send({
 				location: faker.address.streetAddress(true),
 				about: 'Events254 launch party',
@@ -165,7 +192,15 @@ describe('#Events test with protected routes', () => {
 	})
 
 	it('User deletes and event', async () => {
-		const res = await app.delete(`/events/${eventId}`)
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app
+			.delete(`/events/${eventId}`)
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.body.message).equals('Event deleted')
 	})
 })
@@ -173,14 +208,16 @@ describe('#Events test with protected routes', () => {
 describe('#Event registration', () => {
 	before(async () => {
 		// Authenticate a user
-		await app
+		const userr = await app
 			.post('/auth/login')
 			.send({
 				email: user.email,
 				password: 'strongpassword'
 			})
 		// create a ticket
-		const res = await app.post(`/events/${newEventId}/tickets`)
+		const res = await app
+			.post(`/events/${newEventId}/tickets`)
+			.set('Authorization', `Bearer ${userr.body.user.token}`)
 			.send({
 				price: faker.commerce.price(1000, 9999),
 				limit: 1,
@@ -190,29 +227,51 @@ describe('#Event registration', () => {
 	})
 
 	it('Register for event', async () => {
-		const res = await app.post(`/events/${newEventId}/register`)
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app
+			.post(`/events/${newEventId}/register`)
 			.send({
 				ticket_id: ticketId,
 				rsvp_count: 1
 			})
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.body.message).equals('You have successfully registerd for this event')
 	})
 
 	it('Register for online event', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.post(`/events/${onlineEventId}/register`)
 			.send({
 				ticket_id: onlineTicketId,
 				rsvp_count: 1
 			})
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.body.message).equals('You have successfully registerd for this event')
 	})
 
 	it('User cannot register for an event more than once', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.post(`/events/${newEventId}/register`)
 			.send({
 				ticket_id: 1,
 				rsvp_count: 1
 			})
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.body.error).equals('You have already registered for this event')
 	})
 })

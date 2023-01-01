@@ -1,9 +1,7 @@
 import dotenv from 'dotenv'
 import express, { json, urlencoded } from 'express'
-import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import { createSessionStore } from 'sessionstore'
 dotenv.config()
 import config from './config/app.js'
 
@@ -58,24 +56,6 @@ app.use(json())
 		res.send('pong')
 	})
 	.use(apikey())
-
-	.use(session({
-		rolling: true,
-		secret: 'super-secret-cookie',
-		resave: false,
-		saveUninitialized: true,
-		name: 'events254_session',
-		cookie: {
-			maxAge: 365 * 24 * 60 * 60 * 1000,
-			sameSite: 'lax',
-			secure: 'auto'
-		},
-		store: process.env.NODE_ENV === 'development'
-			? null
-			: createSessionStore({
-				type: 'redis'
-			})
-	}))
 	.use(auth)
 	.use('/users', usersRouter)
 	.use('/groups', groupsRouter)

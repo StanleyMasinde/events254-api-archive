@@ -23,78 +23,78 @@ let user2 = {
 	password: 'strongpassword'
 }
 
-describe('Session Authentication tests', () => {
-	it('Register a user', async () => {
-		const res = await app
-			.post('/auth/register')
-			.send(user)
-		expect(res.status).equals(200)
-	})
+// describe('Session Authentication tests', () => {
+// 	it('Register a user', async () => {
+// 		const res = await app
+// 			.post('/auth/register')
+// 			.send(user)
+// 		expect(res.status).equals(200)
+// 	})
 
-	it('Login user with wrong PASSWORD should fail', async () => {
-		const res = await app
-			.post('/auth/login')
-			.send({
-				email: user.email,
-				password: 'wrongpassword'
-			})
-		expect(res.status).equals(401)
-	})
+// 	it('Login user with wrong PASSWORD should fail', async () => {
+// 		const res = await app
+// 			.post('/auth/login')
+// 			.send({
+// 				email: user.email,
+// 				password: 'wrongpassword'
+// 			})
+// 		expect(res.status).equals(401)
+// 	})
 
-	it('Login user with wrong EMAIL should fail', async () => {
-		const res = await app
-			.post('/auth/login')
-			.send({
-				email: 'user@mail.com',
-				password: user.password
-			})
-		expect(res.status).equals(401)
-	})
+// 	it('Login user with wrong EMAIL should fail', async () => {
+// 		const res = await app
+// 			.post('/auth/login')
+// 			.send({
+// 				email: 'user@mail.com',
+// 				password: user.password
+// 			})
+// 		expect(res.status).equals(401)
+// 	})
 
-	it('Login user with correct credentials', async () => {
-		const res = await app
-			.post('/auth/login')
-			.send({
-				email: user.email,
-				password: user.password
-			})
-		expect(res.status).equals(200)
-	})
+// 	it('Login user with correct credentials', async () => {
+// 		const res = await app
+// 			.post('/auth/login')
+// 			.send({
+// 				email: user.email,
+// 				password: user.password
+// 			})
+// 		expect(res.status).equals(200)
+// 	})
 
-	it('Get the current user', async () => {
-		const res = await app.get('/auth/user')
-		expect(res.status).equals(200)
-		expect(res.body).haveOwnProperty('user')
-	})
+// 	it('Get the current user', async () => {
+// 		const res = await app.get('/auth/user')
+// 		expect(res.status).equals(200)
+// 		expect(res.body).haveOwnProperty('user')
+// 	})
 
-	it('Logout a user', async () => {
-		const res = await app
-			.post('/auth/logout')
-		expect(res.status).equals(200)
-	})
+// 	it('Logout a user', async () => {
+// 		const res = await app
+// 			.post('/auth/logout')
+// 		expect(res.status).equals(200)
+// 	})
 
-	it('Should return 401 when due to no authentication', async () => {
-		const res = await app.get('/auth/user')
-		expect(res.status).equals(401)
-	})
+// 	it('Should return 401 when due to no authentication', async () => {
+// 		const res = await app.get('/auth/user')
+// 		expect(res.status).equals(401)
+// 	})
 
-	it('Send a password reset notification without email should fail', async () => {
-		const res = await app.post('/auth/password')
-		expect(res.status).equals(422)
-		expect(res.body).to.haveOwnProperty('errors')
-		expect(res.body.errors).to.be.an('Object')
-	})
+// 	it('Send a password reset notification without email should fail', async () => {
+// 		const res = await app.post('/auth/password')
+// 		expect(res.status).equals(422)
+// 		expect(res.body).to.haveOwnProperty('errors')
+// 		expect(res.body.errors).to.be.an('Object')
+// 	})
 
-	it('Send a password reset notification', async () => {
-		const res = await app
-			.post('/auth/password')
-			.set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36')
-			.send({
-				email: user.email
-			})
-		expect(res.status).equals(200)
-	})
-})
+// 	it('Send a password reset notification', async () => {
+// 		const res = await app
+// 			.post('/auth/password')
+// 			.set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36')
+// 			.send({
+// 				email: user.email
+// 			})
+// 		expect(res.status).equals(200)
+// 	})
+// })
 
 describe('Authentication with personal API Tokens', () => {
 	let token
@@ -103,7 +103,6 @@ describe('Authentication with personal API Tokens', () => {
 			.post('/auth/register')
 			.set('X-requested-with', 'mobile')
 			.send(user2)
-
 		expect(res.status).equals(200)
 		expect(res.body).to.haveOwnProperty('token')
 	})

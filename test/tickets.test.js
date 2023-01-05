@@ -28,7 +28,7 @@ describe('#Events test with protected routes', () => {
 		try {
 			await User.register(user)
 			const cat = await Category.create(category)
-			await app
+			const authUser = await app
 				.post('/auth/login')
 				.send({
 					email: user.email,
@@ -36,12 +36,13 @@ describe('#Events test with protected routes', () => {
 				})
 			const res = await app.post('/events')
 				.set('content-type', 'multipart/form-data')
+				.set('Authorization', `Bearer ${authUser.body.user.token}`)
 				.attach('image', readFileSync('./public/icon.png'), 'icon.png')
 				.field({
 					location: faker.address.streetAddress(),
 					location_name: 'Nairobi national park',
 					formatted_address: 'Tom Mboya street, Nairobi',
-					location_coordinates: '32.88, 1.778', 
+					location_coordinates: '32.88, 1.778',
 					about: 'Awesome event',
 					description: faker.lorem.paragraph(10),
 					startDate: new Date().toISOString().substr(0, 10),
@@ -55,7 +56,14 @@ describe('#Events test with protected routes', () => {
 	})
 
 	it('Create a ticket', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.post(`/events/${eventId}/tickets`)
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 			.send({
 				type: 'Early bird',
 				price: faker.commerce.price(1000, 9999),
@@ -81,7 +89,14 @@ describe('#Events test with protected routes', () => {
 	})
 
 	it('Update a specified ticket', async () => {
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
 		const res = await app.put(`/events/${eventId}/tickets/${ticketId}`)
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 			.send({
 				price: 100,
 				limit: 1,
@@ -93,7 +108,15 @@ describe('#Events test with protected routes', () => {
 	})
 
 	it('Delete a ticket', async () => {
-		const res = await app.delete(`/events/${eventId}/tickets/${ticketId}`)
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app
+			.delete(`/events/${eventId}/tickets/${ticketId}`)
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
 		expect(res.status).equals(204)
 	})
 })

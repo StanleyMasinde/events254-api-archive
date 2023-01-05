@@ -11,11 +11,6 @@ const app = chai.request
 	.agent(application)
 	.keepOpen()
 
-let user = {
-	name: faker.name.findName(),
-	email: faker.internet.email(),
-	password: 'strongpassword'
-}
 
 let user2 = {
 	name: faker.name.findName(),

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { readFileSync } from 'fs'
-import chai, {use, expect} from 'chai'
+import chai, { use, expect } from 'chai'
 import chaiHttp from 'chai-http'
 use(chaiHttp)
 import faker from 'faker'
@@ -40,23 +40,26 @@ describe('Groups', () => {
 	})
 
 	it('#Create a new group', async () => {
-		try {
-			const res = await app.post('/groups')
-				.set('content-type', 'multipart/form-data')
-				.attach('picture', readFileSync('./public/icon.png'), 'icon.png')
-				.field({
-					name,
-					description: faker.company.catchPhrase(),
-					country: faker.address.county(),
-					city: faker.address.city()
-				})
+		const authUser = await app
+			.post('/auth/login')
+			.send({
+				email: user.email,
+				password: 'strongpassword'
+			})
+		const res = await app.post('/groups')
+			.set('content-type', 'multipart/form-data')
+			.attach('picture', readFileSync('./public/icon.png'), 'icon.png')
+			.set('Authorization', `Bearer ${authUser.body.user.token}`)
+			.field({
+				name,
+				description: faker.company.catchPhrase(),
+				country: faker.address.county(),
+				city: faker.address.city()
+			})
 
-			expect(res.status).equals(201)
-			expect(res.body).to.haveOwnProperty('name', name)
-			expect(res.body).to.haveOwnProperty('slug', slug)
-		} catch (err) {
-			throw new Error(err)
-		}
+		expect(res.status).equals(201)
+		expect(res.body).to.haveOwnProperty('name', name)
+		expect(res.body).to.haveOwnProperty('slug', slug)
 	})
 
 	// it('#Read information about a group', async () => {

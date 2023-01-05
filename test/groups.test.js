@@ -40,23 +40,19 @@ describe('Groups', () => {
 	})
 
 	it('#Create a new group', async () => {
-		try {
-			const res = await app.post('/groups')
-				.set('content-type', 'multipart/form-data')
-				.attach('picture', readFileSync('./public/icon.png'), 'icon.png')
-				.field({
-					name,
-					description: faker.company.catchPhrase(),
-					country: faker.address.county(),
-					city: faker.address.city()
-				})
+		const res = await app.post('/groups')
+			.set('content-type', 'multipart/form-data')
+			.attach('picture', readFileSync('./public/icon.png'), 'icon.png')
+			.field({
+				name,
+				description: faker.company.catchPhrase(),
+				country: faker.address.county(),
+				city: faker.address.city()
+			})
 
-			expect(res.status).equals(201)
-			expect(res.body).to.haveOwnProperty('name', name)
-			expect(res.body).to.haveOwnProperty('slug', slug)
-		} catch (err) {
-			throw new Error(err)
-		}
+		expect(res.status).equals(201)
+		expect(res.body).to.haveOwnProperty('name', name)
+		expect(res.body).to.haveOwnProperty('slug', slug)
 	})
 
 	// it('#Read information about a group', async () => {

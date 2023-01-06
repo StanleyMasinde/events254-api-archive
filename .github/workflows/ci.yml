@@ -49,7 +49,7 @@ jobs:
       - name: write ssh-key into a file
         run: |
             echo ${{ secrets.SuperSecret }} > id_rsa
-            chmod 644 id_rsa
+            chmod 600 id_rsa
       - name: Run the deployment command
         run: ssh -o StrictHostKeyChecking=no -i id_rsa stanley@64.225.23.199 "ls /var/www"
     

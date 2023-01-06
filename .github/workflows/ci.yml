@@ -46,7 +46,6 @@ jobs:
     needs: build
     environment: production
     steps:
-      - name: write ssh-key into a file
       - name: Run the deployment command
         run: ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIV_KEY }} stanley@64.225.23.199 "ls /var/www"
     

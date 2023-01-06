@@ -42,10 +42,11 @@ jobs:
     - name: Testing 🚀
       run: npm test
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
     environment: 
-      name: production
+      name: Production
       url: https://api.events254.co.ke
     steps:
       - name: Setup SSH

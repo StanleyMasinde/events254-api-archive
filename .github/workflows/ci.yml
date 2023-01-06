@@ -46,6 +46,10 @@ jobs:
     needs: build
     environment: production
     steps:
+      - name: Setup SSH
+        run: |
+           mkdir -p ~/.ssh/
+           echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
       - name: Run the deployment command
-        run: ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIV_KEY }} stanley@64.225.23.199 "ls /var/www"
+        run: ssh -o StrictHostKeyChecking=no stanley@64.225.23.199 "ls /var/www"
     

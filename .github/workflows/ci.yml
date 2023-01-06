@@ -48,7 +48,7 @@ jobs:
     steps:
       - name: write ssh-key into a file
         run: |
-            KEEY=${{ secrets.SSH_PRIV_KEY }} echo $KEEY > id_rsa
+            KEEY="${{ secrets.SSH_PRIV_KEY }}" echo $KEEY > id_rsa
             chmod 600 id_rsa
       - name: Run the deployment command
         run: ssh -o StrictHostKeyChecking=no -i id_rsa stanley@64.225.23.199 "ls /var/www"

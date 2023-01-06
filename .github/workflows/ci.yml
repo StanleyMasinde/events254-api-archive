@@ -10,10 +10,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: test
-
     strategy:
       matrix:
         node-version: [16.x]
@@ -43,4 +41,13 @@ jobs:
       run: npm run lint
     - name: Testing 🚀
       run: npm test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      - name: write ssh-key into a file
+        run: echo ${{ secrets.SuperSecret }} > id_rsa
+      - name: Run the deployment command
+        run: ssh -i id_rsa stanley@64.225.23.199 "ls /var/www"
     

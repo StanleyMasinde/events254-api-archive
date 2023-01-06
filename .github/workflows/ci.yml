@@ -50,6 +50,9 @@ jobs:
         run: |
            mkdir -p ~/.ssh/
            echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
+           echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+           chmod 600 ~/.ssh/id_rsa
+           chmod 600 ~/.ssh/id_rsa.pub
       - name: Run the deployment command
         run: ssh -o StrictHostKeyChecking=no stanley@64.225.23.199 "ls /var/www"
     

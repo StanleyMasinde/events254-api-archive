@@ -50,6 +50,7 @@ jobs:
           echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa.pub
+          ssh-keyscan -H 64.225.23.199 >> ~/.ssh/known_hosts
       - name: Run the deployment command
         run: |
           ssh stanley@64.225.23.199 "sh deploy.sh git@github.com:Events254/events254 /var/www/api.events254.co.ke/"

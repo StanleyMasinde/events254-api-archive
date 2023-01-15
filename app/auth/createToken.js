@@ -20,7 +20,7 @@ const createToken = async (options = { tokenable_id: 0, tokenable_type: 'users',
 		name,
 		token,
 		abilities: '*',
-		last_used_at: now, // TODO add a middleware to update this on every request
+		last_used_at: now, // TODO #377 add a middleware to update this on every request
 		created_at: now,
 		updated_at: now
 	})

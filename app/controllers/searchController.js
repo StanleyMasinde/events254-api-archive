@@ -8,7 +8,7 @@ class SearchController extends Controller {
    * @param {import('express').Response} response
    */
 	async index(request, response) {
-		// TODO midularize this search
+		// TODO #386 modularize this search
 		const query = request.query.q
 		const groupsTable = DB('groups')
 		const usersTable = DB('users')

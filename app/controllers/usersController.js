@@ -98,7 +98,7 @@ class UserController extends Controller {
 			body.username = username
 			body.bio = 'No bio yet'
 
-			const user = await User.register(body) // TODO This now returns a Model
+			const user = await User.register(body) // TODO #389 This now returns a Model
 			const data = {
 				name: body.name,
 				email: body.email,

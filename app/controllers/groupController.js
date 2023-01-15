@@ -70,7 +70,7 @@ class GroupController extends Controller {
 				user_id: user.id
 			})
 			group.organisers = await group.organisers()
-			group.organisers.map(o => delete o.password) // TODO this should happend at the model level
+			group.organisers.map(o => delete o.password) // TODO #382 this should happend at the model level
 			return res.status(201).json(group)
 		} catch (error) {
 			if(error.errors) {
@@ -131,7 +131,7 @@ class GroupController extends Controller {
 				body.pictureUrl = await upload(file, 'groups')
 			}
 
-			body.slug = slugify(body.name) // TODO make sure the slug is unique
+			body.slug = slugify(body.name) // TODO #383 make sure the slug is unique
 			while (await Group.where({ slug: body.slug }).first()) {
 				body.slug = `${body.slug}-${Math.floor(Math.random() * 100)}`
 			}
@@ -309,7 +309,7 @@ class GroupController extends Controller {
 					event.inProgress = new Date(event.startDate).getTime() < new Date().getTime() && new Date(event.endDate).getTime() > new Date().getTime()
 					event.past = new Date(event.startDate).getTime() < new Date().getTime()
 					event.hasEndTime = event.startDate !== event.endDate
-					// TODO this is a temp fix
+					// TODO #384 this is a temp fix
 					event.attendees = await DB('event_rsvps')
 						.join('users', 'event_rsvps.user_id', '=', 'users.id')
 						.where({
@@ -387,7 +387,7 @@ class GroupController extends Controller {
 		// Load the current event
 		const currentEvent = await Event.find(event)
 		// A user can only update his/her own event
-		// TODO add this middleware
+		// TODO #385 add this middleware
 		// if (await currentEvent.user_id !== user.id) {
 		//   return this.response('You dont\'t have permision to perfrom this action', 401)
 		// }

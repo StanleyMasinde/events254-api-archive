@@ -18,7 +18,7 @@ exports.up = (knex) => {
 		table.timestamps(true, true)
 
 		// A compnay can also have many categories
-		// TODO create categories && A table for all images
+		// TODO #390 create categories && A table for all images
 	})
 }
 

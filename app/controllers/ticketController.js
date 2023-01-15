@@ -92,7 +92,7 @@ class TicketController extends Controller {
 				price, limit, type
 			})
 			res.json(await DB('tickets')
-				.where({ id: req.params.ticket }).first()) // TODO fix this spaghetti
+				.where({ id: req.params.ticket }).first()) // TODO #387 fix this spaghetti
 		} catch (error) {
 			next(error)
 		}
@@ -165,7 +165,7 @@ class TicketController extends Controller {
 					'events.about AS eventName',
 					'events.organisable_type as organisableType',
 					'events.organisable_id as organisableId',
-					'events.startDate AS eventDate', // TODO: change this to start date
+					'events.startDate AS eventDate', // TODO: #388 change this to start date
 					'events.endDate AS endDate',
 					'events.location AS eventLocation',
 					'event_rsvps.id AS ticketId',

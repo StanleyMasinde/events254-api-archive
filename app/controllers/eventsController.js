@@ -61,7 +61,7 @@ class EventsController extends Controller {
 			// eslint-disable-next-line camelcase
 			const { startDate, startTime, frequency, repeat_count, endDate, endTime, location_name, formatted_address, location_coordinates, online_link, about, description, category_id } = body
 			const startDateTime = formatToDateTime(startTime, startDate)
-			const endDateTime = formatToDateTime(endTime, endDate) // TODO Add this field
+			const endDateTime = formatToDateTime(endTime, endDate) // TODO #378 Add this field
 			// eslint-disable-next-line camelcase
 			const organisable_id = user.id // The authenticated user's ID
 			// eslint-disable-next-line camelcase
@@ -141,7 +141,7 @@ class EventsController extends Controller {
 			e.inProgress = new Date(e.startDate).getTime() < new Date().getTime() && new Date(e.endDate).getTime() > new Date().getTime()
 			e.past = new Date(e.startDate).getTime() < new Date().getTime()
 			e.hasEndTime = e.startDate !== e.endDate
-			// TODO this is a temp fix
+			// TODO #379 this is a temp fix
 			e.attendees = await DB('event_rsvps')
 				.join('users', 'event_rsvps.user_id', '=', 'users.id')
 				.where({
@@ -219,7 +219,7 @@ class EventsController extends Controller {
 		const { params } = req
 		const { event } = params
 		// A user can only update his/her own event
-		// TODO add this middleware
+		// TODO #380 add this middleware
 		// if (await currentEvent.user_id !== user.id) {
 		//   return this.response('You dont\'t have permision to perfrom this action', 401)
 		// }
@@ -316,7 +316,7 @@ class EventsController extends Controller {
 			currentEvent.humanStartDate = moment(currentEvent.startDate).tz('Africa/Nairobi').format('LLLL')
 			currentEvent.organiser = await getEventOrganiser(currentEvent)
 			// Send and email to user
-			// TODO add attachments and refactor
+			// TODO #381 add attachments and refactor
 			// Remove html tags from the event description
 			const eventDescription = currentEvent.description.replace(/<(?:.|\n)*?>/gm, '')
 			const icsData = ical({

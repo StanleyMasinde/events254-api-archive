@@ -1,11 +1,9 @@
 import { Router } from 'express'
 import { DB } from 'mevn-orm'
 import moment from 'moment'
-import { cache } from '../app/middleware/cache.js'
-
 const router = Router()
 
-router.get('/', cache(), async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 	let sponsoredEvents = []
 	let happeningNow = []
 	let upcomingEvents = []

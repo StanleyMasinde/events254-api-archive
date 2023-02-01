@@ -33,7 +33,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.2",
     "ical-generator": "^3.6.0",
-    "mevn-orm": "^2.4.0",
+    "mevn-orm": "^2.4.4",
     "mevn-validator": "^2.0.2",
     "moment-timezone": "^0.5.38",
     "morgan": "^1.10.0",

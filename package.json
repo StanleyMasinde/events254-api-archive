@@ -23,7 +23,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.196.0",
     "@sentry/node": "^7.16.0",
-    "@sentry/tracing": "^7.16.0",
+    "@sentry/tracing": "^7.39.0",
     "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",

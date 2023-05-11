@@ -21,7 +21,7 @@
   "author": "Opensource254",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.304.0",
+    "@aws-sdk/client-s3": "^3.329.0",
     "@sentry/node": "^7.46.0",
     "@sentry/tracing": "^7.46.0",
     "axios": "^1.4.0",

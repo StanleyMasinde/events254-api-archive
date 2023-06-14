@@ -38,7 +38,7 @@
     "moment-timezone": "^0.5.43",
     "morgan": "^1.10.0",
     "multer": "1.4.5-lts.1",
-    "mysql2": "^3.3.3",
+    "mysql2": "^3.3.5",
     "nodemailer": "^6.9.3",
     "nodemailer-pug-engine": "^2.0.1",
     "redis": "^4.6.7"
